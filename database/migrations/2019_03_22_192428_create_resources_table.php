@@ -20,7 +20,6 @@ class CreateResourcesTable extends Migration
             $table->string("FirstName");
             $table->string("LastName");
             $table->integer("MaxHoursPerWeek");
-            $table->timestamps();
         });
     }
 
