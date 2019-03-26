@@ -43,6 +43,7 @@ Route::get('/addProject', function() {
         ["ProjectID" => 0, "ProjectName" => "Test", "Technology" => "Laravel", "EstMaxHours" => 40,
             "Status" => "Done", "StartDate" => date_create("2019-3-24"), "DueDate" => date_create("2019-3-24")]
     );
+    echo("Project added successfully");
 });
 
 /** Route that adds a new resource to the resources table
@@ -50,6 +51,7 @@ Route::get('/addProject', function() {
 Route::get('/addResource', function() {
     DB::table('resources')->insertGetId(
         ["ResourceID" => 0, "FirstName" => "Jonathan", "LastName" => "Ou", "MaxHoursPerWeek" => 40]);
+    echo("Resource added successfully");
 });
 
 /** Route that adds a new entry to the resources_per_projects table
@@ -57,6 +59,7 @@ Route::get('/addResource', function() {
 Route::get('/addResourcePerProject', function() {
     DB::table('resources_per_projects')->insertGetId(
         ["ResourceID" => 1, "ProjectID" => 1, "Role" => "APM", "ScheduleID" => 0]);
+    echo("ResourcePerProject added successfully");
 });
 
 /** Route that adds a new entry to the schedules table
@@ -64,6 +67,7 @@ Route::get('/addResourcePerProject', function() {
 Route::get('/addSchedule', function() {
     DB::table('schedules')->insertGetId(
         ["ScheduleID" => 1, "Dates" => date_create("2019-3-24"), "HoursPerWeek" => 30]);
+    echo("Schedule added successfully");
 });
 
 
