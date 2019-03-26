@@ -38,7 +38,7 @@ Route::get('/displaySchedules', function() {
 
 /** Route that adds a new project to the projects table
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter */
-Route::get('/addProject', function() {
+Route::post('/addProject', function() {
     DB::table('projects')->insertGetId(
         ["ProjectID" => 0, "ProjectName" => "Test", "Technology" => "Laravel", "EstMaxHours" => 40,
             "Status" => "Done", "StartDate" => date_create("2019-3-24"), "DueDate" => date_create("2019-3-24")]
