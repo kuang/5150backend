@@ -12,9 +12,7 @@ use Illuminate\Support\Facades\DB;
 */
 
 /** Displays initial webpage */
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::view('/{path?}', 'app');
 
 /** Route that returns all of the rows in the projects table */
 Route::get('/displayAllProjects', function () {
