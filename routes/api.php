@@ -37,14 +37,6 @@ Route::get('/displaySchedules', function() {
     return DB::table('schedules')->get();
 });
 
-/** Route that adds a new entry to the resources_per_projects table
- * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter */
-Route::get('/addResourcePerProject', function() {
-    DB::table('resources_per_projects')->insertGetId(
-        ["ResourceID" => 1, "ProjectID" => 1, "Role" => "APM", "ScheduleID" => 0]);
-    echo("ResourcePerProject added successfully");
-});
-
 /** Route that adds a new entry to the schedules table
  * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter */
 Route::get('/addSchedule', function() {
@@ -52,7 +44,8 @@ Route::get('/addSchedule', function() {
         ["ScheduleID" => 1, "Dates" => date_create("2019-3-24"), "HoursPerWeek" => 30]);
 });
 
-/** Test POST request for PHP */
+/** Route that adds a new project to the projects table via POST Request
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter */
 Route::post("/addProject", function(Request $request) {
     $data = $request->all();
     DB::table('projects')->insertGetId(
@@ -72,6 +65,19 @@ Route::post('/addResource', function(Request $request) {
         ["ResourceID" => 0, "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
             "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
     return "Successfully Added New Resource";
+});
+
+/** Route that adds a new entry to the resources_per_projects table via POST request
+ * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter */
+Route::post('/addResourcePerProject', function(Request $request) {
+    $data = $request->all();
+    $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+    $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+    $project_id = $project_id_json["ProjectID"];
+    // check if resource id is valid
+    DB::table('resources_per_projects')->insertGetId(
+        ["ResourceID" => $data["ResourceID"], "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
+    return ("ResourcePerProject added successfully");
 });
 
 /** Route that adds a new entry to the schedules table
