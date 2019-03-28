@@ -37,13 +37,6 @@ Route::get('/displaySchedules', function() {
     return DB::table('schedules')->get();
 });
 
-/** Route that adds a new entry to the schedules table
- * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter */
-Route::get('/addSchedule', function() {
-    DB::table('schedules')->insertGetId(
-        ["ScheduleID" => 1, "Dates" => date_create("2019-3-24"), "HoursPerWeek" => 30]);
-});
-
 /** Route that adds a new project to the projects table via POST Request
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter */
 Route::post("/addProject", function(Request $request) {
@@ -82,12 +75,21 @@ Route::post('/addResourcePerProject', function(Request $request) {
 
 /** Route that adds a new entry to the schedules table
  * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter */
-//Route::post('/addSchedule', function(Request $request) {
-//    $data = $request->all();
-//    DB::table('schedules')->insertGetId(
-//        ["ScheduleID" => 0, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
-//    return "Successfully Added New Schedule";
-//});
+Route::post('/addSchedule', function(Request $request) {
+   $data = $request->all();
+   
+   $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+   $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+   $project_id = $project_id_json["ProjectID"];
+
+   $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $data["ResourceID"]]])->get();
+   $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+   $schedule_id = $schedule_id_json["ScheduleID"];
+
+   DB::table('schedules')->insertGetId(
+       ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
+   return "Successfully Added New Schedule";
+});
 
 /** Route that clears all records from all tables */
 Route::get('/clear', function() {
@@ -95,5 +97,5 @@ Route::get('/clear', function() {
     DB::table('resources_per_projects')->delete();
     DB::table('resources')->delete();
     DB::table('projects')->delete();
-    echo('Database cleared successfully');
+    return('Database cleared successfully');
 });
