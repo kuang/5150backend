@@ -21,7 +21,7 @@ class CreateSchedulesTable extends Migration
             $table->integer("HoursPerWeek")->unsigned();
         });
 
-        DB::unprepared('ALTER TABLE `schedules` DROP PRIMARY KEY, ADD PRIMARY KEY(`ScheduleID`, `Dates`)');
+        DB::unprepared('ALTER TABLE `schedules` ADD PRIMARY KEY(`ScheduleID`, `Dates`)');
 
         Schema::enableForeignKeyConstraints();
 

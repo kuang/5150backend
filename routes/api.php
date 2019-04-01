@@ -43,7 +43,7 @@ Route::get('/getP2', function() {
 /** Route that adds a new project to the projects table via POST Request
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
 
- {
+{
     "ProjectName": "P2",
     "Technology": "T2",
     "EstMaxHours": 48,
@@ -57,9 +57,9 @@ Route::post("/addProject", function(Request $request) {
     $data = $request->all();
 
     /** Search for if other rows also have the same ProjectName */
-    if (sizeof(DB::table('projects')->where('ProjectName', $data["ProjectName"])->get()) > 0) {
-        abort(501, "ProjectName Already Exists in Database");
-    }
+    // if (sizeof(DB::table('projects')->where('ProjectName', $data["ProjectName"])->get()) > 0) {
+    //     abort(501, "ProjectName Already Exists in Database");
+    // }
 
     DB::table('projects')->insertGetId(
         ["ProjectID" => 0, "ProjectName" => $data["ProjectName"],
