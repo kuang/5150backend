@@ -37,6 +37,9 @@ Route::get('/displaySchedules', function() {
     return DB::table('schedules')->get();
 });
 
+Route::get('/getP2', function() {
+    return sizeof(DB::table('projects')->where('ProjectName', 'P2')->get());
+});
 /** Route that adds a new project to the projects table via POST Request
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
 
@@ -52,6 +55,12 @@ Route::get('/displaySchedules', function() {
 */
 Route::post("/addProject", function(Request $request) {
     $data = $request->all();
+
+    /** Search for if other rows also have the same ProjectName */
+    if (sizeof(DB::table('projects')->where('ProjectName', $data["ProjectName"])->get()) > 0) {
+        abort(501, "ProjectName Already Exists in Database");
+    }
+
     DB::table('projects')->insertGetId(
         ["ProjectID" => 0, "ProjectName" => $data["ProjectName"],
             "Technology" => $data["Technology"], "EstMaxHours" => $data["EstMaxHours"],
@@ -74,6 +83,13 @@ Route::post("/addProject", function(Request $request) {
 */
 Route::post('/addResource', function(Request $request) {
     $data = $request->all();
+
+    // Search for if the NetID already exists in the database
+
+    if (sizeof(DB::table('resources')->where('NetID', $data["NetID"])->get()) > 0) {
+        abort(501, "NetID Already Exists in Database");
+    }
+
     DB::table('resources')->insertGetId(
         ["ResourceID" => 0, "NetID" => $data["NetID"], "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
             "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
