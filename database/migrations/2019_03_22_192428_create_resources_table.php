@@ -17,6 +17,7 @@ class CreateResourcesTable extends Migration
 
         Schema::create('resources', function (Blueprint $table) {
             $table->bigIncrements('ResourceID');
+            $table->string('NetID');
             $table->string("FirstName");
             $table->string("LastName");
             $table->integer("MaxHoursPerWeek");

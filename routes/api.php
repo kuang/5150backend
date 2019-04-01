@@ -55,7 +55,7 @@ Route::post("/addProject", function(Request $request) {
 Route::post('/addResource', function(Request $request) {
     $data = $request->all();
     DB::table('resources')->insertGetId(
-        ["ResourceID" => 0, "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
+        ["ResourceID" => 0, "NetID" => $data["NetID"], "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
             "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
     return "Successfully Added New Resource";
 });

@@ -18,7 +18,7 @@ class CreateProjectsTable extends Migration
 
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('ProjectID');
-            $table->string("ProjectName");
+            $table->string("ProjectName")->unique();
             $table->string("Technology");
             $table->integer("EstMaxHours");
             $table->string("Status");
