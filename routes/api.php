@@ -38,7 +38,18 @@ Route::get('/displaySchedules', function() {
 });
 
 /** Route that adds a new project to the projects table via POST Request
- * ProjectID: auto-incrementing key, so value that is inputted for it does not matter */
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
+
+ {
+    "ProjectName": "P2",
+    "Technology": "T2",
+    "EstMaxHours": 48,
+    "Status": "Done",
+    "StartDate": "2019-03-07",
+    "DueDate": "2019-03-14"
+}
+
+*/
 Route::post("/addProject", function(Request $request) {
     $data = $request->all();
     DB::table('projects')->insertGetId(
@@ -51,7 +62,16 @@ Route::post("/addProject", function(Request $request) {
 });
 
 /** Route that adds a new resource to the resources table via POST Request
- * ResourceID: auto-incrementing key, so value that is inputted for it does not matter */
+ * ResourceID: auto-incrementing key, so value that is inputted for it does not matter 
+
+ {
+    "NetID": "jd111",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "MaxHoursPerWeek": 40
+}
+
+*/
 Route::post('/addResource', function(Request $request) {
     $data = $request->all();
     DB::table('resources')->insertGetId(
@@ -61,20 +81,42 @@ Route::post('/addResource', function(Request $request) {
 });
 
 /** Route that adds a new entry to the resources_per_projects table via POST request
- * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter */
+ * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter 
+
+{
+    "ProjectName": "P2",
+    "NetID": "jd111",
+    "Role": "Product Manager"
+}
+
+ */
 Route::post('/addResourcePerProject', function(Request $request) {
     $data = $request->all();
+    
     $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
     $project_id_json = json_decode(json_encode($project_id_array{0}), true);
     $project_id = $project_id_json["ProjectID"];
-    // check if resource id is valid
+
+    $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+    $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+    $resource_id = $resource_id_json["ResourceID"];
+
     DB::table('resources_per_projects')->insertGetId(
-        ["ResourceID" => $data["ResourceID"], "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
+        ["ResourceID" => $resource_id, "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
     return ("ResourcePerProject added successfully");
 });
 
 /** Route that adds a new entry to the schedules table
- * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter */
+ * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter 
+
+{
+    "ProjectName": "P2",
+    "NetID": "jd111",
+    "Dates": "2019-03-07",
+    "HoursPerWeek": 30
+}
+
+ */
 Route::post('/addSchedule', function(Request $request) {
    $data = $request->all();
    
@@ -82,7 +124,11 @@ Route::post('/addSchedule', function(Request $request) {
    $project_id_json = json_decode(json_encode($project_id_array{0}), true);
    $project_id = $project_id_json["ProjectID"];
 
-   $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $data["ResourceID"]]])->get();
+   $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+   $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+   $resource_id = $resource_id_json["ResourceID"];
+
+   $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
    $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
    $schedule_id = $schedule_id_json["ScheduleID"];
 
@@ -92,10 +138,10 @@ Route::post('/addSchedule', function(Request $request) {
 });
 
 /** Route that clears all records from all tables */
-Route::get('/clear', function() {
-    DB::table('schedules')->delete();
-    DB::table('resources_per_projects')->delete();
-    DB::table('resources')->delete();
-    DB::table('projects')->delete();
-    return('Database cleared successfully');
-});
+// Route::get('/clear', function() {
+//     DB::table('schedules')->delete();
+//     DB::table('resources_per_projects')->delete();
+//     DB::table('resources')->delete();
+//     DB::table('projects')->delete();
+//     return('Database cleared successfully');
+// });
