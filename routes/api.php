@@ -37,9 +37,6 @@ Route::get('/displaySchedules', function() {
     return DB::table('schedules')->get();
 });
 
-Route::get('/getP2', function() {
-    return sizeof(DB::table('projects')->where('ProjectName', 'P2')->get());
-});
 /** Route that adds a new project to the projects table via POST Request
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
 
@@ -158,6 +155,21 @@ Route::post('/addSchedule', function(Request $request) {
    DB::table('schedules')->insertGetId(
        ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
    return "Successfully Added New Schedule";
+});
+
+Route::put('/updateProject', function(Request $request) {
+    $data = $request->all();
+    DB::table('projects')->where('ProjectName', $data["ProjectName"])->update(["Technology" => $data["Technology"],
+        "EstMaxHours" => $data["EstMaxHours"], "Status" => $data["Status"],
+        "StartDate" => $data["StartDate"], "DueDate" => $data["DueDate"]]);
+
+});
+
+Route::put('/updateResource', function(Request $request) {
+    $data = $request->all();
+    DB::table('resources')->where('NetID', $data["NetID"])->update(["FirstName" => $data["FirstName"],
+        "LastName" => $data["LastName"], "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
+
 });
 
 /** Route that clears all records from all tables */
