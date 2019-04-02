@@ -19,7 +19,8 @@ class CreateResourcesPerProjectsTable extends Migration
             $table->bigInteger("ResourceID")->unsigned();
             $table->bigInteger("ProjectID")->unsigned();
             $table->string("Role");
-            $table->bigIncrements("ScheduleID")->unique();
+            $table->bigIncrements("ScheduleID");
+            $table->unique('ScheduleID');
         });
 
         DB::unprepared('ALTER TABLE `resources_per_projects` DROP PRIMARY KEY, ADD PRIMARY KEY(`ResourceID`, `ProjectID`)');

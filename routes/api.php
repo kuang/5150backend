@@ -56,24 +56,28 @@ Route::get('/getP2', function() {
 Route::post("/addProject", function(Request $request) {
     $data = $request->all();
 
-    /** Search for if other rows also have the same ProjectName */
-    // if (sizeof(DB::table('projects')->where('ProjectName', $data["ProjectName"])->get()) > 0) {
-    //     abort(501, "ProjectName Already Exists in Database");
-    // }
-
-    DB::table('projects')->insertGetId(
+    try {
+        DB::table('projects')->insertGetId(
         ["ProjectID" => 0, "ProjectName" => $data["ProjectName"],
             "Technology" => $data["Technology"], "EstMaxHours" => $data["EstMaxHours"],
             "Status" => $data["Status"],"StartDate" => date_create($data["StartDate"]),
             "DueDate" => date_create($data["DueDate"])]
-    );
-    return "Successfully Added New Project";
+        );
+        return "Successfully Added New Project";
+    } catch (Illuminate\Database\QueryException $e){
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'A project already exists with this name';
+        } else {
+            return 'This project could not be added. Please try again.';
+        }
+    }
 });
 
 /** Route that adds a new resource to the resources table via POST Request
  * ResourceID: auto-incrementing key, so value that is inputted for it does not matter 
 
- {
+{
     "NetID": "jd111",
     "FirstName": "John",
     "LastName": "Doe",
@@ -84,16 +88,19 @@ Route::post("/addProject", function(Request $request) {
 Route::post('/addResource', function(Request $request) {
     $data = $request->all();
 
-    // Search for if the NetID already exists in the database
-
-    if (sizeof(DB::table('resources')->where('NetID', $data["NetID"])->get()) > 0) {
-        abort(501, "NetID Already Exists in Database");
-    }
-
-    DB::table('resources')->insertGetId(
+    try {
+        DB::table('resources')->insertGetId(
         ["ResourceID" => 0, "NetID" => $data["NetID"], "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
             "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
-    return "Successfully Added New Resource";
+        return "Successfully Added New Resource";
+    } catch (Illuminate\Database\QueryException $e){
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'A resource already exists with this netID';
+        } else {
+            return 'This resource could not be added. Please try again.';
+        }
+    }  
 });
 
 /** Route that adds a new entry to the resources_per_projects table via POST request
@@ -119,7 +126,7 @@ Route::post('/addResourcePerProject', function(Request $request) {
 
     DB::table('resources_per_projects')->insertGetId(
         ["ResourceID" => $resource_id, "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
-    return ("ResourcePerProject added successfully");
+    return ("Sucessfully Added New ResourcePerProject");
 });
 
 /** Route that adds a new entry to the schedules table

@@ -18,13 +18,17 @@ class CreateProjectsTable extends Migration
 
         Schema::create('projects', function (Blueprint $table) {
             $table->bigIncrements('ProjectID');
-            $table->string("ProjectName")->unique();
+            $table->string("ProjectName");
             $table->string("Technology");
             $table->integer("EstMaxHours");
             $table->string("Status");
             $table->date("StartDate");
             $table->date("DueDate");
+            $table->unique('ProjectName');
         });
+
+        // DB::unprepared('ALTER TABLE `projects` ADD UNIQUE INDEX `ProjectName_UNIQUE` (`ProjectName` ASC)');
+
     }
 
     /**
