@@ -64,7 +64,7 @@ Route::post("/addProject", function(Request $request) {
             "DueDate" => date_create($data["DueDate"])]
         );
         return "Successfully Added New Project";
-    } catch (Illuminate\Database\QueryException $e){
+    } catch (Exception $e){
         $error_code = $e->errorInfo[1];
         if($error_code == 1062){
             return 'A project already exists with this name';
@@ -93,7 +93,7 @@ Route::post('/addResource', function(Request $request) {
         ["ResourceID" => 0, "NetID" => $data["NetID"], "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
             "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
         return "Successfully Added New Resource";
-    } catch (Illuminate\Database\QueryException $e){
+    } catch (Exception $e){
         $error_code = $e->errorInfo[1];
         if($error_code == 1062){
             return 'A resource already exists with this netID';
