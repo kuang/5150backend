@@ -113,17 +113,26 @@ Route::post('/addResource', function(Request $request) {
 Route::post('/addResourcePerProject', function(Request $request) {
     $data = $request->all();
     
-    $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
-    $project_id_json = json_decode(json_encode($project_id_array{0}), true);
-    $project_id = $project_id_json["ProjectID"];
+    try {
+        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+        $project_id = $project_id_json["ProjectID"];
 
-    $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
-    $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
-    $resource_id = $resource_id_json["ResourceID"];
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
 
-    DB::table('resources_per_projects')->insertGetId(
-        ["ResourceID" => $resource_id, "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
-    return ("Sucessfully Added New ResourcePerProject");
+        DB::table('resources_per_projects')->insertGetId(
+            ["ResourceID" => $resource_id, "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
+        return ("Sucessfully Added New ResourcePerProject");
+    } catch (Exception $e){
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'This resource is already working on this project';
+        } else {
+            return 'The resource could not be added to this project. Please try again.';
+        }
+    }  
 });
 
 /** Route that adds a new entry to the schedules table
@@ -139,37 +148,91 @@ Route::post('/addResourcePerProject', function(Request $request) {
  */
 Route::post('/addSchedule', function(Request $request) {
    $data = $request->all();
-   
-   $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
-   $project_id_json = json_decode(json_encode($project_id_array{0}), true);
-   $project_id = $project_id_json["ProjectID"];
+    try {
+        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+        $project_id = $project_id_json["ProjectID"];
 
-   $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
-   $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
-   $resource_id = $resource_id_json["ResourceID"];
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
 
-   $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
-   $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
-   $schedule_id = $schedule_id_json["ScheduleID"];
+        $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
+        $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+        $schedule_id = $schedule_id_json["ScheduleID"];
 
-   DB::table('schedules')->insertGetId(
-       ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
-   return "Successfully Added New Schedule";
+        DB::table('schedules')->insertGetId(
+           ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
+        return "Successfully Added New Schedule";
+   } catch (Exception $e){
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'This resource is already working on this project';
+        } else {
+            return 'The resource could not be added to this project. Please try again.';
+        }
+    }  
 });
 
+/** Route that updates a project in the projects table
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
+
+{
+    "OldProjectName": "P2",
+    "NewProjectName": "P2'",
+    "Technology": "T2",
+    "EstMaxHours": 48,
+    "Status": "Done",
+    "StartDate": "2019-03-07",
+    "DueDate": "2019-03-14"
+}
+
+*/
 Route::put('/updateProject', function(Request $request) {
     $data = $request->all();
-    DB::table('projects')->where('ProjectName', $data["ProjectName"])->update(["Technology" => $data["Technology"],
+    try {
+        DB::table('projects')->where('ProjectName', $data["OldProjectName"])->update(
+        ["ProjectName" => $data["NewProjectName"], "Technology" => $data["Technology"],
         "EstMaxHours" => $data["EstMaxHours"], "Status" => $data["Status"],
         "StartDate" => $data["StartDate"], "DueDate" => $data["DueDate"]]);
-
+        return "Successfully Updated Existing Project";
+    } catch (Exception $e){
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'A project already exists with this name';
+        } else {
+            return 'This project could not be updated. Please try again.';
+        }
+    }
 });
 
+/** Route that updates a resource in the resources table
+ * ResourceID: auto-incrementing key, so value that is inputted for it does not matter 
+
+{
+    "OldNetID": "jd111",
+    "NewNetID": "jd111",
+    "FirstName": "John",
+    "LastName": "Doe",
+    "MaxHoursPerWeek": 40
+}
+
+*/
 Route::put('/updateResource', function(Request $request) {
     $data = $request->all();
-    DB::table('resources')->where('NetID', $data["NetID"])->update(["FirstName" => $data["FirstName"],
+    try {
+        DB::table('resources')->where('NetID', $data["OldNetID"])->update(
+        ["NetID" => $data["NewNetID"], "FirstName" => $data["FirstName"],
         "LastName" => $data["LastName"], "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
-
+        return "Successfully Updated Existing Resource";
+    } catch (Exception $e){
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'A resource already exists with this netID';
+        } else {
+            return 'This resource could not be updated. Please try again.';
+        }
+    }  
 });
 
 /** Route that clears all records from all tables */
