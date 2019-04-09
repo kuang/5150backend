@@ -65473,7 +65473,7 @@ var Header = function Header() {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
     className: "navbar-brand",
     to: "/"
-  }, "Example")));
+  }, "Exalallalalalalae")));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Header);
@@ -65498,8 +65498,8 @@ var Header = function Header() {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/kuang/code/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/kuang/code/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\sunqi\Desktop\SE\5150Backend\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\sunqi\Desktop\SE\5150Backend\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
