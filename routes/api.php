@@ -316,7 +316,7 @@ Route::put('/updateSchedule', function(Request $request) {
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
 
 {
-    "ProjectName": "P2",
+    "ProjectName": "P2"
 }
 
 */
@@ -336,7 +336,7 @@ Route::delete("/deleteProject", function(Request $request) {
         }
 
         DB::table('resources_per_projects')->where("ProjectID", "=", $project_id)->delete();
-        
+
         return "Successfully Deleted Existing Project";
     } catch (Exception $e){
         echo($e->getMessage());
@@ -345,6 +345,43 @@ Route::delete("/deleteProject", function(Request $request) {
             return 'A project does not exist with this name';
         } else {
             return 'This project could not be deleted. Please try again.';
+        }
+    }
+});
+
+/** Route that deletes a  project in the projects table
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter
+
+{
+
+"NetID": "jd111"
+}
+ *
+
+ */
+Route::delete("/deleteResource", function(Request $request) {
+    $data = $request->all();
+    try {
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
+
+        $matching_schedules = DB::table('resources_per_projects')->where("ResourceID", "=", $resource_id)->pluck('ScheduleID');
+
+        foreach ($matching_schedules as $scheduleID) {
+            DB::table('schedules')->where("ScheduleID", "=", $scheduleID)->delete();
+        }
+
+        DB::table('resources_per_projects')->where("ResourceID", "=", $resource_id)->delete();
+        return "Successfully Deleted Resource";
+        
+    } catch (Exception $e){
+        echo($e->getMessage());
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'A resource does not exist with this NetID';
+        } else {
+            return 'This resource could not be deleted. Please try again.';
         }
     }
 });

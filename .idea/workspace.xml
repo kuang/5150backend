@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd0516a1-339f-4907-ba62-f7f0e98ac867" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,8 +32,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="388">
-              <caret line="338" column="8" selection-start-line="338" selection-start-column="8" selection-end-line="338" selection-end-column="8" />
+            <state relative-caret-position="299">
+              <caret line="376" column="8" selection-start-line="376" selection-start-column="8" selection-end-line="376" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -45,6 +43,7 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>ProjectName</find>
+      <find>addSc</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -222,12 +221,12 @@
       <workItem from="1554239929235" duration="1482000" />
       <workItem from="1554409809704" duration="291000" />
       <workItem from="1555009430178" duration="2551000" />
-      <workItem from="1555013699133" duration="2667000" />
+      <workItem from="1555013699133" duration="2988000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15852000" />
+    <option name="totallyTimeSpent" value="16173000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="23" width="1280" height="736" extended-state="6" />
@@ -380,8 +379,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="338" column="8" selection-start-line="338" selection-start-column="8" selection-end-line="338" selection-end-column="8" />
+        <state relative-caret-position="299">
+          <caret line="376" column="8" selection-start-line="376" selection-start-column="8" selection-end-line="376" selection-end-column="8" />
         </state>
       </provider>
     </entry>
