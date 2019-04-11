@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import Header from './Header.js'
+import Individual_resource_page from './individual_resource_page/individual_resource_page.js'
+
 // import './App.css';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
