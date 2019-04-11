@@ -324,7 +324,19 @@ Route::delete("/deleteProject", function(Request $request) {
     $data = $request->all();
 
     try {
-        DB::table('projects')->where('ProjectName', '=', $data["ProjectName"])->delete();
+        // Removing Resources Per Projects
+        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+        $project_id = $project_id_json["ProjectID"];
+
+        $matching_schedules = DB::table('resources_per_projects')->where("ProjectID", "=", $project_id)->pluck('ScheduleID');
+
+        foreach ($matching_schedules as $scheduleID) {
+            DB::table('schedules')->where("ScheduleID" , "=", $scheduleID)->delete();
+        }
+
+        DB::table('resources_per_projects')->where("ProjectID", "=", $project_id)->delete();
+        
         return "Successfully Deleted Existing Project";
     } catch (Exception $e){
         echo($e->getMessage());
