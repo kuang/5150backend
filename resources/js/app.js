@@ -14,3 +14,7 @@ require('./bootstrap');
  */
 
 require('./components/App');
+
+
+// ReactDOM.render(<App />, document.getElementById('app'))
+

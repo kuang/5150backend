@@ -1,19 +1,52 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import Header from './Header'
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+// import './App.css';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 
 class App extends Component {
     render() {
         return (
-            <BrowserRouter>
+            <Router>
                 <div>
-                    <Header />
+                    <nav>
+                        <ul>
+                            <li>
+                                <Link to="/">Home</Link>
+                            </li>
+                            <li>
+                                <Link to="/about/">About</Link>
+                            </li>
+                            <li>
+                                <Link to="/users/">Users</Link>
+                            </li>
+                        </ul>
+                    </nav>
+
+                    <Route path="/" exact component={Index} />
+                    <Route path="/about/" component={About} />
+                    <Route path="/users/" component={Users} />
                 </div>
-            </BrowserRouter>
-        )
+            </Router>
+        );
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('app'))
+function Index() {
+    return <h2>Home</h2>;
+}
+
+function About() {
+    return <h2>About</h2>;
+}
+
+function Users() {
+    return <h2>Users</h2>;
+}
+
+
+export default App;
+
+if (document.getElementById('app')) {
+    ReactDOM.render(<App />, document.getElementById('app'));
+}
