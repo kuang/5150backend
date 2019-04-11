@@ -32,8 +32,17 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/routes/api.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="381" column="32" lean-forward="true" selection-start-line="381" selection-start-column="32" selection-end-line="381" selection-end-column="32" />
+            <state relative-caret-position="290">
+              <caret line="449" column="55" lean-forward="true" selection-start-line="449" selection-start-column="55" selection-end-line="449" selection-end-column="55" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_22_192428_create_resources_table.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
             </state>
           </provider>
         </entry>
@@ -44,6 +53,7 @@
     <findStrings>
       <find>ProjectName</find>
       <find>addSc</find>
+      <find>Dates</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -166,6 +176,17 @@
             <path>
               <item name="5150Backend" type="b2602c69:ProjectViewProjectNode" />
               <item name="5150Backend" type="462c0819:PsiDirectoryNode" />
+              <item name="database" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="5150Backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="5150Backend" type="462c0819:PsiDirectoryNode" />
+              <item name="database" type="462c0819:PsiDirectoryNode" />
+              <item name="migrations" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="5150Backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="5150Backend" type="462c0819:PsiDirectoryNode" />
               <item name="routes" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -221,19 +242,19 @@
       <workItem from="1554239929235" duration="1482000" />
       <workItem from="1554409809704" duration="291000" />
       <workItem from="1555009430178" duration="2551000" />
-      <workItem from="1555013699133" duration="3297000" />
+      <workItem from="1555013699133" duration="4791000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16482000" />
+    <option name="totallyTimeSpent" value="17976000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-1" y="23" width="1280" height="736" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28594506" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4984472" visible="true" weight="0.28513733" />
+      <window_info id="Structure" order="1" sideWeight="0.5015528" side_tool="true" visible="true" weight="0.28513733" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -322,13 +343,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_22_192428_create_resources_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_22_194425_create_resources_per_projects_table.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -377,10 +391,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_03_22_192428_create_resources_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="381" column="32" lean-forward="true" selection-start-line="381" selection-start-column="32" selection-end-line="381" selection-end-column="32" />
+        <state relative-caret-position="290">
+          <caret line="449" column="55" lean-forward="true" selection-start-line="449" selection-start-column="55" selection-end-line="449" selection-end-column="55" />
         </state>
       </provider>
     </entry>

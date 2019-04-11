@@ -349,7 +349,7 @@ Route::delete("/deleteProject", function(Request $request) {
     }
 });
 
-/** Route that deletes a  project in the projects table
+/** Route that deletes a resource in the resource table
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter
 
 {
@@ -387,6 +387,86 @@ Route::delete("/deleteResource", function(Request $request) {
     }
 });
 
+/** Route that deletes a resource in the resource table
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter
+
+{
+"ProjectName" : P1
+"NetID": "jd111"
+}
+ *
+
+ */
+Route::delete("/deleteResourcePerProject", function(Request $request) {
+    $data = $request->all();
+    try {
+        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+        $project_id = $project_id_json["ProjectID"];
+
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
+
+        $matching_schedules =
+            DB::table('resources_per_projects')->where([["ResourceID", "=", $resource_id], ["ProjectID", "=", $project_id]])->pluck('ScheduleID');
+
+        foreach ($matching_schedules as $scheduleID) {
+            DB::table('schedules')->where("ScheduleID", "=", $scheduleID)->delete();
+        }
+
+        DB::table('resources_per_projects')->where([["ResourceID", "=", $resource_id], ["ProjectID", "=", $project_id]])->delete();
+        return "Successfully Deleted Resource From Project";
+
+    } catch (Exception $e){
+        echo($e->getMessage());
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'This resource is not allocated to this project';
+        } else {
+            return 'This resource could not be removed from this project. Please try again.';
+        }
+    }
+});
+
+/** Route that deletes a resource in the resource table
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter
+
+{
+"ProjectName" : P1,
+"NetID": "jd111",
+"Dates" : 2019-04-01
+}*/
+Route::delete("/deleteSchedule", function(Request $request) {
+    $data = $request->all();
+
+    try {
+        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+        $project_id = $project_id_json["ProjectID"];
+
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
+
+        $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
+        $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+        $schedule_id = $schedule_id_json["ScheduleID"];
+
+        DB::table('schedules')->where([["ScheduleID", "=", $schedule_id], ["Dates", "=", $data["Dates"]]])->delete();
+
+        return "Successfully Deleted Schedule";
+
+    } catch (Exception $e){
+        echo($e->getMessage());
+        $error_code = $e->errorInfo[1];
+        if($error_code == 1062){
+            return 'This resource is not allocated to this project';
+        } else {
+            return 'This resource could not be removed from this project. Please try again.';
+        }
+    }
+});
 /** Route that clears all records from all tables */
 // Route::get('/clear', function() {
 //     DB::table('schedules')->delete();
