@@ -336,7 +336,7 @@ Route::delete("/deleteProject", function(Request $request) {
         }
 
         DB::table('resources_per_projects')->where("ProjectID", "=", $project_id)->delete();
-
+        DB::table('projects')->where("ProjectID" ,"=", $project_id)->delete();
         return "Successfully Deleted Existing Project";
     } catch (Exception $e){
         echo($e->getMessage());
@@ -373,8 +373,9 @@ Route::delete("/deleteResource", function(Request $request) {
         }
 
         DB::table('resources_per_projects')->where("ResourceID", "=", $resource_id)->delete();
+        DB::table('resources')->where("ResourceID" ,"=", $resource_id)->delete();
         return "Successfully Deleted Resource";
-        
+
     } catch (Exception $e){
         echo($e->getMessage());
         $error_code = $e->errorInfo[1];
