@@ -37,6 +37,10 @@ Route::get('/displaySchedules', function() {
     return DB::table('schedules')->get();
 });
 
+/** Route that returns all projects a given resource is currently staffed on */
+Route::get('/displayProjectsPerResource/{resourceID}', function ($resourceID) {
+    return DB::table('resources_per_projects')->select('ProjectID')->where('ResourceID', '=', $resourceID)->get();
+});
 /** Route that adds a new project to the projects table via POST Request
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
 
