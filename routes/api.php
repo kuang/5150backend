@@ -41,6 +41,18 @@ Route::get('/displaySchedules', function() {
 Route::get('/displayProjectsPerResource/{resourceID}', function ($resourceID) {
     return DB::table('resources_per_projects')->select('ProjectID')->where('ResourceID', '=', $resourceID)->get();
 });
+
+
+/** Route that returns all resources working on a given project */
+Route::get('/displayResourcesPerProject/{projectID}', function ($projectID) {
+    return DB::table('resources_per_projects')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+            ->select('resources.FirstName', 'resources.LastName', 'resources_per_projects.Role', 'schedules.Dates', 'schedules.HoursPerWeek')
+            ->where('resources_per_projects.ProjectID', '=', $projectID)
+            ->get();
+});
+
 /** Route that adds a new project to the projects table via POST Request
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
 
