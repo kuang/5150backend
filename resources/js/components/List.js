@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 export default class List extends React.Component {
     constructor(props) {
@@ -11,8 +11,8 @@ export default class List extends React.Component {
     render() {
         return (
             <div>
-              <h2>AddResourceToProject<h2>
+                <h2>AddResourceToProject<h2>
             </div>
-        );
-    }
-}
+                    );
+                }
+            }
