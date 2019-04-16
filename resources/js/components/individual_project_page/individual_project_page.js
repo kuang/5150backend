@@ -22,6 +22,7 @@ class Individual_project_page extends React.Component {
             ]
         }
     }
+
     renderRow(name) {
         return (<h2>{name}</h2>);
     }
@@ -32,10 +33,15 @@ class Individual_project_page extends React.Component {
 
     render() {
         return (
-            <ul class="list-unstyled">
-                <li>{this.renderRow("SUP")}</li>
-                <li>{this.renderRow("BOI")}</li>
-            </ul>
+            <div
+                className="ag-theme-balham"
+                style={{ height: '200px', width: '600px' }}
+            >
+                <AgGridReact
+                    columnDefs={this.state.columnDefs}
+                    rowData={this.state.rowData}>
+                </AgGridReact>
+            </div>
         );
     }
 }

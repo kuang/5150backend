@@ -41,6 +41,7 @@ class App extends Component {
                         render={(props) => <Individual_resource_page {...props} resourceID={4} />}
                     />
 
+                    <Route path ="/individual_project" component = {Individual_project_page}/>
                 </div>
             </Router>
         );
