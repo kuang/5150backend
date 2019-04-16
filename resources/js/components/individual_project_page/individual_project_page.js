@@ -15,30 +15,32 @@ class Individual_project_page extends React.Component {
         const componentReference = this.ref;
         return {
             gridOptions: {
-                columnDefs: [
-                    {headerName: 'Make', field: 'make', editable: true, sortable: true, enableCellChangeFlash:true},
-                    {headerName: 'Model', field: 'model', editable: true, sortable: true, enableCellChangeFlash:true},
-                    {headerName: 'Price', field: 'price', editable: true, sortable: true, enableCellChangeFlash:true}
-
-                ],
-                    rowData: [
-                    {make: 'Toyota', model: 'Celica', price: 35000},
-                    {make: 'Ford', model: 'Mondeo', price: 32000},
-                    {make: 'Porsche', model: 'Boxter', price: 72000},
-                    {make: 'Honda', model: 'Element', price: 90000},
-                    {make: 'Panda', model: 'Express', price: 100000},
-                    {make: 'BMW', model: 'X5', price: 75000}
-                ]
+                // columnDefs: [
+                //     {headerName: 'Make', field: 'make', editable: true, sortable: true, enableCellChangeFlash:true},
+                //     {headerName: 'Model', field: 'model', editable: true, sortable: true, enableCellChangeFlash:true},
+                //     {headerName: 'Price', field: 'price', editable: true, sortable: true, enableCellChangeFlash:true}
+                //
+                // ],
+                //     rowData: [
+                //     {make: 'Toyota', model: 'Celica', price: 35000},
+                //     {make: 'Ford', model: 'Mondeo', price: 32000},
+                //     {make: 'Porsche', model: 'Boxter', price: 72000},
+                //     {make: 'Honda', model: 'Element', price: 90000},
+                //     {make: 'Panda', model: 'Express', price: 100000},
+                //     {make: 'BMW', model: 'X5', price: 75000}
+                // ]
+                columnDefs: [],
+                rowData: []
             }
         }
     }
     /***
-     * Make API Calls here to fetch data and set the row data appropriately
+     * Makes an API call to fetch data and set the row data appropriately
+     * Also initializes all the variables in gridOptions of the state
      */
     componentDidMount() {
-        const projectID = this.props.match.params.projectID;
-
-        fetch('../api/displaySchedules') // <-- this path surprises me
+        const projectID = this.props.match.params.projectID; // the project id of this individual project page
+        fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(response => response.json())
             .then(data => console.log(data));
     }
