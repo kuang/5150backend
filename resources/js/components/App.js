@@ -5,7 +5,7 @@ import Individual_resource_page from './individual_resource_page/individual_reso
 import Individual_project_page from './individual_project_page/individual_project_page.js'
 // import './App.css';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-
+import Projects_list_page from './projects_list_page/projects_list_page.js'
 
 class App extends Component {
     render() {
@@ -29,6 +29,9 @@ class App extends Component {
                             <li>
                                 <Link to="/individual_project/">projects</Link>
                             </li>
+                            <li>
+                                <Link to="/projects_list/">List of projects</Link>
+                            </li>
                         </ul>
                     </nav>
 
@@ -42,6 +45,7 @@ class App extends Component {
                     />
 
                     <Route path ="/individual_project" component = {Individual_project_page}/>
+                    <Route path ="/projects_list/" component = {Projects_list_page}/>
                 </div>
             </Router>
         );

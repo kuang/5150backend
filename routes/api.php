@@ -42,7 +42,6 @@ Route::get('/displayProjectsPerResource/{resourceID}', function ($resourceID) {
     return DB::table('resources_per_projects')->select('ProjectID')->where('ResourceID', '=', $resourceID)->get();
 });
 
-
 /** Route that returns all resources working on a given project */
 Route::get('/displayResourcesPerProject/{projectID}', function ($projectID) {
     return DB::table('resources_per_projects')
