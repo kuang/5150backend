@@ -27,7 +27,7 @@ class App extends Component {
                                 <Link to="/resource/">resource</Link>
                             </li>
                             <li>
-                                <Link to="/individual_project/">projects</Link>
+                                <Link to="/individual_project/25">projects</Link>
                             </li>
                             <li>
                                 <Link to="/projects_list/">List of projects</Link>
@@ -44,7 +44,10 @@ class App extends Component {
                         render={(props) => <Individual_resource_page {...props} resourceID={4} />}
                     />
 
-                    <Route path ="/individual_project" component = {Individual_project_page}/>
+                    <Route
+                        path ="/individual_project/:projectID"
+                        component = {Individual_project_page}
+                    />
                     <Route path ="/projects_list/" component = {Projects_list_page}/>
                 </div>
             </Router>

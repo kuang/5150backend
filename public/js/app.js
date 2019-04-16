@@ -88848,7 +88848,7 @@ function (_Component) {
       }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/resource/"
       }, "resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
-        to: "/individual_project/"
+        to: "/individual_project/25"
       }, "projects")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/projects_list/"
       }, "List of projects")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
@@ -88869,7 +88869,7 @@ function (_Component) {
           }));
         }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
-        path: "/individual_project",
+        path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/projects_list/",
@@ -88983,42 +88983,78 @@ function (_React$Component) {
     _classCallCheck(this, Individual_project_page);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Individual_project_page).call(this, props));
-    _this.state = {
-      columnDefs: [{
-        headerName: 'Make',
-        field: 'make'
-      }, {
-        headerName: 'Model',
-        field: 'model'
-      }, {
-        headerName: 'Price',
-        field: 'price'
-      }],
-      rowData: [{
-        make: 'Toyota',
-        model: 'Celica',
-        price: 35000
-      }, {
-        make: 'Ford',
-        model: 'Mondeo',
-        price: 32000
-      }, {
-        make: 'Porsche',
-        model: 'Boxter',
-        price: 72000
-      }]
-    };
+    _this.state = _this.createState();
     return _this;
   }
 
   _createClass(Individual_project_page, [{
-    key: "renderRow",
-    value: function renderRow(name) {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, name);
+    key: "createState",
+    value: function createState() {
+      var componentReference = this.ref;
+      return {
+        gridOptions: {
+          columnDefs: [{
+            headerName: 'Make',
+            field: 'make',
+            editable: true,
+            sortable: true,
+            enableCellChangeFlash: true
+          }, {
+            headerName: 'Model',
+            field: 'model',
+            editable: true,
+            sortable: true,
+            enableCellChangeFlash: true
+          }, {
+            headerName: 'Price',
+            field: 'price',
+            editable: true,
+            sortable: true,
+            enableCellChangeFlash: true
+          }],
+          rowData: [{
+            make: 'Toyota',
+            model: 'Celica',
+            price: 35000
+          }, {
+            make: 'Ford',
+            model: 'Mondeo',
+            price: 32000
+          }, {
+            make: 'Porsche',
+            model: 'Boxter',
+            price: 72000
+          }, {
+            make: 'Honda',
+            model: 'Element',
+            price: 90000
+          }, {
+            make: 'Panda',
+            model: 'Express',
+            price: 100000
+          }, {
+            make: 'BMW',
+            model: 'X5',
+            price: 75000
+          }]
+        }
+      };
     }
+    /***
+     * Make API Calls here to fetch data and set the row data appropriately
+     */
+
   }, {
-    key: "renderGrid",
-    value: function renderGrid() {}
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var projectID = this.props.match.params.projectID;
+      fetch('../api/displaySchedules') // <-- this path surprises me
+      .then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        return console.log(data);
+      });
+    }
   }, {
     key: "render",
     value: function render() {
@@ -89029,8 +89065,10 @@ function (_React$Component) {
           width: '600px'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__["AgGridReact"], {
-        columnDefs: this.state.columnDefs,
-        rowData: this.state.rowData
+        gridOptions: this.state.gridOptions,
+        onCellEditingStopped: function onCellEditingStopped(e) {
+          console.log("");
+        }
       }));
     }
   }]);
@@ -89198,8 +89236,8 @@ function (_React$Component) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/ayushmittal-user/Documents/College/Cornell6/CS 5150/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/ayushmittal-user/Documents/College/Cornell6/CS 5150/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
