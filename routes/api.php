@@ -40,16 +40,40 @@ Route::get('/displaySchedules', function() {
 /** Route that returns all projects a given resource is currently staffed on */
 Route::get('/displayProjectsPerResource/{resourceID}', function ($resourceID) {
     return DB::table('resources_per_projects')->select('ProjectID')->where('ResourceID', '=', $resourceID)->get();
+//    return DB::table('resources_per_projects')
+//        ->join('projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
+//        ->select('projects.ProjectName', 'resources_per_projects.Role', 'projects.Technology', 'projects.EstMaxHours', 'projects.Status', 'projects.StartDate', 'projects.DueDate')
+//        ->where('resources_per_projects.ResourceID', '=', $resourceID)
+//        ->get();
 });
 
-/** Route that returns all resources working on a given project */
-Route::get('/displayResourcesPerProject/{projectID}', function ($projectID) {
+/** Route that returns all resources (and hours per week) working on a given project */
+Route::get('/displayResourceInfoPerProject/{projectID}', function ($projectID) {
     return DB::table('resources_per_projects')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
             ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
-            ->select('resources.FirstName', 'resources.LastName', 'resources_per_projects.Role', 'schedules.Dates', 'schedules.HoursPerWeek')
+            ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role', 'schedules.Dates', 'schedules.HoursPerWeek')
             ->where('resources_per_projects.ProjectID', '=', $projectID)
             ->get();
+});
+
+/** Route that returns all resources (and hours per week) working on a given project */
+Route::get('/displayResourcesPerProject/{projectID}', function ($projectID) {
+    return DB::table('resources_per_projects')
+        ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+        ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role')
+        ->where('resources_per_projects.ProjectID', '=', $projectID)
+        ->get();
+});
+
+/** Route that returns all resources not working on a given project */
+Route::get('/displayResourcesAvailable/{projectID}', function ($projectID) {
+    return DB::table('resources_per_projects')
+        ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+        ->select('resources.NetID', 'resources.FirstName', 'resources.LastName')
+        ->where('resources_per_projects.ProjectID', '!=', $projectID)
+        ->groupBy('resources.NetID')
+        ->get();
 });
 
 /** Route that adds a new project to the projects table via POST Request
