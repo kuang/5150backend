@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Header from './Header.js'
 import Individual_resource_page from './individual_resource_page/individual_resource_page.js'
-
+import Individual_project_page from './individual_project_page/individual_project_page.js'
 // import './App.css';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -26,6 +26,9 @@ class App extends Component {
                             <li>
                                 <Link to="/resource/">resource</Link>
                             </li>
+                            <li>
+                                <Link to="/individual_project/">projects</Link>
+                            </li>
                         </ul>
                     </nav>
 
@@ -33,6 +36,7 @@ class App extends Component {
                     <Route path="/about/" component={About} />
                     <Route path="/users/" component={Users} />
                     <Route path="/resource/" component={Individual_resource_page} />
+                    <Route path="/individual_project/" component = {Individual_project_page} />
                 </div>
             </Router>
         );
@@ -50,7 +54,6 @@ function About() {
 function Users() {
     return <h2>Users</h2>;
 }
-
 
 export default App;
 
