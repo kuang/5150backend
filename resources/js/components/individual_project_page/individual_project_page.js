@@ -79,7 +79,8 @@ class Projects_list_page extends React.Component {
      * This function is always called right after the constructor for this class is called
      * It makes a GET request to the api (argument to the fetch function), retrieves it, then processes the data
      * using processData to create new row data and column definitions, and then updates the state to those values.
-     * That is why when you load this page, it starts off empty and then data populates the grid
+     * That is why when you load this page, it starts off empty and then data populates the grid.
+     * It is called once, immediately after render() is first called
      */
     componentDidMount() {
         let projectID = this.props.match.params.projectID;
@@ -91,6 +92,10 @@ class Projects_list_page extends React.Component {
                 columnDefs: newStuff["columnDefs"]}))
     }
 
+    /*** This is what you see on the screen
+     * 
+     * @returns {*}
+     */
     render() {
         return (
             <div
