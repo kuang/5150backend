@@ -8,9 +8,12 @@ class Projects_list_page extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = { // state is initialized to just have two column definitions, and no row data.
+            // the column defintions and row data are actually updated in compoundDidMount()
             columnDefs: [{
-                headerName: "Name", field: "name"
+                headerName: "Name", field: "name" // headerName is the name of the column, field is what is
+                // referenced by row data. For instance, to create a row for these two column defs, you would do
+                // [{"name" : Jonathan Ou}, {"role": "Product Manager"}]
             }, {
                 headerName: "Role", field: "role"
             }],
@@ -18,6 +21,11 @@ class Projects_list_page extends React.Component {
         }
     }
 
+    /***
+     * Processes
+     * @param data
+     * @returns {{rowData: Array, columnDefs: *[]}}
+     */
     processData(data) {
         console.log(data);
         let columnDefs = [
@@ -67,6 +75,12 @@ class Projects_list_page extends React.Component {
         return {"rowData" : rowData, "columnDefs" : columnDefs};
     }
 
+    /***
+     * This function is always called right after the constructor for this class is called
+     * It makes a GET request to the api (argument to the fetch function), retrieves it, then processes the data
+     * using processData to create new row data and column definitions, and then updates the state to those values.
+     * That is why when you load this page, it starts off empty and then data populates the grid
+     */
     componentDidMount() {
         let projectID = this.props.match.params.projectID;
         fetch(`../api/displayResourceInfoPerProject/${projectID}`)
