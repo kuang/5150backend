@@ -88999,15 +88999,20 @@ function (_React$Component) {
   _createClass(Projects_list_page, [{
     key: "processData",
     value: function processData(data) {
+      console.log(data);
       var columnDefs = [{
         headerName: 'Name',
         field: 'name',
-        sortable: true,
-        enableCellChangeFlash: true
+        sortable: true
+      }, {
+        headerName: 'NetID',
+        field: 'netid',
+        sortable: true
       }, {
         headerName: 'Role',
         field: 'role',
         editable: true,
+        sortable: true,
         enableCellChangeFlash: true
       }];
       var rowData = [];
@@ -89019,6 +89024,7 @@ function (_React$Component) {
         var currentSchedule = data[i];
         var currentNetID = currentSchedule.NetID;
         var currentHeader = currentSchedule.Dates;
+        var fullName = currentSchedule.FirstName + " " + currentSchedule.LastName;
 
         if (currentNetID != prevNetID) {
           if (prevNetID != null) {
@@ -89028,7 +89034,8 @@ function (_React$Component) {
           var currentRole = currentSchedule.Role;
           prevNetID = currentNetID;
           currentJSON = {
-            name: currentNetID,
+            netid: currentNetID,
+            name: fullName,
             role: currentRole
           };
         }
@@ -89078,8 +89085,8 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ag-theme-balham",
         style: {
-          height: '500px',
-          width: '600px'
+          height: '80vh',
+          width: '100vw'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__["AgGridReact"], {
         columnDefs: this.state.columnDefs,

@@ -19,9 +19,11 @@ class Projects_list_page extends React.Component {
     }
 
     processData(data) {
+        console.log(data);
         let columnDefs = [
-            {headerName: 'Name', field: 'name', sortable: true, enableCellChangeFlash: true},
-            {headerName: 'Role', field: 'role', editable: true, enableCellChangeFlash: true},
+            {headerName: 'Name', field: 'name', sortable: true},
+            {headerName: 'NetID', field: 'netid', sortable:true},
+            {headerName: 'Role', field: 'role', editable: true, sortable:true, enableCellChangeFlash: true},
         ];
         let rowData = [];
         let columnNames = new Set();
@@ -32,6 +34,7 @@ class Projects_list_page extends React.Component {
             let currentSchedule = data[i];
             let currentNetID = currentSchedule.NetID;
             let currentHeader = currentSchedule.Dates;
+            let fullName = currentSchedule.FirstName + " " + currentSchedule.LastName;
 
             if (currentNetID != prevNetID) {
                 if (prevNetID != null) {
@@ -40,7 +43,7 @@ class Projects_list_page extends React.Component {
 
                 let currentRole = currentSchedule.Role;
                 prevNetID = currentNetID;
-                currentJSON = {name: currentNetID, role: currentRole};
+                currentJSON = {netid: currentNetID, name : fullName, role: currentRole};
             }
 
             let currentHours = currentSchedule.HoursPerWeek;
@@ -79,12 +82,14 @@ class Projects_list_page extends React.Component {
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '500px',
-                    width: '600px' }}
+                    height: '80vh',
+                    width: '100vw'
+                }}
             >
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
-                    rowData={this.state.rowData}>
+                    rowData={this.state.rowData}
+                >
                 </AgGridReact>
             </div>
         );
