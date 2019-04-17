@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd0516a1-339f-4907-ba62-f7f0e98ac867" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/js/components/individual_project_page/individual_project_page.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/individual_project_page/individual_project_page.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,22 +30,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/api.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="750">
-              <caret line="50" column="54" selection-start-line="50" selection-start-column="12" selection-end-line="50" selection-end-column="54" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/js/components/individual_project_page/individual_project_page.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="95" column="7" selection-start-line="95" selection-start-column="7" selection-end-line="95" selection-end-column="7" />
+            <state relative-caret-position="252">
+              <caret line="105" column="56" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="56" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
+                <element signature="n#!!block;n#processData#0;n#Projects_list_page#0" />
               </folding>
             </state>
           </provider>
@@ -176,6 +169,7 @@
     </include_path>
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="120" />
     <option name="y" value="23" />
     <option name="width" value="1280" />
     <option name="height" value="736" />
@@ -191,6 +185,24 @@
             <path>
               <item name="5150Backend" type="b2602c69:ProjectViewProjectNode" />
               <item name="5150Backend" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="5150Backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="5150Backend" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="5150Backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="5150Backend" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="5150Backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="5150Backend" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -249,15 +261,15 @@
       <workItem from="1555013699133" duration="4791000" />
       <workItem from="1555377907349" duration="683000" />
       <workItem from="1555444314248" duration="7630000" />
-      <workItem from="1555504845892" duration="446000" />
+      <workItem from="1555504845892" duration="3075000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54688000" />
+    <option name="totallyTimeSpent" value="57317000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="736" extended-state="6" />
+    <frame x="120" y="23" width="1280" height="736" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5017026" visible="true" weight="0.3029079" />
@@ -471,17 +483,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/routes/api.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
+        <state relative-caret-position="365">
           <caret line="50" column="54" selection-start-line="50" selection-start-column="12" selection-end-line="50" selection-end-column="54" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/resources/js/components/individual_project_page/individual_project_page.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="95" column="7" selection-start-line="95" selection-start-column="7" selection-end-line="95" selection-end-column="7" />
+        <state relative-caret-position="252">
+          <caret line="105" column="56" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="56" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
+            <element signature="n#!!block;n#processData#0;n#Projects_list_page#0" />
           </folding>
         </state>
       </provider>

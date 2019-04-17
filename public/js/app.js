@@ -88983,10 +88983,16 @@ function (_React$Component) {
     _classCallCheck(this, Projects_list_page);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Projects_list_page).call(this, props));
+    _this.updatedRows = new Set();
     _this.state = {
+      // state is initialized to just have two column definitions, and no row data.
+      // the column definitions and row data are actually updated in compoundDidMount()
       columnDefs: [{
         headerName: "Name",
-        field: "name"
+        field: "name" // headerName is the name of the column, field is what is
+        // referenced by row data. For instance, to create a row for these two column defs, you would do
+        // [{"name" : Jonathan Ou}, {"role": "Product Manager"}]
+
       }, {
         headerName: "Role",
         field: "role"
@@ -88995,6 +89001,12 @@ function (_React$Component) {
     };
     return _this;
   }
+  /***
+   * Processes
+   * @param data
+   * @returns {{rowData: Array, columnDefs: *[]}}
+   */
+
 
   _createClass(Projects_list_page, [{
     key: "processData",
@@ -89011,7 +89023,6 @@ function (_React$Component) {
       }, {
         headerName: 'Role',
         field: 'role',
-        editable: true,
         sortable: true,
         enableCellChangeFlash: true
       }];
@@ -89048,7 +89059,8 @@ function (_React$Component) {
             headerName: currentHeader,
             field: currentHeader,
             sortable: true,
-            enableCellChangeFlash: true
+            enableCellChangeFlash: true,
+            editable: true
           };
           columnDefs.push(newColumnDef);
         }
@@ -89062,6 +89074,14 @@ function (_React$Component) {
         "columnDefs": columnDefs
       };
     }
+    /***
+     * This function is always called right after the constructor for this class is called
+     * It makes a GET request to the api (argument to the fetch function), retrieves it, then processes the data
+     * using processData to create new row data and column definitions, and then updates the state to those values.
+     * That is why when you load this page, it starts off empty and then data populates the grid.
+     * It is called once, immediately after render() is first called
+     */
+
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
@@ -89080,18 +89100,44 @@ function (_React$Component) {
       });
     }
   }, {
+    key: "saveData",
+    value: function saveData() {
+      console.log(this);
+    }
+  }, {
+    key: "addUpdatedRow",
+    value: function addUpdatedRow(event) {
+      this.updatedRows.add(event.rowIndex);
+    }
+    /***
+     * Makes POST Request to save data
+     */
+
+    /*** This is what you see on the screen
+     *
+     * @returns {*}
+     */
+
+  }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ag-theme-balham",
         style: {
-          height: '80vh',
+          height: '70vh',
           width: '100vw'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__["AgGridReact"], {
         columnDefs: this.state.columnDefs,
-        rowData: this.state.rowData
-      }));
+        rowData: this.state.rowData,
+        onCellEditingStopped: this.addUpdatedRow.bind(this)
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        style: {
+          height: '30px',
+          width: '100px'
+        },
+        onClick: this.saveData.bind(this)
+      }, "Save"));
     }
   }]);
 

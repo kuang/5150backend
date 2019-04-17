@@ -8,8 +8,9 @@ class Projects_list_page extends React.Component {
 
     constructor(props) {
         super(props);
+        this.updatedRows = new Set();
         this.state = { // state is initialized to just have two column definitions, and no row data.
-            // the column defintions and row data are actually updated in compoundDidMount()
+            // the column definitions and row data are actually updated in compoundDidMount()
             columnDefs: [{
                 headerName: "Name", field: "name" // headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
@@ -31,7 +32,7 @@ class Projects_list_page extends React.Component {
         let columnDefs = [
             {headerName: 'Name', field: 'name', sortable: true},
             {headerName: 'NetID', field: 'netid', sortable:true},
-            {headerName: 'Role', field: 'role', editable: true, sortable:true, enableCellChangeFlash: true},
+            {headerName: 'Role', field: 'role', sortable:true, enableCellChangeFlash: true},
         ];
         let rowData = [];
         let columnNames = new Set();
@@ -62,7 +63,8 @@ class Projects_list_page extends React.Component {
                     headerName: currentHeader,
                     field: currentHeader,
                     sortable: true,
-                    enableCellChangeFlash: true
+                    enableCellChangeFlash: true,
+                    editable: true
                 };
                 columnDefs.push(newColumnDef);
             }
@@ -92,8 +94,26 @@ class Projects_list_page extends React.Component {
                 columnDefs: newStuff["columnDefs"]}))
     }
 
+    /***
+     * Makes API call to update all the edited rows prior to this call
+     * Clears the edited rows so we don't save the same information twice
+     */
+    saveData() {
+        console.log(this)
+    }
+
+    /***
+     * Add the row index of the row that was just edited
+     * @param event
+     */
+    addUpdatedRow(event) {
+        this.updatedRows.add(event.rowIndex);
+    }
+    /***
+     * Makes POST Request to save data
+     */
     /*** This is what you see on the screen
-     * 
+     *
      * @returns {*}
      */
     render() {
@@ -101,15 +121,24 @@ class Projects_list_page extends React.Component {
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '80vh',
+                    height: '70vh',
                     width: '100vw'
                 }}
             >
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
+                    onCellEditingStopped = {this.addUpdatedRow.bind(this)}
                 >
                 </AgGridReact>
+
+                <button style = {{height:'30px',width:'100px'}}
+                        onClick = {
+                            this.saveData.bind(this)
+                        }
+                >
+                    Save
+                </button>
             </div>
         );
     }
