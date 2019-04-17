@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import {cloneDeep} from 'lodash';
 
 class Projects_list_page extends React.Component {
 
@@ -25,7 +26,7 @@ class Projects_list_page extends React.Component {
     /***
      * Processes
      * @param data
-     * @returns {{rowData: Array, columnDefs: *[]}}
+     * @returns {{rowData: Array, columnDefs: []}}
      */
     processData(data) {
         console.log(data);
@@ -89,9 +90,9 @@ class Projects_list_page extends React.Component {
         fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
-            .then(newStuff => this.setState(
-                {rowData: newStuff["rowData"],
-                columnDefs: newStuff["columnDefs"]}))
+            .then(function(newStuff) {
+                this.setState({rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"]})
+                    }.bind(this))
     }
 
     /***
@@ -99,7 +100,14 @@ class Projects_list_page extends React.Component {
      * Clears the edited rows so we don't save the same information twice
      */
     saveData() {
-        console.log(this)
+        console.log(this);
+    }
+
+    /***
+     * Restores the row data to the last saved row data
+     */
+    restoreData() {
+        console.log(this);
     }
 
     /***
@@ -132,12 +140,18 @@ class Projects_list_page extends React.Component {
                 >
                 </AgGridReact>
 
-                <button style = {{height:'30px',width:'100px'}}
+                <button style = {{height:'30px',width:'100px',marginRight: '10px'}}
                         onClick = {
                             this.saveData.bind(this)
                         }
                 >
                     Save
+                </button>
+                <button style = {{height:'30px',width:'100px'}}
+                        onClick = {this.restoreData.bind(this)
+                        }
+                >
+                    Cancel
                 </button>
             </div>
         );

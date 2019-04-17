@@ -88948,6 +88948,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-theme-balham.css */ "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css");
 /* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_5__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -88965,6 +88967,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 
 
 
@@ -89004,7 +89007,7 @@ function (_React$Component) {
   /***
    * Processes
    * @param data
-   * @returns {{rowData: Array, columnDefs: *[]}}
+   * @returns {{rowData: Array, columnDefs: []}}
    */
 
 
@@ -89093,17 +89096,36 @@ function (_React$Component) {
       }).then(function (data) {
         return _this2.processData(data);
       }).then(function (newStuff) {
-        return _this2.setState({
+        this.setState({
           rowData: newStuff["rowData"],
           columnDefs: newStuff["columnDefs"]
         });
-      });
+      }.bind(this));
     }
+    /***
+     * Makes API call to update all the edited rows prior to this call
+     * Clears the edited rows so we don't save the same information twice
+     */
+
   }, {
     key: "saveData",
     value: function saveData() {
       console.log(this);
     }
+    /***
+     * Restores the row data to the last saved row data
+     */
+
+  }, {
+    key: "restoreData",
+    value: function restoreData() {
+      console.log(this);
+    }
+    /***
+     * Add the row index of the row that was just edited
+     * @param event
+     */
+
   }, {
     key: "addUpdatedRow",
     value: function addUpdatedRow(event) {
@@ -89134,10 +89156,17 @@ function (_React$Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
         style: {
           height: '30px',
-          width: '100px'
+          width: '100px',
+          marginRight: '10px'
         },
         onClick: this.saveData.bind(this)
-      }, "Save"));
+      }, "Save"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+        style: {
+          height: '30px',
+          width: '100px'
+        },
+        onClick: this.restoreData.bind(this)
+      }, "Cancel"));
     }
   }]);
 
