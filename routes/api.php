@@ -78,8 +78,6 @@ Route::get('/displayResourcesAvailable/{projectID}', function ($projectID) {
 });
 
 /** Route that adds a new project to the projects table via POST Request
- * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
-
 {
     "ProjectName": "P2",
     "Technology": "T2",
@@ -102,18 +100,17 @@ Route::post("/addProject", function(Request $request) {
         );
         return "Successfully Added New Project";
     } catch (Exception $e){
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'A project already exists with this name';
-        } else {
-            return 'This project could not be added. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('A project already exists with this name', 403);
+            }
         }
+        return response('This project could not be added. Please try again.', 403);
     }
 });
 
 /** Route that adds a new resource to the resources table via POST Request
- * ResourceID: auto-incrementing key, so value that is inputted for it does not matter 
-
 {
     "NetID": "jd111",
     "FirstName": "John",
@@ -131,12 +128,13 @@ Route::post('/addResource', function(Request $request) {
             "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
         return "Successfully Added New Resource";
     } catch (Exception $e){
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'A resource already exists with this netID';
-        } else {
-            return 'This resource could not be added. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('A resource already exists with this name', 403);
+            }
         }
+        return response('This resource could not be added. Please try again.', 403);
     }  
 });
 
@@ -166,18 +164,17 @@ Route::post('/addResourcePerProject', function(Request $request) {
             ["ResourceID" => $resource_id, "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
         return ("Sucessfully Added New ResourcePerProject");
     } catch (Exception $e){
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'This resource is already working on this project';
-        } else {
-            return 'The resource could not be added to this project. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('This resource is already working on this project', 403);
+            }
         }
+        return response('The resource could not be added to this project. Please try again.', 403);
     }  
 });
 
 /** Route that adds a new entry to the schedules table
- * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter 
-
 {
     "ProjectName": "P2",
     "NetID": "jd111",
@@ -205,12 +202,13 @@ Route::post('/addSchedule', function(Request $request) {
            ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
         return "Successfully Added New Schedule";
    } catch (Exception $e){
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'This resource is already working on this project';
-        } else {
-            return 'The resource could not be added to this project. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('This resource already has hours for this week on this project', 403);
+            }
         }
+        return response('This entry could not be added. Please try again.', 403);
     }  
 });
 
@@ -237,12 +235,13 @@ Route::put('/updateProject', function(Request $request) {
         "StartDate" => $data["StartDate"], "DueDate" => $data["DueDate"]]);
         return "Successfully Updated Existing Project";
     } catch (Exception $e){
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'A project already exists with this name';
-        } else {
-            return 'This project could not be updated. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('A project already exists with this name', 403);
+            }
         }
+        return response('This project could not be updated. Please try again.', 403);
     }
 });
 
@@ -266,12 +265,13 @@ Route::put('/updateResource', function(Request $request) {
         "LastName" => $data["LastName"], "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
         return "Successfully Updated Existing Resource";
     } catch (Exception $e){
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'A resource already exists with this netID';
-        } else {
-            return 'This resource could not be updated. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('A resource already exists with this netID', 403);
+            }
         }
+        return response('This resource could not be updated. Please try again.', 403);
     }  
 });
 
@@ -301,13 +301,13 @@ Route::put('/updateResourcePerProject', function(Request $request) {
         ["Role" => $data["Role"]]);
         return "Successfully Updated Existing ResourcePerProject";
     } catch (Exception $e){
-        echo($e->getMessage());
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'This resource already exists on this project';
-        } else {
-            return 'This resource could not be updated. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('This resource already exists on this project', 403);
+            }
         }
+        return response('This resource could not be updated. Please try again.', 403);
     }  
 });
 
@@ -342,13 +342,13 @@ Route::put('/updateSchedule', function(Request $request) {
         ["Dates" => $data["Dates"], "HoursPerWeek" => $data["HoursPerWeek"]]);
         return "Successfully Updated Existing Schedule";
     } catch (Exception $e){
-        echo($e->getMessage());
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'This schedule already exists';
-        } else {
-            return 'This resource could not be updated. Please try again.';
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('This resource already has hours for this week on this project', 403);
+            }
         }
+        return response('This entry could not be added. Please try again.', 403);
     }  
 });
 
@@ -379,13 +379,7 @@ Route::delete("/deleteProject", function(Request $request) {
         DB::table('projects')->where("ProjectID" ,"=", $project_id)->delete();
         return "Successfully Deleted Existing Project";
     } catch (Exception $e){
-        echo($e->getMessage());
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'A project does not exist with this name';
-        } else {
-            return 'This project could not be deleted. Please try again.';
-        }
+        return response('This project could not be deleted. Please try again.', 403);
     }
 });
 
@@ -417,13 +411,7 @@ Route::delete("/deleteResource", function(Request $request) {
         return "Successfully Deleted Resource";
 
     } catch (Exception $e){
-        echo($e->getMessage());
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'A resource does not exist with this NetID';
-        } else {
-            return 'This resource could not be deleted. Please try again.';
-        }
+        return response('This resource could not be deleted. Please try again.', 403);
     }
 });
 
@@ -459,13 +447,7 @@ Route::delete("/deleteResourcePerProject", function(Request $request) {
         return "Successfully Deleted Resource From Project";
 
     } catch (Exception $e){
-        echo($e->getMessage());
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'This resource is not allocated to this project';
-        } else {
-            return 'This resource could not be removed from this project. Please try again.';
-        }
+        return response('This resource could not be removed from this project. Please try again.', 403);
     }
 });
 
@@ -498,13 +480,7 @@ Route::delete("/deleteSchedule", function(Request $request) {
         return "Successfully Deleted Schedule";
 
     } catch (Exception $e){
-        echo($e->getMessage());
-        $error_code = $e->errorInfo[1];
-        if($error_code == 1062){
-            return 'This resource is not allocated to this project';
-        } else {
-            return 'This resource could not be removed from this project. Please try again.';
-        }
+        return response('This entry could not be deleted. Please try again.', 403);
     }
 });
 /** Route that clears all records from all tables */
