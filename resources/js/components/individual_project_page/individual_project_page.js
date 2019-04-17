@@ -23,6 +23,12 @@ class Projects_list_page extends React.Component {
         }
     }
 
+    /* Determine if date is indeed an actual date
+     */
+    isDate(date) {
+        return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+    }
+
     /***
      * Processes
      * @param data
@@ -99,8 +105,38 @@ class Projects_list_page extends React.Component {
      * Makes API call to update all the edited rows prior to this call
      * Clears the edited rows so we don't save the same information twice
      */
-    saveData() {
-        console.log(this);
+    async saveData() {
+        console.log("Saving Data");
+        let data = this.state.rowData;
+        let updatedRows = this.updatedRows;
+        let projectName = this.props.match.params.ProjectID;
+        let index = updatedRows.next();
+
+        // index is the index of a row that has been updated
+
+        while (index != undefined) {
+            let rowData = data[index];
+            let netID = rowData["netid"];
+
+            for (let key in rowData) {
+                if (this.isDate(key)) {
+                    let newData = {
+                        "ProjectName": projectName,
+                        "NetID": netID,
+                        "Dates": key,
+                        "HoursPerWeek": Number(rowData[key])
+                    };
+                    console.log(newData);
+                    // let response = await fetch("../api/updateSchedule", {
+                    //     method: "PUT",
+                    //     body: newData
+                    // });
+                }
+            }
+
+            index = updatedRows.next().value;
+        }
+        this.updatedRows.clear();
     }
 
     /***
