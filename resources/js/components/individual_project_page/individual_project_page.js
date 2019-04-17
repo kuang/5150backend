@@ -4,63 +4,91 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
-class Individual_project_page extends React.Component {
+class Projects_list_page extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = this.createState();
-    }
-
-    createState() {
-        const componentReference = this.ref;
-        return {
-            gridOptions: {
-                // columnDefs: [
-                //     {headerName: 'Make', field: 'make', editable: true, sortable: true, enableCellChangeFlash:true},
-                //     {headerName: 'Model', field: 'model', editable: true, sortable: true, enableCellChangeFlash:true},
-                //     {headerName: 'Price', field: 'price', editable: true, sortable: true, enableCellChangeFlash:true}
-                //
-                // ],
-                //     rowData: [
-                //     {make: 'Toyota', model: 'Celica', price: 35000},
-                //     {make: 'Ford', model: 'Mondeo', price: 32000},
-                //     {make: 'Porsche', model: 'Boxter', price: 72000},
-                //     {make: 'Honda', model: 'Element', price: 90000},
-                //     {make: 'Panda', model: 'Express', price: 100000},
-                //     {make: 'BMW', model: 'X5', price: 75000}
-                // ]
-                columnDefs: [],
-                rowData: []
-            }
+        this.state = {
+            columnDefs: [{
+                headerName: "Name", field: "name"
+            }, {
+                headerName: "Role", field: "role"
+            }],
+            rowData: []
         }
     }
-    /***
-     * Makes an API call to fetch data and set the row data appropriately
-     * Also initializes all the variables in gridOptions of the state
-     */
+
+    processData(data) {
+        let columnDefs = [
+            {headerName: 'Name', field: 'name', sortable: true, enableCellChangeFlash: true},
+            {headerName: 'Role', field: 'role', editable: true, enableCellChangeFlash: true},
+        ];
+        let rowData = [];
+        let columnNames = new Set();
+        let prevNetID = null;
+        let currentJSON = {};
+
+        for (let i = 0; i < data.length; i++) {
+            let currentSchedule = data[i];
+            let currentNetID = currentSchedule.NetID;
+            let currentHeader = currentSchedule.Dates;
+
+            if (currentNetID != prevNetID) {
+                if (prevNetID != null) {
+                    rowData.push(currentJSON);
+                }
+
+                let currentRole = currentSchedule.Role;
+                prevNetID = currentNetID;
+                currentJSON = {name: currentNetID, role: currentRole};
+            }
+
+            let currentHours = currentSchedule.HoursPerWeek;
+
+            if (!columnNames.has(currentHeader)) {
+                columnNames.add(currentHeader);
+                let newColumnDef = {
+                    headerName: currentHeader,
+                    field: currentHeader,
+                    sortable: true,
+                    enableCellChangeFlash: true
+                };
+                columnDefs.push(newColumnDef);
+            }
+
+            currentJSON[currentHeader] = currentHours;
+        }
+
+        rowData.push(currentJSON);
+
+        return {"rowData" : rowData, "columnDefs" : columnDefs};
+    }
+
     componentDidMount() {
-        const projectID = this.props.match.params.projectID; // the project id of this individual project page
+        let projectID = this.props.match.params.projectID;
         fetch(`../api/displayResourceInfoPerProject/${projectID}`)
-            .then(response => response.json())
-            .then(data => console.log(data));
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(newStuff => this.setState(
+                {rowData: newStuff["rowData"],
+                columnDefs: newStuff["columnDefs"]}))
     }
 
     render() {
         return (
             <div
                 className="ag-theme-balham"
-                style={{ height: '200px', width: '600px' }}
+                style={{
+                    height: '500px',
+                    width: '600px' }}
             >
                 <AgGridReact
-                    gridOptions={this.state.gridOptions}
-                    onCellEditingStopped={function(e) {
-                        console.log("");
-                    }}
-                >
+                    columnDefs={this.state.columnDefs}
+                    rowData={this.state.rowData}>
                 </AgGridReact>
             </div>
         );
     }
 }
 
-export default Individual_project_page
+export default Projects_list_page

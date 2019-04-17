@@ -88972,60 +88972,104 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
-var Individual_project_page =
+var Projects_list_page =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(Individual_project_page, _React$Component);
+  _inherits(Projects_list_page, _React$Component);
 
-  function Individual_project_page(props) {
+  function Projects_list_page(props) {
     var _this;
 
-    _classCallCheck(this, Individual_project_page);
+    _classCallCheck(this, Projects_list_page);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Individual_project_page).call(this, props));
-    _this.state = _this.createState();
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Projects_list_page).call(this, props));
+    _this.state = {
+      columnDefs: [{
+        headerName: "Name",
+        field: "name"
+      }, {
+        headerName: "Role",
+        field: "role"
+      }],
+      rowData: []
+    };
     return _this;
   }
 
-  _createClass(Individual_project_page, [{
-    key: "createState",
-    value: function createState() {
-      var componentReference = this.ref;
-      return {
-        gridOptions: {
-          // columnDefs: [
-          //     {headerName: 'Make', field: 'make', editable: true, sortable: true, enableCellChangeFlash:true},
-          //     {headerName: 'Model', field: 'model', editable: true, sortable: true, enableCellChangeFlash:true},
-          //     {headerName: 'Price', field: 'price', editable: true, sortable: true, enableCellChangeFlash:true}
-          //
-          // ],
-          //     rowData: [
-          //     {make: 'Toyota', model: 'Celica', price: 35000},
-          //     {make: 'Ford', model: 'Mondeo', price: 32000},
-          //     {make: 'Porsche', model: 'Boxter', price: 72000},
-          //     {make: 'Honda', model: 'Element', price: 90000},
-          //     {make: 'Panda', model: 'Express', price: 100000},
-          //     {make: 'BMW', model: 'X5', price: 75000}
-          // ]
-          columnDefs: [],
-          rowData: []
+  _createClass(Projects_list_page, [{
+    key: "processData",
+    value: function processData(data) {
+      var columnDefs = [{
+        headerName: 'Name',
+        field: 'name',
+        sortable: true,
+        enableCellChangeFlash: true
+      }, {
+        headerName: 'Role',
+        field: 'role',
+        editable: true,
+        enableCellChangeFlash: true
+      }];
+      var rowData = [];
+      var columnNames = new Set();
+      var prevNetID = null;
+      var currentJSON = {};
+
+      for (var i = 0; i < data.length; i++) {
+        var currentSchedule = data[i];
+        var currentNetID = currentSchedule.NetID;
+        var currentHeader = currentSchedule.Dates;
+
+        if (currentNetID != prevNetID) {
+          if (prevNetID != null) {
+            rowData.push(currentJSON);
+          }
+
+          var currentRole = currentSchedule.Role;
+          prevNetID = currentNetID;
+          currentJSON = {
+            name: currentNetID,
+            role: currentRole
+          };
         }
+
+        var currentHours = currentSchedule.HoursPerWeek;
+
+        if (!columnNames.has(currentHeader)) {
+          columnNames.add(currentHeader);
+          var newColumnDef = {
+            headerName: currentHeader,
+            field: currentHeader,
+            sortable: true,
+            enableCellChangeFlash: true
+          };
+          columnDefs.push(newColumnDef);
+        }
+
+        currentJSON[currentHeader] = currentHours;
+      }
+
+      rowData.push(currentJSON);
+      return {
+        "rowData": rowData,
+        "columnDefs": columnDefs
       };
     }
-    /***
-     * Makes an API call to fetch data and set the row data appropriately
-     * Also initializes all the variables in gridOptions of the state
-     */
-
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var projectID = this.props.match.params.projectID; // the project id of this individual project page
+      var _this2 = this;
 
-      fetch("../api/displayResourceInfoPerProject/".concat(projectID)).then(function (response) {
-        return response.json();
+      var projectID = this.props.match.params.projectID;
+      fetch("../api/displayResourceInfoPerProject/".concat(projectID)).then(function (result) {
+        return result.json();
       }).then(function (data) {
-        return console.log(data);
+        return _this2.processData(data);
+      }).then(function (newStuff) {
+        return _this2.setState({
+          rowData: newStuff["rowData"],
+          columnDefs: newStuff["columnDefs"]
+        });
       });
     }
   }, {
@@ -89034,22 +89078,20 @@ function (_React$Component) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ag-theme-balham",
         style: {
-          height: '200px',
+          height: '500px',
           width: '600px'
         }
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__["AgGridReact"], {
-        gridOptions: this.state.gridOptions,
-        onCellEditingStopped: function onCellEditingStopped(e) {
-          console.log("");
-        }
+        columnDefs: this.state.columnDefs,
+        rowData: this.state.rowData
       }));
     }
   }]);
 
-  return Individual_project_page;
+  return Projects_list_page;
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
-/* harmony default export */ __webpack_exports__["default"] = (Individual_project_page);
+/* harmony default export */ __webpack_exports__["default"] = (Projects_list_page);
 
 /***/ }),
 
@@ -89146,6 +89188,13 @@ function (_Component) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ag-grid-react */ "./node_modules/ag-grid-react/main.js");
+/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-grid.css */ "./node_modules/ag-grid-community/dist/styles/ag-grid.css");
+/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-theme-balham.css */ "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css");
+/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4__);
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -89166,21 +89215,75 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
+
+
+
 var Projects_list_page =
 /*#__PURE__*/
 function (_React$Component) {
   _inherits(Projects_list_page, _React$Component);
 
-  function Projects_list_page() {
+  function Projects_list_page(props) {
+    var _this;
+
     _classCallCheck(this, Projects_list_page);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Projects_list_page).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Projects_list_page).call(this, props));
+    _this.state = {
+      columnDefs: [{
+        headerName: "Make",
+        field: "make"
+      }, {
+        headerName: "Model",
+        field: "model"
+      }, {
+        headerName: "Price",
+        field: "price"
+      }],
+      rowData: [{
+        make: "Toyota",
+        model: "Celica",
+        price: 35000
+      }, {
+        make: "Ford",
+        model: "Mondeo",
+        price: 32000
+      }, {
+        make: "Porsche",
+        model: "Boxter",
+        price: 72000
+      }]
+    };
+    return _this;
   }
 
   _createClass(Projects_list_page, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      fetch('https://api.myjson.com/bins/15psn9').then(function (result) {
+        return result.json();
+      }).then(function (rowData) {
+        return _this2.setState({
+          rowData: rowData
+        });
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Hello");
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ag-theme-balham",
+        style: {
+          height: '500px',
+          width: '600px'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__["AgGridReact"], {
+        columnDefs: this.state.columnDefs,
+        rowData: this.state.rowData
+      }));
     }
   }]);
 
