@@ -37,14 +37,18 @@ Route::get('/displaySchedules', function() {
     return DB::table('schedules')->get();
 });
 
+/** Route that returns all general info on a given project */
+Route::get('/displayProjectInfo/{projectID}', function ($projectID) {
+    return DB::table("projects")->where('ProjectID', '=', $projectID)->get();
+});
+
 /** Route that returns all projects a given resource is currently staffed on */
 Route::get('/displayProjectsPerResource/{resourceID}', function ($resourceID) {
-    return DB::table('resources_per_projects')->select('ProjectID')->where('ResourceID', '=', $resourceID)->get();
-//    return DB::table('resources_per_projects')
-//        ->join('projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
-//        ->select('projects.ProjectName', 'resources_per_projects.Role', 'projects.Technology', 'projects.EstMaxHours', 'projects.Status', 'projects.StartDate', 'projects.DueDate')
-//        ->where('resources_per_projects.ResourceID', '=', $resourceID)
-//        ->get();
+   return DB::table('resources_per_projects')
+       ->rightJoin('projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
+       ->select('projects.ProjectName', 'resources_per_projects.Role', 'projects.Technology', 'projects.EstMaxHours', 'projects.Status', 'projects.StartDate', 'projects.DueDate')
+       ->where('resources_per_projects.ResourceID', '=', $resourceID)
+       ->get();
 });
 
 /** Route that returns all resources (and hours per week) working on a given project */
