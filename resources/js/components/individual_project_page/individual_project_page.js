@@ -109,33 +109,24 @@ class Projects_list_page extends React.Component {
         console.log("Saving Data");
         let data = this.state.rowData;
         let updatedRows = this.updatedRows;
-        let projectName = this.props.match.params.ProjectID;
-        let index = updatedRows.next();
+        let projectName = this.props.match.params.projectID;
 
         // index is the index of a row that has been updated
 
-        while (index != undefined) {
-            let rowData = data[index];
-            let netID = rowData["netid"];
-
-            for (let key in rowData) {
-                if (this.isDate(key)) {
-                    let newData = {
-                        "ProjectName": projectName,
-                        "NetID": netID,
-                        "Dates": key,
-                        "HoursPerWeek": Number(rowData[key])
-                    };
-                    console.log(newData);
-                    // let response = await fetch("../api/updateSchedule", {
-                    //     method: "PUT",
-                    //     body: newData
-                    // });
-                }
-            }
-
-            index = updatedRows.next().value;
+        let processData = function(pair) {
+            let index = pair["rowIndex"];
+            let key = pair["colIndex"];
+            let netID = data[index]["netid"];
+            let hours = data[index][key];
+            let newData = {
+                "ProjectName": projectName,
+                "NetID": netID,
+                "Dates": key,
+                "HoursPerWeek": Number(hours)
+            };
+            console.log(newData);
         }
+        updatedRows.forEach(processData);
         this.updatedRows.clear();
     }
 
@@ -151,7 +142,7 @@ class Projects_list_page extends React.Component {
      * @param event
      */
     addUpdatedRow(event) {
-        this.updatedRows.add(event.rowIndex);
+        this.updatedRows.add({"rowIndex" : event.rowIndex, "colIndex" : event.colDef.field});
     }
     /***
      * Makes POST Request to save data

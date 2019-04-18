@@ -89878,7 +89878,7 @@ function (_React$Component) {
       var _saveData = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var data, updatedRows, projectName, index, rowData, netID, key, newData;
+        var data, updatedRows, projectName, processData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -89886,31 +89886,23 @@ function (_React$Component) {
                 console.log("Saving Data");
                 data = this.state.rowData;
                 updatedRows = this.updatedRows;
-                projectName = this.props.match.params.ProjectID;
-                index = updatedRows.next(); // index is the index of a row that has been updated
+                projectName = this.props.match.params.projectID; // index is the index of a row that has been updated
 
-                while (index != undefined) {
-                  rowData = data[index];
-                  netID = rowData["netid"];
+                processData = function processData(pair) {
+                  var index = pair["rowIndex"];
+                  var key = pair["colIndex"];
+                  var netID = data[index]["netid"];
+                  var hours = data[index][key];
+                  var newData = {
+                    "ProjectName": projectName,
+                    "NetID": netID,
+                    "Dates": key,
+                    "HoursPerWeek": Number(hours)
+                  };
+                  console.log(newData);
+                };
 
-                  for (key in rowData) {
-                    if (this.isDate(key)) {
-                      newData = {
-                        "ProjectName": projectName,
-                        "NetID": netID,
-                        "Dates": key,
-                        "HoursPerWeek": Number(rowData[key])
-                      };
-                      console.log(newData); // let response = await fetch("../api/updateSchedule", {
-                      //     method: "PUT",
-                      //     body: newData
-                      // });
-                    }
-                  }
-
-                  index = updatedRows.next().value;
-                }
-
+                updatedRows.forEach(processData);
                 this.updatedRows.clear();
 
               case 7:
@@ -89944,7 +89936,10 @@ function (_React$Component) {
   }, {
     key: "addUpdatedRow",
     value: function addUpdatedRow(event) {
-      this.updatedRows.add(event.rowIndex);
+      this.updatedRows.add({
+        "rowIndex": event.rowIndex,
+        "colIndex": event.colDef.field
+      });
     }
     /***
      * Makes POST Request to save data
