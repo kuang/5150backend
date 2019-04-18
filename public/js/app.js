@@ -92380,6 +92380,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./individual_project_page/individual_project_page.js */ "./resources/js/components/individual_project_page/individual_project_page.js");
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _projects_list_page_projects_list_page_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./projects_list_page/projects_list_page.js */ "./resources/js/components/projects_list_page/projects_list_page.js");
+/* harmony import */ var _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./resource_list_page/resource_list_page.js */ "./resources/js/components/resource_list_page/resource_list_page.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
@@ -92405,6 +92406,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
  // import './App.css';
+
 
 
 
@@ -92445,8 +92447,11 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/users/",
         component: Users
+      }), "// ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        path: "/resource/",
+        component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
-        path: "/resource",
+        path: "/resource/",
         render: function render(props) {
           return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
             resourceID: 4
@@ -92764,10 +92769,10 @@ function (_React$Component) {
                             netID = data[index]["netid"];
                             hours = data[index][key];
                             newData = {
-                              "ProjectID": 26,
-                              "NetID": "jd111",
-                              "Dates": "03-07-19",
-                              "HoursPerWeek": 0
+                              "ProjectID": projectID,
+                              "NetID": netID,
+                              "Dates": key,
+                              "HoursPerWeek": hours
                             };
                             console.log(newData);
                             _context2.next = 8;
@@ -93103,6 +93108,29 @@ function (_React$Component) {
 }(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Projects_list_page);
+
+/***/ }),
+
+/***/ "./resources/js/components/resource_list_page/resource_list_page.js":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/resource_list_page/resource_list_page.js ***!
+  \**************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+var Resource_list_page = function Resource_list_page() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Rsource List Page");
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Resource_list_page);
 
 /***/ }),
 
