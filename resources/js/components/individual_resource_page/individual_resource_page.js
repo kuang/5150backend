@@ -11,7 +11,7 @@ class Individual_resource_page extends Component {
         };
     }
     componentDidMount() {
-        fetch('/api/displayProjectsPerResource/' + this.props.resourceID)
+        fetch('/api/displayProjectsPerResource/' + this.props.match.params.resourceID)
             .then(res => res.json())
             .then(
                 (result) => {
@@ -25,7 +25,7 @@ class Individual_resource_page extends Component {
                     return <h2>failed</h2>;
                 });
 
-        fetch('/api/displayResourceInfo/' + this.props.resourceID)
+        fetch('/api/displayResourceInfo/' + this.props.match.params.resourceID)
             .then(res => res.json())
             .then(
                 (result) => {
