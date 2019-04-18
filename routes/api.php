@@ -42,6 +42,12 @@ Route::get('/displayProjectInfo/{projectID}', function ($projectID) {
     return DB::table("projects")->where('ProjectID', '=', $projectID)->get();
 });
 
+/** Route that returns all general info on a given resource */
+Route::get('/displayResourceInfo/{resourceID}', function ($resourceID) {
+    return DB::table("resources")->where('resourceID', '=', $resourceID)->get();
+});
+
+
 /** Route that returns all projects a given resource is currently staffed on */
 Route::get('/displayProjectsPerResource/{resourceID}', function ($resourceID) {
    return DB::table('resources_per_projects')
@@ -214,7 +220,7 @@ Route::post('/addSchedule', function(Request $request) {
             }
         }
         return response('This entry could not be added. Please try again.', 403);
-    }  
+    }
 });
 
 /** Route that adds a new week to the schedules table via POST Request
