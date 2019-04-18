@@ -72,7 +72,7 @@ class Projects_list_page extends React.Component {
                 columnDefs.push(newColumnDef);
             }
 
-            currentJSON[currentHeader] = currentHours;
+            currentJSON[currentHeader] = currentHours == "";
         }
 
         rowData.push(currentJSON);
