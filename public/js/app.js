@@ -89885,7 +89885,7 @@ function (_React$Component) {
               case 0:
                 console.log("Saving Data");
                 data = this.state.rowData;
-                updatedRows = this.updatedRows.entries();
+                updatedRows = this.updatedRows;
                 projectName = this.props.match.params.ProjectID;
                 index = updatedRows.next(); // index is the index of a row that has been updated
 

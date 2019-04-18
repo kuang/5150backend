@@ -54,7 +54,8 @@ Route::get('/displayResourceInfoPerProject/{projectID}', function ($projectID) {
             ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
             ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role', 'schedules.Dates', 'schedules.HoursPerWeek')
             ->where('resources_per_projects.ProjectID', '=', $projectID)
-            ->orderBy('resources.NetID', 'schedules.Dates')
+            ->orderBy('resources.NetID')
+            ->orderBy('schedules.Dates')
             ->get();
 });
 
