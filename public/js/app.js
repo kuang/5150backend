@@ -92432,7 +92432,11 @@ function (_Component) {
       }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/resource/"
       }, "resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
+<<<<<<< HEAD
+        to: "/individual_resource/"
+=======
         to: "/individual_resource/4"
+>>>>>>> 0b847a402ba45a97123fd0c8ccaf7a2893911786
       }, "individual_resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/individual_project/25"
       }, "projects")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
@@ -92451,8 +92455,26 @@ function (_Component) {
         path: "/resource/",
         component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+<<<<<<< HEAD
         path: "/individual_resource/:resourceID",
         component: _individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"]
+=======
+<<<<<<< HEAD
+        path: "/individual_resource/",
+=======
+<<<<<<< HEAD
+        path: "/individual_resource/:resourceID",
+        component: _individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"]
+=======
+        path: "/resource/",
+>>>>>>> 0b847a402ba45a97123fd0c8ccaf7a2893911786
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
+            resourceID: 4
+          }));
+        }
+>>>>>>> f5993603a11b6f79c363a56d534aa7040d9156f8
+>>>>>>> 5e593f9684c5fd41c9f639b67cc73c4c9cfe7496
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
@@ -93237,7 +93259,7 @@ function (_React$Component) {
                 console.log(data);
                 columnDefs = [{
                   headerName: 'NetID',
-                  filed: 'netid'
+                  field: 'netid'
                 }, {
                   headerName: 'Name',
                   field: 'name'
@@ -93338,8 +93360,13 @@ function (_React$Component) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/js/app.js */"./resources/js/app.js");
 module.exports = __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+=======
+__webpack_require__(/*! /Users/GMZ/Desktop/CS5150_SoftwareEngineering/5150Backend/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/GMZ/Desktop/CS5150_SoftwareEngineering/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+>>>>>>> 5e593f9684c5fd41c9f639b67cc73c4c9cfe7496
 
 
 /***/ })

@@ -23,7 +23,7 @@ class Resource_list_page extends React.Component {
 	async processData(data) {
 		console.log(data);
 		let columnDefs = [
-			{headerName: 'NetID', filed: 'netid'},
+			{headerName: 'NetID', field: 'netid'},
 			{headerName: 'Name', field: 'name'},
 			{headerName: 'Max Hour Per Week', field: 'maxHourPerWeek'}
 		]
@@ -35,7 +35,7 @@ class Resource_list_page extends React.Component {
 			let curr = data[i];
 			let currID = curr.NetID;
 			let fullName = curr.FirstName + " " + curr.LastName;
-			let maxHour = curr.MaxHoursPerWeek;
+			let maxHour = curr.MaxHoursPerWeek; 
 
 			currJSON = {netid: currID, name : fullName,  maxHourPerWeek: maxHour};
 			rowData.push(currJSON);
