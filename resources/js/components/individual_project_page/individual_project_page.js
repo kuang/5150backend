@@ -5,6 +5,8 @@ import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Modal from 'react-responsive-modal';
 import {cloneDeep} from 'lodash';
+import { confirmAlert } from 'react-confirm-alert'; // Import
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
 class Projects_list_page extends React.Component {
 
@@ -77,7 +79,18 @@ class Projects_list_page extends React.Component {
         }
 
         rowData.push(currentJSON);
-
+        let dates = columnDefs.slice(3);
+        let dateComparator = function(a,b) {
+            if (a.field < b.field) {
+                return -1;
+            }
+            if (a.field > b.field) {
+                return 1;
+            }
+            return 0;
+        };
+        dates.sort(dateComparator);
+        columnDefs = columnDefs.slice(0,3).concat(dates);
         return {"rowData" : rowData, "columnDefs" : columnDefs};
     }
 
@@ -174,6 +187,28 @@ class Projects_list_page extends React.Component {
         this.setState({openNoScheduleWarning: false});
     }
 
+    submit() {
+        confirmAlert({
+            title: 'Confirm To Save',
+            message: 'Are you sure to do this?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.saveData()
+                },
+                {
+                    label: 'No',
+                    onClick: () => {}
+                }
+            ],
+            closeOnEscape: true,
+            closeOnClickOutside: true
+        });
+    };
+
+    async addOneWeek() {
+
+    }
     /***
      * Makes POST Request to save data
      */
@@ -186,7 +221,7 @@ class Projects_list_page extends React.Component {
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '70vh',
+                    height: '65vh',
                     width: '100vw'
                 }}
             >
@@ -195,7 +230,7 @@ class Projects_list_page extends React.Component {
                 </Modal>
 
                 <Modal open={this.state.openNoScheduleWarning} onClose = {this.closeNoScheduleWarningModal.bind(this)} center closeIconSize = {14}>
-                    <h3 style = {{marginTop:'15px'}}>No Schedule Recorded</h3>
+                    <h3 style = {{marginTop:'15px'}}>Resource Did Not Work This Week</h3>
                 </Modal>
 
                 <AgGridReact
@@ -203,22 +238,24 @@ class Projects_list_page extends React.Component {
                     rowData={this.state.rowData}
                     onCellValueChanged = {this.addUpdatedRow.bind(this)}
                     onCellClicked = {this.canEditCell.bind(this)}
+                    suppressHorizontalScroll = {true}
                 >
                 </AgGridReact>
 
                 <button style = {{height:'30px',width:'100px',marginRight: '10px'}}
                         onClick = {
-                            this.saveData.bind(this)
+                            this.submit.bind(this)
                         }
                 >
                     Save
                 </button>
-                <button style = {{height:'30px',width:'100px'}}
+                <button style = {{height:'30px',width:'100px', marginRight: '10px'}}
                         onClick = {this.restoreData.bind(this)
                         }
                 >
                     Cancel
                 </button>
+                <button style = {{height:'30px',width:'100px'}} onClick = {() => console.log("hello")}>Add One Week</button>
             </div>
         );
     }

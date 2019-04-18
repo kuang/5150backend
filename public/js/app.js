@@ -42368,6 +42368,25 @@ exports.push([module.i, ".ag-theme-balham {\n  background-color: white;\n  color
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/react-confirm-alert/src/react-confirm-alert.css":
+/*!******************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/react-confirm-alert/src/react-confirm-alert.css ***!
+  \******************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "body.react-confirm-alert-body-element {\n  overflow: hidden;\n}\n\n.react-confirm-alert-blur {\n  -webkit-filter: url(#gaussian-blur);\n          filter: url(#gaussian-blur);\n  filter: blur(2px);\n  -webkit-filter: blur(2px);\n}\n\n.react-confirm-alert-overlay {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  bottom: 0;\n  z-index: 99;\n  background: rgba(255, 255, 255, 0.9);\n  display: -moz-flex;\n  display: -ms-flex;\n  display: -o-flex;\n  display: flex;\n  justify-content: center;\n  -ms-align-items: center;\n  align-items: center;\n  opacity: 0;\n  -webkit-animation: react-confirm-alert-fadeIn 0.5s 0.2s forwards;\n  animation: react-confirm-alert-fadeIn 0.5s 0.2s forwards;\n}\n\n.react-confirm-alert-body {\n  font-family: Arial, Helvetica, sans-serif;\n  width: 400px;\n  padding: 30px;\n  text-align: left;\n  background: #fff;\n  border-radius: 10px;\n  box-shadow: 0 20px 75px rgba(0, 0, 0, 0.13);\n  color: #666;\n}\n\n.react-confirm-alert-svg {\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n\n.react-confirm-alert-body > h1 {\n  margin-top: 0;\n}\n\n.react-confirm-alert-body > h3 {\n  margin: 0;\n  font-size: 16px;\n}\n\n.react-confirm-alert-button-group {\n  display: -moz-flex;\n  display: -ms-flex;\n  display: -o-flex;\n  display: flex;\n  justify-content: flex-start;\n  margin-top: 20px;\n}\n\n.react-confirm-alert-button-group > button {\n  outline: none;\n  background: #333;\n  border: none;\n  display: inline-block;\n  padding: 6px 18px;\n  color: #eee;\n  margin-right: 10px;\n  border-radius: 5px;\n  font-size: 12px;\n  cursor: pointer;\n}\n\n@-webkit-keyframes react-confirm-alert-fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n\n@keyframes react-confirm-alert-fadeIn {\n  from {\n    opacity: 0;\n  }\n  to {\n    opacity: 1;\n  }\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/lib/css-base.js":
 /*!*************************************************!*\
   !*** ./node_modules/css-loader/lib/css-base.js ***!
@@ -62405,6 +62424,298 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
+
+/***/ }),
+
+/***/ "./node_modules/react-confirm-alert/lib/index.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/react-confirm-alert/lib/index.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _class, _temp2;
+
+exports.confirmAlert = confirmAlert;
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactDom = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ReactConfirmAlert = (_temp2 = _class = function (_Component) {
+  _inherits(ReactConfirmAlert, _Component);
+
+  function ReactConfirmAlert() {
+    var _ref;
+
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, ReactConfirmAlert);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ReactConfirmAlert.__proto__ || Object.getPrototypeOf(ReactConfirmAlert)).call.apply(_ref, [this].concat(args))), _this), _this.handleClickButton = function (button) {
+      if (button.onClick) button.onClick();
+      _this.close();
+    }, _this.handleClickOverlay = function (e) {
+      var _this$props = _this.props,
+          closeOnClickOutside = _this$props.closeOnClickOutside,
+          onClickOutside = _this$props.onClickOutside;
+
+      var isClickOutside = e.target === _this.overlay;
+
+      if (closeOnClickOutside && isClickOutside) {
+        onClickOutside();
+        _this.close();
+      }
+    }, _this.close = function () {
+      removeBodyClass();
+      removeElementReconfirm();
+      removeSVGBlurReconfirm();
+    }, _this.keyboardClose = function (event) {
+      var _this$props2 = _this.props,
+          closeOnEscape = _this$props2.closeOnEscape,
+          onKeypressEscape = _this$props2.onKeypressEscape;
+
+      var isKeyCodeEscape = event.keyCode === 27;
+
+      if (closeOnEscape && isKeyCodeEscape) {
+        onKeypressEscape(event);
+        _this.close();
+      }
+    }, _this.componentDidMount = function () {
+      document.addEventListener('keydown', _this.keyboardClose, false);
+    }, _this.componentWillUnmount = function () {
+      document.removeEventListener('keydown', _this.keyboardClose, false);
+      _this.props.willUnmount();
+    }, _this.renderCustomUI = function () {
+      var _this$props3 = _this.props,
+          title = _this$props3.title,
+          message = _this$props3.message,
+          customUI = _this$props3.customUI;
+
+      var dataCustomUI = {
+        title: title,
+        message: message,
+        onClose: _this.close
+      };
+
+      return customUI(dataCustomUI);
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  _createClass(ReactConfirmAlert, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var _props = this.props,
+          title = _props.title,
+          message = _props.message,
+          buttons = _props.buttons,
+          childrenElement = _props.childrenElement,
+          customUI = _props.customUI;
+
+
+      return _react2.default.createElement(
+        'div',
+        {
+          className: 'react-confirm-alert-overlay',
+          ref: function ref(dom) {
+            return _this2.overlay = dom;
+          },
+          onClick: this.handleClickOverlay
+        },
+        _react2.default.createElement(
+          'div',
+          { className: 'react-confirm-alert' },
+          customUI ? this.renderCustomUI() : _react2.default.createElement(
+            'div',
+            { className: 'react-confirm-alert-body' },
+            title && _react2.default.createElement(
+              'h1',
+              null,
+              title
+            ),
+            message,
+            childrenElement(),
+            _react2.default.createElement(
+              'div',
+              { className: 'react-confirm-alert-button-group' },
+              buttons.map(function (button, i) {
+                return _react2.default.createElement(
+                  'button',
+                  { key: i, onClick: function onClick() {
+                      return _this2.handleClickButton(button);
+                    } },
+                  button.label
+                );
+              })
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return ReactConfirmAlert;
+}(_react.Component), _class.propTypes = {
+  title: _propTypes2.default.string,
+  message: _propTypes2.default.string,
+  buttons: _propTypes2.default.array.isRequired,
+  childrenElement: _propTypes2.default.func,
+  customUI: _propTypes2.default.func,
+  closeOnClickOutside: _propTypes2.default.bool,
+  closeOnEscape: _propTypes2.default.bool,
+  willUnmount: _propTypes2.default.func,
+  onClickOutside: _propTypes2.default.func,
+  onKeypressEscape: _propTypes2.default.func
+}, _class.defaultProps = {
+  buttons: [{
+    label: 'Cancel',
+    onClick: function onClick() {
+      return null;
+    }
+  }, {
+    label: 'Confirm',
+    onClick: function onClick() {
+      return null;
+    }
+  }],
+  childrenElement: function childrenElement() {
+    return null;
+  },
+  closeOnClickOutside: true,
+  closeOnEscape: true,
+  willUnmount: function willUnmount() {
+    return null;
+  },
+  onClickOutside: function onClickOutside() {
+    return null;
+  },
+  onKeypressEscape: function onKeypressEscape() {
+    return null;
+  }
+}, _temp2);
+exports.default = ReactConfirmAlert;
+
+
+function createSVGBlurReconfirm() {
+  // If has svg ignore to create the svg
+  var svg = document.getElementById('react-confirm-alert-firm-svg');
+  if (svg) return;
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var feGaussianBlur = document.createElementNS(svgNS, 'feGaussianBlur');
+  feGaussianBlur.setAttribute('stdDeviation', '0.3');
+
+  var filter = document.createElementNS(svgNS, 'filter');
+  filter.setAttribute('id', 'gaussian-blur');
+  filter.appendChild(feGaussianBlur);
+
+  var svgElem = document.createElementNS(svgNS, 'svg');
+  svgElem.setAttribute('id', 'react-confirm-alert-firm-svg');
+  svgElem.setAttribute('class', 'react-confirm-alert-svg');
+  svgElem.appendChild(filter);
+
+  document.body.appendChild(svgElem);
+}
+
+function removeSVGBlurReconfirm() {
+  var svg = document.getElementById('react-confirm-alert-firm-svg');
+  svg.parentNode.removeChild(svg);
+  document.body.children[0].classList.remove('react-confirm-alert-blur');
+}
+
+function createElementReconfirm(properties) {
+  var divTarget = document.getElementById('react-confirm-alert');
+  if (divTarget) {
+    // Rerender - the mounted ReactConfirmAlert
+    (0, _reactDom.render)(_react2.default.createElement(ReactConfirmAlert, properties), divTarget);
+  } else {
+    // Mount the ReactConfirmAlert component
+    document.body.children[0].classList.add('react-confirm-alert-blur');
+    divTarget = document.createElement('div');
+    divTarget.id = 'react-confirm-alert';
+    document.body.appendChild(divTarget);
+    (0, _reactDom.render)(_react2.default.createElement(ReactConfirmAlert, properties), divTarget);
+  }
+}
+
+function removeElementReconfirm() {
+  var target = document.getElementById('react-confirm-alert');
+  (0, _reactDom.unmountComponentAtNode)(target);
+  target.parentNode.removeChild(target);
+}
+
+function addBodyClass() {
+  document.body.classList.add('react-confirm-alert-body-element');
+}
+
+function removeBodyClass() {
+  document.body.classList.remove('react-confirm-alert-body-element');
+}
+
+function confirmAlert(properties) {
+  addBodyClass();
+  createSVGBlurReconfirm();
+  createElementReconfirm(properties);
+}
+
+/***/ }),
+
+/***/ "./node_modules/react-confirm-alert/src/react-confirm-alert.css":
+/*!**********************************************************************!*\
+  !*** ./node_modules/react-confirm-alert/src/react-confirm-alert.css ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../css-loader??ref--6-1!../../postcss-loader/src??ref--6-2!./react-confirm-alert.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./node_modules/react-confirm-alert/src/react-confirm-alert.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
 
 /***/ }),
 
@@ -92432,11 +92743,7 @@ function (_Component) {
       }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/resource/"
       }, "resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
-<<<<<<< HEAD
-        to: "/individual_resource/"
-=======
         to: "/individual_resource/4"
->>>>>>> 0b847a402ba45a97123fd0c8ccaf7a2893911786
       }, "individual_resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/individual_project/25"
       }, "projects")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
@@ -92455,26 +92762,8 @@ function (_Component) {
         path: "/resource/",
         component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
-<<<<<<< HEAD
         path: "/individual_resource/:resourceID",
         component: _individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"]
-=======
-<<<<<<< HEAD
-        path: "/individual_resource/",
-=======
-<<<<<<< HEAD
-        path: "/individual_resource/:resourceID",
-        component: _individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"]
-=======
-        path: "/resource/",
->>>>>>> 0b847a402ba45a97123fd0c8ccaf7a2893911786
-        render: function render(props) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
-            resourceID: 4
-          }));
-        }
->>>>>>> f5993603a11b6f79c363a56d534aa7040d9156f8
->>>>>>> 5e593f9684c5fd41c9f639b67cc73c4c9cfe7496
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
@@ -92560,6 +92849,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_responsive_modal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-responsive-modal */ "./node_modules/react-responsive-modal/lib/index.es.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-confirm-alert */ "./node_modules/react-confirm-alert/lib/index.js");
+/* harmony import */ var react_confirm_alert__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-confirm-alert/src/react-confirm-alert.css */ "./node_modules/react-confirm-alert/src/react-confirm-alert.css");
+/* harmony import */ var react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_9__);
 
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -92591,6 +92884,9 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+ // Import
+
+ // Import css
 
 var Projects_list_page =
 /*#__PURE__*/
@@ -92636,7 +92932,7 @@ function (_React$Component) {
       var _processData = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(data) {
-        var columnDefs, rowData, columnNames, prevNetID, currentJSON, i, currentSchedule, currentNetID, currentHeader, fullName, currentRole, currentHours, newColumnDef;
+        var columnDefs, rowData, columnNames, prevNetID, currentJSON, i, currentSchedule, currentNetID, currentHeader, fullName, currentRole, currentHours, newColumnDef, dates, dateComparator;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -92699,12 +92995,28 @@ function (_React$Component) {
                 }
 
                 rowData.push(currentJSON);
+                dates = columnDefs.slice(3);
+
+                dateComparator = function dateComparator(a, b) {
+                  if (a.field < b.field) {
+                    return -1;
+                  }
+
+                  if (a.field > b.field) {
+                    return 1;
+                  }
+
+                  return 0;
+                };
+
+                dates.sort(dateComparator);
+                columnDefs = columnDefs.slice(0, 3).concat(dates);
                 return _context.abrupt("return", {
                   "rowData": rowData,
                   "columnDefs": columnDefs
                 });
 
-              case 9:
+              case 13:
               case "end":
                 return _context.stop();
             }
@@ -92887,6 +93199,30 @@ function (_React$Component) {
         openNoScheduleWarning: false
       });
     }
+  }, {
+    key: "submit",
+    value: function submit() {
+      var _this3 = this;
+
+      Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__["confirmAlert"])({
+        title: 'Confirm To Save',
+        message: 'Are you sure to do this?',
+        buttons: [{
+          label: 'Yes',
+          onClick: function onClick() {
+            return _this3.saveData();
+          }
+        }, {
+          label: 'No',
+          onClick: function onClick() {}
+        }],
+        closeOnEscape: true,
+        closeOnClickOutside: true
+      });
+    }
+  }, {
+    key: "render",
+
     /***
      * Makes POST Request to save data
      */
@@ -92895,14 +93231,11 @@ function (_React$Component) {
      *
      * @returns {*}
      */
-
-  }, {
-    key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "ag-theme-balham",
         style: {
-          height: '70vh',
+          height: '65vh',
           width: '100vw'
         }
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_responsive_modal__WEBPACK_IMPORTED_MODULE_6__["default"], {
@@ -92923,25 +93256,35 @@ function (_React$Component) {
         style: {
           marginTop: '15px'
         }
-      }, "No Schedule Recorded")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
+      }, "Resource Did Not Work This Week")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
         columnDefs: this.state.columnDefs,
         rowData: this.state.rowData,
         onCellValueChanged: this.addUpdatedRow.bind(this),
-        onCellClicked: this.canEditCell.bind(this)
+        onCellClicked: this.canEditCell.bind(this),
+        suppressHorizontalScroll: true
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',
           width: '100px',
           marginRight: '10px'
         },
-        onClick: this.saveData.bind(this)
+        onClick: this.submit.bind(this)
       }, "Save"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        style: {
+          height: '30px',
+          width: '100px',
+          marginRight: '10px'
+        },
+        onClick: this.restoreData.bind(this)
+      }, "Cancel"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',
           width: '100px'
         },
-        onClick: this.restoreData.bind(this)
-      }, "Cancel"));
+        onClick: function onClick() {
+          return console.log("hello");
+        }
+      }, "Add One Week"));
     }
   }]);
 
@@ -93360,13 +93703,8 @@ function (_React$Component) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
 __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/js/app.js */"./resources/js/app.js");
 module.exports = __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
-=======
-__webpack_require__(/*! /Users/GMZ/Desktop/CS5150_SoftwareEngineering/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/GMZ/Desktop/CS5150_SoftwareEngineering/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
->>>>>>> 5e593f9684c5fd41c9f639b67cc73c4c9cfe7496
 
 
 /***/ })

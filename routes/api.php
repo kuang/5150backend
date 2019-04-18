@@ -225,7 +225,7 @@ Route::post('/addSchedule', function(Request $request) {
 
 /** Route that adds a new week to the schedules table via POST Request
 {
-"ProjectName": "P2"
+"ProjectID": "25"
 }
 
  */
@@ -233,9 +233,9 @@ Route::post("/addOneWeek", function(Request $request) {
     $data = $request->all();
     try {
 
-        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
-        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
-        $project_id = $project_id_json["ProjectID"];
+//        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+//        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+        $project_id = $data["ProjectID"];
 
         $num_resources = DB::table('resources_per_projects')
             ->where('resources_per_projects.ProjectID', '=', $project_id)
