@@ -46,10 +46,10 @@ class App extends Component {
                     />
 
                     <Route
-                        path ="/individual_project/:projectID"
-                        component = {Individual_project_page}
+                        path="/individual_project/:projectID"
+                        component={Individual_project_page}
                     />
-                    <Route path ="/projects_list/" component = {Projects_list_page}/>
+                    <Route path="/projects_list/" component={Projects_list_page} />
                 </div>
             </Router>
         );

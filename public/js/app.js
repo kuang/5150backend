@@ -92951,14 +92951,15 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Individual_resource_page).call(this, props));
     _this.state = {
+      resourceFullName: "",
       projectIDs: ""
     };
     return _this;
   }
 
   _createClass(Individual_resource_page, [{
-    key: "render",
-    value: function render() {
+    key: "componentDidMount",
+    value: function componentDidMount() {
       var _this2 = this;
 
       fetch('/api/displayProjectsPerResource/' + this.props.resourceID).then(function (res) {
@@ -92977,7 +92978,22 @@ function (_Component) {
       function (error) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "failed");
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "ProjectIDs: ", this.state.projectIDs);
+      fetch('/api/displayResourceInfo/' + this.props.resourceID).then(function (res) {
+        return res.json();
+      }).then(function (result) {
+        _this2.setState({
+          resourceFullName: result[0].FirstName + " " + result[0].LastName
+        });
+
+        console.log(result);
+      }, function (error) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "failed");
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Resource name: ", this.state.resourceFullName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "ProjectIDs: ", this.state.projectIDs));
     }
   }]);
 
@@ -93298,8 +93314,8 @@ function (_React$Component) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/kuang/code/5150Backend/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/kuang/code/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
