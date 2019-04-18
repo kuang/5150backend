@@ -93200,8 +93200,8 @@ function (_React$Component) {
       });
     }
   }, {
-    key: "submit",
-    value: function submit() {
+    key: "submitSave",
+    value: function submitSave() {
       var _this3 = this;
 
       Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__["confirmAlert"])({
@@ -93221,8 +93221,101 @@ function (_React$Component) {
       });
     }
   }, {
-    key: "render",
+    key: "addOneWeek",
+    value: function () {
+      var _addOneWeek = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var _this4 = this;
 
+        var projectID, newData, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                projectID = this.props.match.params.projectID;
+                newData = {
+                  "ProjectID": projectID
+                };
+                _context4.next = 4;
+                return fetch('../api/addOneWeek', {
+                  method: "POST",
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(newData)
+                });
+
+              case 4:
+                response = _context4.sent;
+                fetch("../api/displayResourceInfoPerProject/".concat(projectID)).then(function (result) {
+                  return result.json();
+                }).then(function (data) {
+                  return _this4.processData(data);
+                }).then(function (newStuff) {
+                  this.setState({
+                    rowData: newStuff["rowData"],
+                    columnDefs: newStuff["columnDefs"]
+                  });
+                }.bind(this));
+
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function addOneWeek() {
+        return _addOneWeek.apply(this, arguments);
+      }
+
+      return addOneWeek;
+    }()
+  }, {
+    key: "submitAddOneWeek",
+    value: function () {
+      var _submitAddOneWeek = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var _this5 = this;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__["confirmAlert"])({
+                  title: 'Confirm To Add One Week',
+                  message: 'Are you sure to do this?',
+                  buttons: [{
+                    label: 'Yes',
+                    onClick: function onClick() {
+                      return _this5.addOneWeek();
+                    }
+                  }, {
+                    label: 'No',
+                    onClick: function onClick() {}
+                  }],
+                  closeOnEscape: true,
+                  closeOnClickOutside: true
+                });
+
+              case 1:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }));
+
+      function submitAddOneWeek() {
+        return _submitAddOneWeek.apply(this, arguments);
+      }
+
+      return submitAddOneWeek;
+    }()
     /***
      * Makes POST Request to save data
      */
@@ -93231,6 +93324,9 @@ function (_React$Component) {
      *
      * @returns {*}
      */
+
+  }, {
+    key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "ag-theme-balham",
@@ -93268,7 +93364,7 @@ function (_React$Component) {
           width: '100px',
           marginRight: '10px'
         },
-        onClick: this.submit.bind(this)
+        onClick: this.submitSave.bind(this)
       }, "Save"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',
@@ -93281,9 +93377,7 @@ function (_React$Component) {
           height: '30px',
           width: '100px'
         },
-        onClick: function onClick() {
-          return console.log("hello");
-        }
+        onClick: this.submitAddOneWeek.bind(this)
       }, "Add One Week"));
     }
   }]);

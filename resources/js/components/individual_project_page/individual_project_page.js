@@ -187,7 +187,7 @@ class Projects_list_page extends React.Component {
         this.setState({openNoScheduleWarning: false});
     }
 
-    submit() {
+    submitSave() {
         confirmAlert({
             title: 'Confirm To Save',
             message: 'Are you sure to do this?',
@@ -207,8 +207,43 @@ class Projects_list_page extends React.Component {
     };
 
     async addOneWeek() {
-
+        let projectID = this.props.match.params.projectID;
+        let newData = {"ProjectID" : projectID};
+        let response = await fetch('../api/addOneWeek', {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        });
+        fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(function(newStuff) {
+                this.setState({rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"]})
+            }.bind(this))
     }
+
+    async submitAddOneWeek() {
+        confirmAlert({
+            title: 'Confirm To Add One Week',
+            message: 'Are you sure to do this?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.addOneWeek()
+                },
+                {
+                    label: 'No',
+                    onClick: () => {}
+                }
+            ],
+            closeOnEscape: true,
+            closeOnClickOutside: true
+        });
+    }
+
     /***
      * Makes POST Request to save data
      */
@@ -244,7 +279,7 @@ class Projects_list_page extends React.Component {
 
                 <button style = {{height:'30px',width:'100px',marginRight: '10px'}}
                         onClick = {
-                            this.submit.bind(this)
+                            this.submitSave.bind(this)
                         }
                 >
                     Save
@@ -255,7 +290,7 @@ class Projects_list_page extends React.Component {
                 >
                     Cancel
                 </button>
-                <button style = {{height:'30px',width:'100px'}} onClick = {() => console.log("hello")}>Add One Week</button>
+                <button style = {{height:'30px',width:'100px'}} onClick = {this.submitAddOneWeek.bind(this)}>Add One Week</button>
             </div>
         );
     }
