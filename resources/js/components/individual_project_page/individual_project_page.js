@@ -121,10 +121,10 @@ class Projects_list_page extends React.Component {
             let netID = data[index]["netid"];
             let hours = data[index][key];
             let newData = {
-                "ProjectID": 26,
-                "NetID": "jd111",
-                "Dates": "03-07-19",
-                "HoursPerWeek": 0
+                "ProjectID": projectID,
+                "NetID": netID,
+                "Dates": key,
+                "HoursPerWeek": hours
             };
             console.log(newData);
             let response = await fetch('../api/updateSchedule', {

@@ -92445,9 +92445,20 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/users/",
         component: Users
-      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+      }), "// ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/resource/",
         component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        path: "/resource/",
+<<<<<<< HEAD
+        component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
+=======
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
+            resourceID: 4
+          }));
+        }
+>>>>>>> fe224643547f7ebc36fab27598f59706cfc9d970
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
@@ -92760,10 +92771,10 @@ function (_React$Component) {
                             netID = data[index]["netid"];
                             hours = data[index][key];
                             newData = {
-                              "ProjectID": 26,
-                              "NetID": "jd111",
-                              "Dates": "03-07-19",
-                              "HoursPerWeek": 0
+                              "ProjectID": projectID,
+                              "NetID": netID,
+                              "Dates": key,
+                              "HoursPerWeek": hours
                             };
                             console.log(newData);
                             _context2.next = 8;
@@ -93111,6 +93122,7 @@ function (_React$Component) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+<<<<<<< HEAD
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
@@ -93272,6 +93284,17 @@ function (_React$Component) {
 
   return Resource_list_page;
 }(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+=======
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+var Resource_list_page = function Resource_list_page() {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Rsource List Page");
+};
+>>>>>>> fe224643547f7ebc36fab27598f59706cfc9d970
 
 /* harmony default export */ __webpack_exports__["default"] = (Resource_list_page);
 
