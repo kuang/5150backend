@@ -35,7 +35,7 @@ class Resource_list_page extends React.Component {
 			let curr = data[i];
 			let currID = curr.NetID;
 			let fullName = curr.FirstName + " " + curr.LastName;
-			let maxHour = curr.MaxHoursPerWeek;
+			let maxHour = curr.MaxHoursPerWeek; 
 
 			currJSON = {netid: currID, name : fullName,  maxHourPerWeek: maxHour};
 			rowData.push(currJSON);
