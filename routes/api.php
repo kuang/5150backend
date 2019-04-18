@@ -54,7 +54,7 @@ Route::get('/displayResourceInfoPerProject/{projectID}', function ($projectID) {
             ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
             ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role', 'schedules.Dates', 'schedules.HoursPerWeek')
             ->where('resources_per_projects.ProjectID', '=', $projectID)
-            ->orderBy('resources.NetID')
+            ->orderBy('resources.NetID', 'schedules.Dates')
             ->get();
 });
 
@@ -210,6 +210,55 @@ Route::post('/addSchedule', function(Request $request) {
         }
         return response('This entry could not be added. Please try again.', 403);
     }  
+});
+
+/** Route that adds a new week to the schedules table via POST Request
+{
+"ProjectName": "P2"
+}
+
+ */
+Route::post("/addOneWeek", function(Request $request) {
+    $data = $request->all();
+    try {
+
+        $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
+        $project_id_json = json_decode(json_encode($project_id_array{0}), true);
+        $project_id = $project_id_json["ProjectID"];
+
+        $num_resources = DB::table('resources_per_projects')
+            ->where('resources_per_projects.ProjectID', '=', $project_id)
+            ->count();
+        $num_weeks = DB::table('resources_per_projects')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->where('resources_per_projects.ProjectID', '=', $project_id)
+            ->count();
+        if ($num_resources < 1) {
+            return response('Add a resource before adding a week', 403);
+        } elseif ($num_weeks < 1) {
+            // JSON array containing the most recent Monday
+            $monday = DB::select(DB::raw('select DATE(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) ) as LastMonday'));
+            $ids = DB::table('resources_per_projects')->select('ScheduleID')
+                ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+            foreach($ids as $i){
+                $date = $monday[0];
+                DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->LastMonday, 'HoursPerWeek' => 40]);
+            }
+            return("Successfully inserted first week");
+        } else {
+            return "Unimplemented";
+        }
+
+    } catch (Exception $e){
+        if ($e instanceof \Illuminate\Database\QueryException) {
+            $error_code= $e->errorInfo[1];
+            if($error_code == 1062){
+                return response('A project already exists with this name', 403);
+            }
+        }
+        echo($e->getMessage());
+        return response('This project could not be added. Please try again.', 403);
+    }
 });
 
 /** Route that updates a project in the projects table
