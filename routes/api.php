@@ -247,7 +247,22 @@ Route::post("/addOneWeek", function(Request $request) {
             }
             return("Successfully inserted first week");
         } else {
-            return "Unimplemented";
+            $last_week = DB::table('resources_per_projects')
+                ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+                ->where('resources_per_projects.ProjectID', '=', $project_id)->max('Dates');
+//            return $last_week;
+            $monday = DB::select(DB::raw('SELECT DATE_ADD("'. $last_week . '", INTERVAL 7 DAY) AS Monday'));
+//            return $monday;
+            $ids = DB::table('resources_per_projects')->select('ScheduleID')
+                ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+            foreach($ids as $i){
+                $date = $monday[0];
+                $hours_array = DB::table('schedules')->select('HoursPerWeek')
+                    ->where([['ScheduleID', $i->ScheduleID], ["Dates", $last_week]])->get();
+                $prev_hours = $hours_array[0]->HoursPerWeek;
+                DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->Monday, 'HoursPerWeek' => $prev_hours]);
+            }
+            return("Successfully inserted next week");
         }
 
     } catch (Exception $e){
