@@ -6,6 +6,7 @@ import Individual_project_page from './individual_project_page/individual_projec
 // import './App.css';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Projects_list_page from './projects_list_page/projects_list_page.js'
+import Resource_list_page from './resource_list_page/resource_list_page.js'
 
 class App extends Component {
     render() {
@@ -38,12 +39,12 @@ class App extends Component {
                     <Route path="/" exact component={Index} />
                     <Route path="/about/" component={About} />
                     <Route path="/users/" component={Users} />
-                    <Route path="/resource/" component={Resource_list_page} /> 
+                    // <Route path="/resource/" component={Resource_list_page} />
 
-                    // <Route
-                    //     path='/resource'
-                    //     render={(props) => <Individual_resource_page {...props} resourceID={4} />}
-                    // />
+                    <Route
+                        path='/resource/'
+                        render={(props) => <Individual_resource_page {...props} resourceID={4} />}
+                    />
 
                     <Route
                         path ="/individual_project/:projectID"
