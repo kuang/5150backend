@@ -92457,7 +92457,7 @@ function (_Component) {
             resourceID: 4
           }));
         }
-      }), "}", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
@@ -92589,7 +92589,8 @@ function (_React$Component) {
     _this.state = {
       // state is initialized to just have two column definitions, and no row data.
       // the column definitions and row data are actually updated in compoundDidMount()
-      open: false,
+      openTypeWarning: false,
+      openNoScheduleWarning: false,
       columnDefs: [{
         headerName: "Name",
         field: "name" // headerName is the name of the column, field is what is
@@ -92676,7 +92677,7 @@ function (_React$Component) {
                     columnDefs.push(newColumnDef);
                   }
 
-                  currentJSON[currentHeader] = currentHours == "";
+                  currentJSON[currentHeader] = currentHours;
                 }
 
                 rowData.push(currentJSON);
@@ -92821,10 +92822,10 @@ function (_React$Component) {
       console.log(this);
     }
   }, {
-    key: "closeModal",
-    value: function closeModal() {
+    key: "closeTypeWarningModal",
+    value: function closeTypeWarningModal() {
       this.setState({
-        open: false
+        openTypeWarning: false
       });
     }
     /***
@@ -92841,7 +92842,7 @@ function (_React$Component) {
 
       if (isNaN(numericalInput)) {
         this.setState({
-          open: true
+          openTypeWarning: true
         });
         return;
       }
@@ -92849,6 +92850,23 @@ function (_React$Component) {
       this.updatedRows.add({
         "rowIndex": event.rowIndex,
         "colIndex": editedColumn
+      });
+    }
+  }, {
+    key: "canEditCell",
+    value: function canEditCell(event) {
+      if (event.value == undefined) {
+        this.setState({
+          "openNoScheduleWarning": true
+        });
+        return;
+      }
+    }
+  }, {
+    key: "closeNoScheduleWarningModal",
+    value: function closeNoScheduleWarningModal() {
+      this.setState({
+        openNoScheduleWarning: false
       });
     }
     /***
@@ -92870,18 +92888,28 @@ function (_React$Component) {
           width: '100vw'
         }
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_responsive_modal__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        open: this.state.open,
-        onClose: this.closeModal.bind(this),
+        open: this.state.openTypeWarning,
+        onClose: this.closeTypeWarningModal.bind(this),
         center: true,
         closeIconSize: 14
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", {
         style: {
           marginTop: '15px'
         }
-      }, "Please Enter An Integer")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
+      }, "Please Enter An Integer")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_responsive_modal__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        open: this.state.openNoScheduleWarning,
+        onClose: this.closeNoScheduleWarningModal.bind(this),
+        center: true,
+        closeIconSize: 14
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", {
+        style: {
+          marginTop: '15px'
+        }
+      }, "No Schedule Recorded")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
         columnDefs: this.state.columnDefs,
         rowData: this.state.rowData,
-        onCellValueChanged: this.addUpdatedRow.bind(this)
+        onCellValueChanged: this.addUpdatedRow.bind(this),
+        onCellClicked: this.canEditCell.bind(this)
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',
