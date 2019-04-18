@@ -92383,6 +92383,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./resource_list_page/resource_list_page.js */ "./resources/js/components/resource_list_page/resource_list_page.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -92432,6 +92434,8 @@ function (_Component) {
       }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/resource/"
       }, "resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
+        to: "/individual_resource/"
+      }, "individual_resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/individual_project/25"
       }, "projects")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/projects_list/"
@@ -92448,6 +92452,13 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/resource/",
         component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        path: "/individual_resource/",
+        render: function render(props) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
+            resourceID: 4
+          }));
+        }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
@@ -92580,7 +92591,8 @@ function (_React$Component) {
     _this.state = {
       // state is initialized to just have two column definitions, and no row data.
       // the column definitions and row data are actually updated in compoundDidMount()
-      open: false,
+      openTypeWarning: false,
+      openNoScheduleWarning: false,
       columnDefs: [{
         headerName: "Name",
         field: "name" // headerName is the name of the column, field is what is
@@ -92812,10 +92824,10 @@ function (_React$Component) {
       console.log(this);
     }
   }, {
-    key: "closeModal",
-    value: function closeModal() {
+    key: "closeTypeWarningModal",
+    value: function closeTypeWarningModal() {
       this.setState({
-        open: false
+        openTypeWarning: false
       });
     }
     /***
@@ -92832,7 +92844,7 @@ function (_React$Component) {
 
       if (isNaN(numericalInput)) {
         this.setState({
-          open: true
+          openTypeWarning: true
         });
         return;
       }
@@ -92840,6 +92852,23 @@ function (_React$Component) {
       this.updatedRows.add({
         "rowIndex": event.rowIndex,
         "colIndex": editedColumn
+      });
+    }
+  }, {
+    key: "canEditCell",
+    value: function canEditCell(event) {
+      if (event.value == undefined) {
+        this.setState({
+          "openNoScheduleWarning": true
+        });
+        return;
+      }
+    }
+  }, {
+    key: "closeNoScheduleWarningModal",
+    value: function closeNoScheduleWarningModal() {
+      this.setState({
+        openNoScheduleWarning: false
       });
     }
     /***
@@ -92861,18 +92890,28 @@ function (_React$Component) {
           width: '100vw'
         }
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_responsive_modal__WEBPACK_IMPORTED_MODULE_6__["default"], {
-        open: this.state.open,
-        onClose: this.closeModal.bind(this),
+        open: this.state.openTypeWarning,
+        onClose: this.closeTypeWarningModal.bind(this),
         center: true,
         closeIconSize: 14
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", {
         style: {
           marginTop: '15px'
         }
-      }, "Please Enter An Integer")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
+      }, "Please Enter An Integer")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_responsive_modal__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        open: this.state.openNoScheduleWarning,
+        onClose: this.closeNoScheduleWarningModal.bind(this),
+        center: true,
+        closeIconSize: 14
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h3", {
+        style: {
+          marginTop: '15px'
+        }
+      }, "No Schedule Recorded")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
         columnDefs: this.state.columnDefs,
         rowData: this.state.rowData,
-        onCellValueChanged: this.addUpdatedRow.bind(this)
+        onCellValueChanged: this.addUpdatedRow.bind(this),
+        onCellClicked: this.canEditCell.bind(this)
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',
@@ -92942,14 +92981,15 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Individual_resource_page).call(this, props));
     _this.state = {
+      resourceFullName: "",
       projectIDs: ""
     };
     return _this;
   }
 
   _createClass(Individual_resource_page, [{
-    key: "render",
-    value: function render() {
+    key: "componentDidMount",
+    value: function componentDidMount() {
       var _this2 = this;
 
       fetch('/api/displayProjectsPerResource/' + this.props.resourceID).then(function (res) {
@@ -92968,7 +93008,22 @@ function (_Component) {
       function (error) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "failed");
       });
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "ProjectIDs: ", this.state.projectIDs);
+      fetch('/api/displayResourceInfo/' + this.props.resourceID).then(function (res) {
+        return res.json();
+      }).then(function (result) {
+        _this2.setState({
+          resourceFullName: result[0].FirstName + " " + result[0].LastName
+        });
+
+        console.log(result);
+      }, function (error) {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "failed");
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Resource name: ", this.state.resourceFullName), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "ProjectIDs: ", this.state.projectIDs));
     }
   }]);
 
@@ -93188,7 +93243,7 @@ function (_React$Component) {
                 console.log(data);
                 columnDefs = [{
                   headerName: 'NetID',
-                  filed: 'netid'
+                  field: 'netid'
                 }, {
                   headerName: 'Name',
                   field: 'name'

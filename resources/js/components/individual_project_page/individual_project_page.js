@@ -13,7 +13,8 @@ class Projects_list_page extends React.Component {
         this.updatedRows = new Set();
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
-            open : false,
+            openTypeWarning : false,
+            openNoScheduleWarning: false,
             columnDefs: [{
                 headerName: "Name", field: "name" // headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
@@ -142,8 +143,8 @@ class Projects_list_page extends React.Component {
         console.log(this);
     }
 
-    closeModal() {
-        this.setState({open: false});
+    closeTypeWarningModal() {
+        this.setState({openTypeWarning: false});
     }
 
     /***
@@ -155,11 +156,24 @@ class Projects_list_page extends React.Component {
         let numericalInput = Number(event.value);
         let editedColumn = event.colDef.field;
         if (isNaN(numericalInput)) {
-            this.setState({open:true})
+            this.setState({openTypeWarning:true})
             return;
         }
         this.updatedRows.add({"rowIndex" : event.rowIndex, "colIndex" : editedColumn});
     }
+
+
+    canEditCell(event) {
+        if (event.value == undefined) {
+            this.setState({"openNoScheduleWarning":true});
+            return;
+        }
+    }
+
+    closeNoScheduleWarningModal() {
+        this.setState({openNoScheduleWarning: false});
+    }
+
     /***
      * Makes POST Request to save data
      */
@@ -176,14 +190,19 @@ class Projects_list_page extends React.Component {
                     width: '100vw'
                 }}
             >
-                <Modal open={this.state.open} onClose = {this.closeModal.bind(this)} center closeIconSize = {14}>
+                <Modal open={this.state.openTypeWarning} onClose = {this.closeTypeWarningModal.bind(this)} center closeIconSize = {14}>
                     <h3 style = {{marginTop:'15px'}}>Please Enter An Integer</h3>
+                </Modal>
+
+                <Modal open={this.state.openNoScheduleWarning} onClose = {this.closeNoScheduleWarningModal.bind(this)} center closeIconSize = {14}>
+                    <h3 style = {{marginTop:'15px'}}>No Schedule Recorded</h3>
                 </Modal>
 
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
                     onCellValueChanged = {this.addUpdatedRow.bind(this)}
+                    onCellClicked = {this.canEditCell.bind(this)}
                 >
                 </AgGridReact>
 

@@ -6,11 +6,11 @@ class Individual_resource_page extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            resourceFullName: "",
             projectIDs: "",
         };
     }
-
-    render() {
+    componentDidMount() {
         fetch('/api/displayProjectsPerResource/' + this.props.resourceID)
             .then(res => res.json())
             .then(
@@ -25,7 +25,29 @@ class Individual_resource_page extends Component {
                     return <h2>failed</h2>;
                 });
 
-        return <h2>ProjectIDs: {this.state.projectIDs}</h2>;
+        fetch('/api/displayResourceInfo/' + this.props.resourceID)
+            .then(res => res.json())
+            .then(
+                (result) => {
+                    this.setState({
+                        resourceFullName: result[0].FirstName + " " + result[0].LastName
+                    })
+                    console.log(result);
+
+                },
+                (error) => {
+                    return <h2>failed</h2>;
+                });
+    }
+
+    render() {
+        return (
+            <div>
+                <h1>Resource name: {this.state.resourceFullName}</h1>
+
+                <h2>ProjectIDs: {this.state.projectIDs}</h2>
+            </div>
+        );
     }
 }
 
