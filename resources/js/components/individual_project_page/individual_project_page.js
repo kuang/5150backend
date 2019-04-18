@@ -34,7 +34,7 @@ class Projects_list_page extends React.Component {
      * @param data
      * @returns {{rowData: Array, columnDefs: []}}
      */
-    processData(data) {
+    async processData(data) {
         console.log(data);
         let columnDefs = [
             {headerName: 'Name', field: 'name', sortable: true},
@@ -109,22 +109,27 @@ class Projects_list_page extends React.Component {
         console.log("Saving Data");
         let data = this.state.rowData;
         let updatedRows = this.updatedRows;
-        let projectName = this.props.match.params.projectID;
+        let projectID = this.props.match.params.projectID;
 
         // index is the index of a row that has been updated
 
-        let processData = function(pair) {
+        let processData = async function (pair) {
             let index = pair["rowIndex"];
             let key = pair["colIndex"];
             let netID = data[index]["netid"];
             let hours = data[index][key];
             let newData = {
-                "ProjectName": projectName,
+                "ProjectID": projectID,
                 "NetID": netID,
                 "Dates": key,
                 "HoursPerWeek": Number(hours)
             };
             console.log(newData);
+            let response = await fetch('../api/updateSchedule', {
+                method: "PUT",
+                body: JSON.stringify(newData)
+            });
+            console.log(response);
         }
         updatedRows.forEach(processData);
         this.updatedRows.clear();

@@ -89778,70 +89778,92 @@ function (_React$Component) {
 
   }, {
     key: "processData",
-    value: function processData(data) {
-      console.log(data);
-      var columnDefs = [{
-        headerName: 'Name',
-        field: 'name',
-        sortable: true
-      }, {
-        headerName: 'NetID',
-        field: 'netid',
-        sortable: true
-      }, {
-        headerName: 'Role',
-        field: 'role',
-        sortable: true,
-        enableCellChangeFlash: true
-      }];
-      var rowData = [];
-      var columnNames = new Set();
-      var prevNetID = null;
-      var currentJSON = {};
+    value: function () {
+      var _processData = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(data) {
+        var columnDefs, rowData, columnNames, prevNetID, currentJSON, i, currentSchedule, currentNetID, currentHeader, fullName, currentRole, currentHours, newColumnDef;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                console.log(data);
+                columnDefs = [{
+                  headerName: 'Name',
+                  field: 'name',
+                  sortable: true
+                }, {
+                  headerName: 'NetID',
+                  field: 'netid',
+                  sortable: true
+                }, {
+                  headerName: 'Role',
+                  field: 'role',
+                  sortable: true,
+                  enableCellChangeFlash: true
+                }];
+                rowData = [];
+                columnNames = new Set();
+                prevNetID = null;
+                currentJSON = {};
 
-      for (var i = 0; i < data.length; i++) {
-        var currentSchedule = data[i];
-        var currentNetID = currentSchedule.NetID;
-        var currentHeader = currentSchedule.Dates;
-        var fullName = currentSchedule.FirstName + " " + currentSchedule.LastName;
+                for (i = 0; i < data.length; i++) {
+                  currentSchedule = data[i];
+                  currentNetID = currentSchedule.NetID;
+                  currentHeader = currentSchedule.Dates;
+                  fullName = currentSchedule.FirstName + " " + currentSchedule.LastName;
 
-        if (currentNetID != prevNetID) {
-          if (prevNetID != null) {
-            rowData.push(currentJSON);
+                  if (currentNetID != prevNetID) {
+                    if (prevNetID != null) {
+                      rowData.push(currentJSON);
+                    }
+
+                    currentRole = currentSchedule.Role;
+                    prevNetID = currentNetID;
+                    currentJSON = {
+                      netid: currentNetID,
+                      name: fullName,
+                      role: currentRole
+                    };
+                  }
+
+                  currentHours = currentSchedule.HoursPerWeek;
+
+                  if (!columnNames.has(currentHeader)) {
+                    columnNames.add(currentHeader);
+                    newColumnDef = {
+                      headerName: currentHeader,
+                      field: currentHeader,
+                      sortable: true,
+                      enableCellChangeFlash: true,
+                      editable: true
+                    };
+                    columnDefs.push(newColumnDef);
+                  }
+
+                  currentJSON[currentHeader] = currentHours;
+                }
+
+                rowData.push(currentJSON);
+                return _context.abrupt("return", {
+                  "rowData": rowData,
+                  "columnDefs": columnDefs
+                });
+
+              case 9:
+              case "end":
+                return _context.stop();
+            }
           }
+        }, _callee);
+      }));
 
-          var currentRole = currentSchedule.Role;
-          prevNetID = currentNetID;
-          currentJSON = {
-            netid: currentNetID,
-            name: fullName,
-            role: currentRole
-          };
-        }
-
-        var currentHours = currentSchedule.HoursPerWeek;
-
-        if (!columnNames.has(currentHeader)) {
-          columnNames.add(currentHeader);
-          var newColumnDef = {
-            headerName: currentHeader,
-            field: currentHeader,
-            sortable: true,
-            enableCellChangeFlash: true,
-            editable: true
-          };
-          columnDefs.push(newColumnDef);
-        }
-
-        currentJSON[currentHeader] = currentHours;
+      function processData(_x) {
+        return _processData.apply(this, arguments);
       }
 
-      rowData.push(currentJSON);
-      return {
-        "rowData": rowData,
-        "columnDefs": columnDefs
-      };
-    }
+      return processData;
+    }()
     /***
      * This function is always called right after the constructor for this class is called
      * It makes a GET request to the api (argument to the fetch function), retrieves it, then processes the data
@@ -89877,40 +89899,71 @@ function (_React$Component) {
     value: function () {
       var _saveData = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var data, updatedRows, projectName, processData;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 console.log("Saving Data");
                 data = this.state.rowData;
                 updatedRows = this.updatedRows;
                 projectName = this.props.match.params.projectID; // index is the index of a row that has been updated
 
-                processData = function processData(pair) {
-                  var index = pair["rowIndex"];
-                  var key = pair["colIndex"];
-                  var netID = data[index]["netid"];
-                  var hours = data[index][key];
-                  var newData = {
-                    "ProjectName": projectName,
-                    "NetID": netID,
-                    "Dates": key,
-                    "HoursPerWeek": Number(hours)
+                processData =
+                /*#__PURE__*/
+                function () {
+                  var _ref = _asyncToGenerator(
+                  /*#__PURE__*/
+                  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(pair) {
+                    var index, key, netID, hours, newData, response;
+                    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+                      while (1) {
+                        switch (_context2.prev = _context2.next) {
+                          case 0:
+                            index = pair["rowIndex"];
+                            key = pair["colIndex"];
+                            netID = data[index]["netid"];
+                            hours = data[index][key];
+                            newData = {
+                              "ProjectName": projectName,
+                              "NetID": netID,
+                              "Dates": key,
+                              "HoursPerWeek": Number(hours)
+                            };
+                            console.log(newData);
+                            _context2.next = 8;
+                            return fetch('../api/updateSchedule', {
+                              method: "PUT",
+                              body: JSON.stringify(newData)
+                            });
+
+                          case 8:
+                            response = _context2.sent;
+                            console.log(response);
+
+                          case 10:
+                          case "end":
+                            return _context2.stop();
+                        }
+                      }
+                    }, _callee2);
+                  }));
+
+                  return function processData(_x2) {
+                    return _ref.apply(this, arguments);
                   };
-                  console.log(newData);
-                };
+                }();
 
                 updatedRows.forEach(processData);
                 this.updatedRows.clear();
 
               case 7:
               case "end":
-                return _context.stop();
+                return _context3.stop();
             }
           }
-        }, _callee, this);
+        }, _callee3, this);
       }));
 
       function saveData() {
