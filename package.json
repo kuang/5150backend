@@ -28,6 +28,7 @@
         "ag-grid-community": "^20.2.0",
         "ag-grid-react": "^20.2.0",
         "react-dom-factories": "^1.0.2",
+        "react-responsive-modal": "^3.6.0",
         "react-router-dom": "^5.0.0"
     }
 }

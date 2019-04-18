@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import Modal from 'react-responsive-modal';
 import {cloneDeep} from 'lodash';
 
 class Projects_list_page extends React.Component {
@@ -12,6 +13,7 @@ class Projects_list_page extends React.Component {
         this.updatedRows = new Set();
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
+            open : false,
             columnDefs: [{
                 headerName: "Name", field: "name" // headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
@@ -125,11 +127,11 @@ class Projects_list_page extends React.Component {
                 "HoursPerWeek": Number(hours)
             };
             console.log(newData);
-            let response = await fetch('../api/updateSchedule', {
-                method: "PUT",
-                body: JSON.stringify(newData)
-            });
-            console.log(response);
+            // let response = await fetch('../api/updateSchedule', {
+            //     method: "PUT",
+            //     body: JSON.stringify(newData)
+            // });
+            // console.log(response);
         }
         updatedRows.forEach(processData);
         this.updatedRows.clear();
@@ -142,11 +144,20 @@ class Projects_list_page extends React.Component {
         console.log(this);
     }
 
+    closeModal() {
+        this.setState({open: false});
+    }
+
     /***
      * Add the row index of the row that was just edited
      * @param event
      */
     addUpdatedRow(event) {
+        var numericalInput = Number(event.value);
+        if (isNaN(numericalInput)) {
+            this.setState({open:true})
+            return;
+        }
         this.updatedRows.add({"rowIndex" : event.rowIndex, "colIndex" : event.colDef.field});
     }
     /***
@@ -165,6 +176,10 @@ class Projects_list_page extends React.Component {
                     width: '100vw'
                 }}
             >
+                <Modal open={this.state.open} onClose = {this.closeModal.bind(this)} center closeIconSize = {14}>
+                    <h3 style = {{marginTop:'15px'}}>Please Enter An Integer</h3>
+                </Modal>
+
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
