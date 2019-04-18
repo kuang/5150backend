@@ -44,7 +44,6 @@ class App extends Component {
                         path='/resource/'
                         render={(props) => <Individual_resource_page {...props} resourceID={4} />}
                     />
-                    }
 
                     <Route
                         path ="/individual_project/:projectID"
