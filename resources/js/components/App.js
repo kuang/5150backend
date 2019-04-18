@@ -40,11 +40,16 @@ class App extends Component {
                     <Route path="/about/" component={About} />
                     <Route path="/users/" component={Users} />
                     <Route path="/resource/" component={Resource_list_page} />
+<<<<<<< HEAD
+                    {/*
+=======
 
+>>>>>>> fe224643547f7ebc36fab27598f59706cfc9d970
                     <Route
                         path='/resource/'
                         render={(props) => <Individual_resource_page {...props} resourceID={4} />}
                     />
+                    */}
 
                     <Route
                         path ="/individual_project/:projectID"
