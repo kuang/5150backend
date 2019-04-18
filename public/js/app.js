@@ -92383,8 +92383,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./resource_list_page/resource_list_page.js */ "./resources/js/components/resource_list_page/resource_list_page.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
-
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -92434,6 +92432,8 @@ function (_Component) {
       }, "Users")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/resource/"
       }, "resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
+        to: "/individual_resource/4"
+      }, "individual_resource")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/individual_project/25"
       }, "projects")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Link"], {
         to: "/projects_list/"
@@ -92451,13 +92451,9 @@ function (_Component) {
         path: "/resource/",
         component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
-        path: "/resource/",
-        render: function render(props) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
-            resourceID: 4
-          }));
-        }
-      }), "}", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+        path: "/individual_resource/:resourceID",
+        component: _individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"]
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
@@ -92962,7 +92958,7 @@ function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      fetch('/api/displayProjectsPerResource/' + this.props.resourceID).then(function (res) {
+      fetch('/api/displayProjectsPerResource/' + this.props.match.params.resourceID).then(function (res) {
         return res.json();
       }).then(function (result) {
         var string_result = JSON.stringify({
@@ -92978,7 +92974,7 @@ function (_Component) {
       function (error) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "failed");
       });
-      fetch('/api/displayResourceInfo/' + this.props.resourceID).then(function (res) {
+      fetch('/api/displayResourceInfo/' + this.props.match.params.resourceID).then(function (res) {
         return res.json();
       }).then(function (result) {
         _this2.setState({
