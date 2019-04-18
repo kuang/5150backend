@@ -25,12 +25,6 @@ class Projects_list_page extends React.Component {
         }
     }
 
-    /* Determine if date is indeed an actual date
-     */
-    isDate(date) {
-        return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
-    }
-
     /***
      * Processes
      * @param data
