@@ -92451,17 +92451,8 @@ function (_Component) {
         path: "/resource/",
         component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
-<<<<<<< HEAD
         path: "/individual_resource/:resourceID",
         component: _individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"]
-=======
-        path: "/resource/",
-        render: function render(props) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_individual_resource_page_individual_resource_page_js__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
-            resourceID: 4
-          }));
-        }
->>>>>>> f5993603a11b6f79c363a56d534aa7040d9156f8
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/individual_project/:projectID",
         component: _individual_project_page_individual_project_page_js__WEBPACK_IMPORTED_MODULE_4__["default"]
@@ -93347,8 +93338,8 @@ function (_React$Component) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/kuang/code/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/kuang/code/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
