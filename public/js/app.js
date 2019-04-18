@@ -92447,7 +92447,7 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/users/",
         component: Users
-      }), "// ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
         path: "/resource/",
         component: _resource_list_page_resource_list_page_js__WEBPACK_IMPORTED_MODULE_7__["default"]
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_5__["Route"], {
@@ -92843,7 +92843,9 @@ function (_React$Component) {
   }, {
     key: "addUpdatedRow",
     value: function addUpdatedRow(event) {
+      console.log("SUP");
       var numericalInput = Number(event.value);
+      var editedColumn = event.colDef.field;
 
       if (isNaN(numericalInput)) {
         this.setState({
@@ -92854,7 +92856,7 @@ function (_React$Component) {
 
       this.updatedRows.add({
         "rowIndex": event.rowIndex,
-        "colIndex": event.colDef.field
+        "colIndex": editedColumn
       });
     }
     /***
@@ -92887,7 +92889,7 @@ function (_React$Component) {
       }, "Please Enter An Integer")), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
         columnDefs: this.state.columnDefs,
         rowData: this.state.rowData,
-        onCellEditingStopped: this.addUpdatedRow.bind(this)
+        onCellValueChanged: this.addUpdatedRow.bind(this)
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',

@@ -157,12 +157,14 @@ class Projects_list_page extends React.Component {
      * @param event
      */
     addUpdatedRow(event) {
-        var numericalInput = Number(event.value);
+        console.log("SUP");
+        let numericalInput = Number(event.value);
+        let editedColumn = event.colDef.field;
         if (isNaN(numericalInput)) {
             this.setState({open:true})
             return;
         }
-        this.updatedRows.add({"rowIndex" : event.rowIndex, "colIndex" : event.colDef.field});
+        this.updatedRows.add({"rowIndex" : event.rowIndex, "colIndex" : editedColumn});
     }
     /***
      * Makes POST Request to save data
@@ -187,7 +189,7 @@ class Projects_list_page extends React.Component {
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
-                    onCellEditingStopped = {this.addUpdatedRow.bind(this)}
+                    onCellValueChanged = {this.addUpdatedRow.bind(this)}
                 >
                 </AgGridReact>
 
