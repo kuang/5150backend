@@ -39,12 +39,13 @@ class App extends Component {
                     <Route path="/" exact component={Index} />
                     <Route path="/about/" component={About} />
                     <Route path="/users/" component={Users} />
-                    // <Route path="/resource/" component={Resource_list_page} />
-
+                    <Route path="/resource/" component={Resource_list_page} />
+                    {/*
                     <Route
                         path='/resource/'
                         render={(props) => <Individual_resource_page {...props} resourceID={4} />}
                     />
+                    */}
 
                     <Route
                         path ="/individual_project/:projectID"
