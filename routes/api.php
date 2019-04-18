@@ -365,7 +365,7 @@ Route::put('/updateResourcePerProject', function(Request $request) {
  * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter 
 
 //{
-//    "ProjectName": "P2",
+//    "ProjectID": "26",
 //    "NetID": "jd111",
 //    "Dates": "2019-03-07",
 //    "HoursPerWeek": 30
@@ -413,23 +413,21 @@ Route::put('/updateResourcePerProject', function(Request $request) {
 Route::put('/updateSchedule', function(Request $request) {
     $data = $request->all();
 
-//    $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
-//    $project_id_json = json_decode(json_encode($project_id_array{0}), true);
-//    $project_id = $project_id_json["ProjectID"];
-    $project_id = $data["ProjectID"];
-    $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
-    $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
-    $resource_id = $resource_id_json["ResourceID"];
-
-    $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
-    $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
-    $schedule_id = $schedule_id_json["ScheduleID"];
-
     try {
-        DB::table('schedules')->where('ScheduleID', $schedule_id)->update(
-            ["Dates" => $data["Dates"], "HoursPerWeek" => $data["HoursPerWeek"]]);
+        $project_id = $data["ProjectID"];
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
+
+        $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
+        $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+        $schedule_id = $schedule_id_json["ScheduleID"];
+
+        $updateDetails = array("HoursPerWeek" => $data["HoursPerWeek"]);
+        DB::table('schedules')->where([['ScheduleID', $schedule_id], ["Dates", $data["Dates"]]])->update($updateDetails);
         return "Successfully Updated Existing Schedule";
     } catch (Exception $e){
+        echo($e->getMessage());
         if ($e instanceof \Illuminate\Database\QueryException) {
             $error_code= $e->errorInfo[1];
             if($error_code == 1062){
