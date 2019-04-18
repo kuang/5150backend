@@ -92754,7 +92754,7 @@ function (_React$Component) {
                   var _ref = _asyncToGenerator(
                   /*#__PURE__*/
                   _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(pair) {
-                    var index, key, netID, hours, newData;
+                    var index, key, netID, hours, newData, response;
                     return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
                       while (1) {
                         switch (_context2.prev = _context2.next) {
@@ -92764,18 +92764,27 @@ function (_React$Component) {
                             netID = data[index]["netid"];
                             hours = data[index][key];
                             newData = {
-                              "ProjectID": projectID,
-                              "NetID": netID,
-                              "Dates": key,
-                              "HoursPerWeek": Number(hours)
+                              "ProjectID": 26,
+                              "NetID": "jd111",
+                              "Dates": "03-07-19",
+                              "HoursPerWeek": 0
                             };
-                            console.log(newData); // let response = await fetch('../api/updateSchedule', {
-                            //     method: "PUT",
-                            //     body: JSON.stringify(newData)
-                            // });
-                            // console.log(response);
+                            console.log(newData);
+                            _context2.next = 8;
+                            return fetch('../api/updateSchedule', {
+                              method: "PUT",
+                              headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify(newData)
+                            });
 
-                          case 6:
+                          case 8:
+                            response = _context2.sent;
+                            console.log(response);
+
+                          case 10:
                           case "end":
                             return _context2.stop();
                         }

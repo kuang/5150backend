@@ -403,6 +403,13 @@ Route::put('/updateResourcePerProject', function(Request $request) {
 //});
 
 
+//{
+//    "ProjectID": 25,
+//    "NetID": "jd111",
+//    "Dates": "2019-03-07",
+//    "HoursPerWeek": 30
+//}
+
 Route::put('/updateSchedule', function(Request $request) {
     $data = $request->all();
 
