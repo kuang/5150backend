@@ -93063,15 +93063,31 @@ function (_React$Component) {
       var _saveData = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var data, updatedRows, projectID, processData;
+        var data, projectID, updateSuccessful, updatedRows, processData;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
                 console.log("Saving Data");
                 data = this.state.rowData;
-                updatedRows = this.updatedRows;
-                projectID = this.props.match.params.projectID; // index is the index of a row that has been updated
+                projectID = this.props.match.params.projectID;
+                _context3.next = 5;
+                return fetch('../api/updateMostRecentRowData', {
+                  method: "PUT",
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    "projectID": projectID,
+                    "data": data
+                  })
+                });
+
+              case 5:
+                updateSuccessful = _context3.sent;
+                console.log(updateSuccessful);
+                updatedRows = this.updatedRows; // index is the index of a row that has been updated
 
                 processData =
                 /*#__PURE__*/
@@ -93125,7 +93141,7 @@ function (_React$Component) {
                 updatedRows.forEach(processData);
                 this.updatedRows.clear();
 
-              case 7:
+              case 11:
               case "end":
                 return _context3.stop();
             }
@@ -93145,9 +93161,41 @@ function (_React$Component) {
 
   }, {
     key: "restoreData",
-    value: function restoreData() {
-      console.log(this);
-    }
+    value: function () {
+      var _restoreData = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var projectID, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                projectID = this.props.match.params.projectID;
+                _context4.next = 3;
+                return fetch("../api/displayMostRecentRowData/".concat(projectID));
+
+              case 3:
+                response = _context4.sent;
+                //     .then(result => result.json())
+                //     .then(function(newStuff) {
+                //         this.setState({rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"]})
+                //     }.bind(this))
+                console.log(response.json());
+
+              case 5:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function restoreData() {
+        return _restoreData.apply(this, arguments);
+      }
+
+      return restoreData;
+    }()
   }, {
     key: "closeTypeWarningModal",
     value: function closeTypeWarningModal() {
@@ -93229,19 +93277,19 @@ function (_React$Component) {
     value: function () {
       var _addOneWeek = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
         var _this4 = this;
 
         var projectID, newData, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context4.prev = _context4.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
                 projectID = this.props.match.params.projectID;
                 newData = {
                   "ProjectID": projectID
                 };
-                _context4.next = 4;
+                _context5.next = 4;
                 return fetch('../api/addOneWeek', {
                   method: "POST",
                   headers: {
@@ -93252,7 +93300,7 @@ function (_React$Component) {
                 });
 
               case 4:
-                response = _context4.sent;
+                response = _context5.sent;
                 fetch("../api/displayResourceInfoPerProject/".concat(projectID)).then(function (result) {
                   return result.json();
                 }).then(function (data) {
@@ -93266,10 +93314,10 @@ function (_React$Component) {
 
               case 6:
               case "end":
-                return _context4.stop();
+                return _context5.stop();
             }
           }
-        }, _callee4, this);
+        }, _callee5, this);
       }));
 
       function addOneWeek() {
@@ -93283,12 +93331,12 @@ function (_React$Component) {
     value: function () {
       var _submitAddOneWeek = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
         var _this5 = this;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context6.prev = _context6.next) {
               case 0:
                 Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_7__["confirmAlert"])({
                   title: 'Confirm To Add One Week',
@@ -93308,10 +93356,10 @@ function (_React$Component) {
 
               case 1:
               case "end":
-                return _context5.stop();
+                return _context6.stop();
             }
           }
-        }, _callee5);
+        }, _callee6);
       }));
 
       function submitAddOneWeek() {
@@ -93377,7 +93425,7 @@ function (_React$Component) {
           marginRight: '10px'
         },
         onClick: this.restoreData.bind(this)
-      }, "Cancel"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }, "Revert"), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',
           width: '100px'

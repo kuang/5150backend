@@ -594,6 +594,24 @@ Route::delete("/deleteSchedule", function(Request $request) {
         return response('This entry could not be deleted. Please try again.', 403);
     }
 });
+
+$mostRecentData = null;
+$currentProjectID = null;
+Route::put("/updateMostRecentRowData", function(Request $request) {
+    global $mostRecentData, $currentProjectID;
+    $data = $request->all();
+    $mostRecentData = $data["data"];
+    $currentProjectID = $data["projectID"];
+    echo($mostRecentData);
+});
+
+Route::get("/displayMostRecentRowData/{projectID}", function($projectID) {
+    global $mostRecentData, $currentProjectID;
+    if ($mostRecentData == null || $currentProjectID == null ||$projectID != $currentProjectID) {
+        return response("No Reversion Detected", 200);
+    }
+    return response($mostRecentData, 200);
+});
 /** Route that clears all records from all tables */
 // Route::get('/clear', function() {
 //     DB::table('schedules')->delete();

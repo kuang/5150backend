@@ -117,8 +117,19 @@ class Projects_list_page extends React.Component {
     async saveData() {
         console.log("Saving Data");
         let data = this.state.rowData;
-        let updatedRows = this.updatedRows;
         let projectID = this.props.match.params.projectID;
+        let updateSuccessful = await fetch('../api/updateMostRecentRowData', {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"projectID" : projectID, "data" : data})
+        });
+
+        console.log(updateSuccessful);
+
+        let updatedRows = this.updatedRows;
 
         // index is the index of a row that has been updated
 
@@ -151,8 +162,14 @@ class Projects_list_page extends React.Component {
     /***
      * Restores the row data to the last saved row data
      */
-    restoreData() {
-        console.log(this);
+    async restoreData() {
+        let projectID = this.props.match.params.projectID;
+        let response = await fetch(`../api/displayMostRecentRowData/${projectID}`);
+        //     .then(result => result.json())
+        //     .then(function(newStuff) {
+        //         this.setState({rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"]})
+        //     }.bind(this))
+        console.log(response.json());
     }
 
     closeTypeWarningModal() {
@@ -294,7 +311,7 @@ class Projects_list_page extends React.Component {
                         onClick = {this.restoreData.bind(this)
                         }
                 >
-                    Cancel
+                    Revert
                 </button>
                 <button style = {{height:'30px',width:'100px'}} onClick = {this.submitAddOneWeek.bind(this)}>Add One Week</button>
             </div>
