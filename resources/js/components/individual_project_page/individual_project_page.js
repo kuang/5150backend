@@ -167,11 +167,17 @@ class Projects_list_page extends React.Component {
         console.log("SUP");
         let numericalInput = Number(event.value);
         let editedColumn = event.colDef.field;
+        let rowIndex = event.rowIndex;
         if (isNaN(numericalInput)) {
-            this.setState({openTypeWarning:true})
+            let oldData = event.oldValue;
+            let currentRowData = this.state.rowData;
+            let currentRow = currentRowData[rowIndex];
+            currentRow[editedColumn] = Number(oldData);
+            this.setState({openTypeWarning: true, rowData: currentRowData});
+            event.api.refreshCells();
             return;
         }
-        this.updatedRows.add({"rowIndex" : event.rowIndex, "colIndex" : editedColumn});
+        this.updatedRows.add({"rowIndex" : rowIndex, "colIndex" : editedColumn});
     }
 
 
@@ -273,6 +279,7 @@ class Projects_list_page extends React.Component {
                     onCellValueChanged = {this.addUpdatedRow.bind(this)}
                     onCellClicked = {this.canEditCell.bind(this)}
                     suppressHorizontalScroll = {true}
+                    enableCellChangeFlash = {true}
                 >
                 </AgGridReact>
 

@@ -92847,12 +92847,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-theme-balham.css */ "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css");
 /* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var react_responsive_modal__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-responsive-modal */ "./node_modules/react-responsive-modal/lib/index.es.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-confirm-alert */ "./node_modules/react-confirm-alert/lib/index.js");
-/* harmony import */ var react_confirm_alert__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-confirm-alert/src/react-confirm-alert.css */ "./node_modules/react-confirm-alert/src/react-confirm-alert.css");
-/* harmony import */ var react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var react_confirm_alert__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-confirm-alert */ "./node_modules/react-confirm-alert/lib/index.js");
+/* harmony import */ var react_confirm_alert__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_confirm_alert__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-confirm-alert/src/react-confirm-alert.css */ "./node_modules/react-confirm-alert/src/react-confirm-alert.css");
+/* harmony import */ var react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(react_confirm_alert_src_react_confirm_alert_css__WEBPACK_IMPORTED_MODULE_8__);
 
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -92876,7 +92874,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
 
 
 
@@ -93169,16 +93166,23 @@ function (_React$Component) {
       console.log("SUP");
       var numericalInput = Number(event.value);
       var editedColumn = event.colDef.field;
+      var rowIndex = event.rowIndex;
 
       if (isNaN(numericalInput)) {
+        var oldData = event.oldValue;
+        var currentRowData = this.state.rowData;
+        var currentRow = currentRowData[rowIndex];
+        currentRow[editedColumn] = Number(oldData);
         this.setState({
-          openTypeWarning: true
+          openTypeWarning: true,
+          rowData: currentRowData
         });
+        event.api.refreshCells();
         return;
       }
 
       this.updatedRows.add({
-        "rowIndex": event.rowIndex,
+        "rowIndex": rowIndex,
         "colIndex": editedColumn
       });
     }
@@ -93204,7 +93208,7 @@ function (_React$Component) {
     value: function submitSave() {
       var _this3 = this;
 
-      Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__["confirmAlert"])({
+      Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_7__["confirmAlert"])({
         title: 'Confirm To Save',
         message: 'Are you sure to do this?',
         buttons: [{
@@ -93286,7 +93290,7 @@ function (_React$Component) {
           while (1) {
             switch (_context5.prev = _context5.next) {
               case 0:
-                Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_8__["confirmAlert"])({
+                Object(react_confirm_alert__WEBPACK_IMPORTED_MODULE_7__["confirmAlert"])({
                   title: 'Confirm To Add One Week',
                   message: 'Are you sure to do this?',
                   buttons: [{
@@ -93357,7 +93361,8 @@ function (_React$Component) {
         rowData: this.state.rowData,
         onCellValueChanged: this.addUpdatedRow.bind(this),
         onCellClicked: this.canEditCell.bind(this),
-        suppressHorizontalScroll: true
+        suppressHorizontalScroll: true,
+        enableCellChangeFlash: true
       }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         style: {
           height: '30px',
@@ -93866,8 +93871,8 @@ function (_React$Component) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\james\Documents\Cornell\Curriculum\2019SP\CS5150\Project-SourceCode\5150Backend\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\james\Documents\Cornell\Curriculum\2019SP\CS5150\Project-SourceCode\5150Backend\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
