@@ -93496,16 +93496,24 @@ function (_Component) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
-/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ag-grid-react */ "./node_modules/ag-grid-react/main.js");
-/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-grid.css */ "./node_modules/ag-grid-community/dist/styles/ag-grid.css");
-/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-theme-balham.css */ "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css");
-/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ag-grid-react */ "./node_modules/ag-grid-react/main.js");
+/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-grid.css */ "./node_modules/ag-grid-community/dist/styles/ag-grid.css");
+/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-theme-balham.css */ "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css");
+/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5__);
+
+
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -93542,55 +93550,116 @@ function (_React$Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(Projects_list_page).call(this, props));
     _this.state = {
       columnDefs: [{
-        headerName: "Make",
-        field: "make"
-      }, {
-        headerName: "Model",
-        field: "model"
-      }, {
-        headerName: "Price",
-        field: "price"
+        headerName: 'Project',
+        field: 'projectName'
       }],
-      rowData: [{
-        make: "Toyota",
-        model: "Celica",
-        price: 35000
-      }, {
-        make: "Ford",
-        model: "Mondeo",
-        price: 32000
-      }, {
-        make: "Porsche",
-        model: "Boxter",
-        price: 72000
-      }]
+      rowData: []
     };
     return _this;
   }
 
   _createClass(Projects_list_page, [{
+    key: "processData",
+    value: function () {
+      var _processData = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(data) {
+        var columnDefs, rowData, rowJSON, i, currJSON, currProjectName, currStatus, currTech, currMaxHour, currStartDate, currDueDate;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                columnDefs = [{
+                  headerName: 'Project',
+                  field: 'projectName',
+                  sortable: true
+                }, {
+                  headerName: 'Status',
+                  field: 'status',
+                  sortable: true
+                }, {
+                  headerName: 'Technology',
+                  field: 'tech',
+                  sortable: true
+                }, {
+                  headerName: 'Maximum Hours',
+                  field: 'maxHour',
+                  sortable: true
+                }, {
+                  headerName: 'Start Date',
+                  field: 'startDate'
+                }, {
+                  headerName: 'Due Date',
+                  field: 'dueDate'
+                }];
+                rowData = [];
+                rowJSON = {};
+
+                for (i = 0; i < data.length; i++) {
+                  currJSON = data[i];
+                  currProjectName = currJSON.projectName;
+                  currStatus = currJSON.Status;
+                  currTech = currJSON.Technology;
+                  currMaxHour = currJSON.EstMaxHours;
+                  currStartDate = currJSON.StartDate;
+                  currDueDate = currJSON.DueDate;
+                  rowJSON = {
+                    projectName: currProjectName,
+                    status: currStatus,
+                    tech: currTech,
+                    maxHour: currMaxHour,
+                    startDate: currStartDate,
+                    dueDate: currDueDate
+                  };
+                  rowData.push(rowJSON);
+                }
+
+                console.log(rowData);
+                return _context.abrupt("return", {
+                  "rowData": rowData,
+                  "columnDefs": columnDefs
+                });
+
+              case 6:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function processData(_x) {
+        return _processData.apply(this, arguments);
+      }
+
+      return processData;
+    }()
+  }, {
     key: "componentDidMount",
     value: function componentDidMount() {
       var _this2 = this;
 
-      fetch('https://api.myjson.com/bins/15psn9').then(function (result) {
+      fetch("../api/displayAllProjects").then(function (result) {
         return result.json();
-      }).then(function (rowData) {
-        return _this2.setState({
-          rowData: rowData
+      }).then(function (data) {
+        return _this2.processData(data);
+      }).then(function (newData) {
+        this.setState({
+          rowData: newData["rowData"],
+          columnDefs: newData["columnDefs"]
         });
-      });
+      }.bind(this));
     }
   }, {
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "ag-theme-balham",
         style: {
-          height: '500px',
-          width: '600px'
+          height: '65vh',
+          width: '100vw'
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_2__["AgGridReact"], {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
         columnDefs: this.state.columnDefs,
         rowData: this.state.rowData
       }));
@@ -93598,7 +93667,7 @@ function (_React$Component) {
   }]);
 
   return Projects_list_page;
-}(react__WEBPACK_IMPORTED_MODULE_0___default.a.Component);
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
 
 /* harmony default export */ __webpack_exports__["default"] = (Projects_list_page);
 
@@ -93797,8 +93866,8 @@ function (_React$Component) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/jonathan/Desktop/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\james\Documents\Cornell\Curriculum\2019SP\CS5150\Project-SourceCode\5150Backend\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\james\Documents\Cornell\Curriculum\2019SP\CS5150\Project-SourceCode\5150Backend\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
