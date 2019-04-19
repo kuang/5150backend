@@ -92999,11 +92999,11 @@ function (_React$Component) {
 
                 dateComparator = function dateComparator(a, b) {
                   if (a.field < b.field) {
-                    return -1;
+                    return 1;
                   }
 
                   if (a.field > b.field) {
-                    return 1;
+                    return -1;
                   }
 
                   return 0;

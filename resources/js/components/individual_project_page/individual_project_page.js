@@ -4,7 +4,6 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Modal from 'react-responsive-modal';
-import {cloneDeep} from 'lodash';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 
@@ -82,10 +81,10 @@ class Projects_list_page extends React.Component {
         let dates = columnDefs.slice(3);
         let dateComparator = function(a,b) {
             if (a.field < b.field) {
-                return -1;
+                return 1;
             }
             if (a.field > b.field) {
-                return 1;
+                return -1;
             }
             return 0;
         };
