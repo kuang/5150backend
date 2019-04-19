@@ -29,7 +29,7 @@ class Projects_list_page extends React.Component {
         var rowJSON = {};
         for (let i = 0; i < data.length; i++) {
             let currJSON = data[i];
-            let currProjectName = currJSON.projectName;
+            let currProjectName = currJSON.ProjectName;
             let currStatus = currJSON.Status;
             let currTech = currJSON.Technology;
             let currMaxHour = currJSON.EstMaxHours;

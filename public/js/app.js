@@ -93597,7 +93597,7 @@ function (_React$Component) {
 
                 for (i = 0; i < data.length; i++) {
                   currJSON = data[i];
-                  currProjectName = currJSON.projectName;
+                  currProjectName = currJSON.ProjectName;
                   currStatus = currJSON.Status;
                   currTech = currJSON.Technology;
                   currMaxHour = currJSON.EstMaxHours;
