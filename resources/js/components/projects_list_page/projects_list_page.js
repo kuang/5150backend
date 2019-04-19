@@ -10,26 +10,54 @@ class Projects_list_page extends React.Component {
         super(props);
         this.state = {
             columnDefs: [{
-                headerName: "Make", field: "make"
-            }, {
-                headerName: "Model", field: "model"
-            }, {
-                headerName: "Price", field: "price"
+                headerName: 'Project', field: 'projectName'
             }],
-            rowData: [{
-                make: "Toyota", model: "Celica", price: 35000
-            }, {
-                make: "Ford", model: "Mondeo", price: 32000
-            }, {
-                make: "Porsche", model: "Boxter", price: 72000
-            }]
+            rowData: []
         }
     }
 
+    async processData(data) {
+        var columnDefs = [
+            { headerName: 'Project', field: 'projectName', sortable: true },
+            { headerName: 'Status', field: 'status', sortable: true},
+            { headerName: 'Technology', field: 'tech', sortable: true },
+            { headerName: 'Maximum Hours', field: 'maxHour', sortable: true},
+            { headerName: 'Start Date', field: 'startDate'},
+            { headerName: 'Due Date', field: 'dueDate'}
+        ];
+        var rowData = [];
+        var rowJSON = {};
+        for (let i = 0; i < data.length; i++) {
+            let currJSON = data[i];
+            let currProjectName = currJSON.ProjectName;
+            let currStatus = currJSON.Status;
+            let currTech = currJSON.Technology;
+            let currMaxHour = currJSON.EstMaxHours;
+            let currStartDate = currJSON.StartDate;
+            let currDueDate = currJSON.DueDate;
+
+            rowJSON = {
+                projectName : currProjectName,
+                status : currStatus,
+                tech : currTech,
+                maxHour : currMaxHour,
+                startDate : currStartDate,
+                dueDate : currDueDate
+            };
+            rowData.push(rowJSON);
+        }
+
+        console.log(rowData);
+        return { "rowData": rowData, "columnDefs": columnDefs };
+    }
+
     componentDidMount() {
-          fetch('https://api.myjson.com/bins/15psn9')
-         .then(result => result.json())
-         .then(rowData => this.setState({rowData: rowData}))
+        fetch(`../api/displayAllProjects`)
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(function (newData) {
+                this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
+            }.bind(this))
     }
 
     render() {
@@ -37,12 +65,15 @@ class Projects_list_page extends React.Component {
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '500px',
-                    width: '600px' }}
+                    height: '65vh',
+                    width: '100vw'
+                }}
             >
+
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
-                    rowData={this.state.rowData}>
+                    rowData={this.state.rowData}
+                >
                 </AgGridReact>
             </div>
         );
