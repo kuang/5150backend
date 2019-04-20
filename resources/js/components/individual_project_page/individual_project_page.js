@@ -14,7 +14,7 @@ class Projects_list_page extends React.Component {
         this.updatedRows = new Set();
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
-            openTypeWarning : false,
+            openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
                 headerName: "Name", field: "name" // headerName is the name of the column, field is what is
@@ -35,9 +35,9 @@ class Projects_list_page extends React.Component {
     async processData(data) {
         console.log(data);
         let columnDefs = [
-            {headerName: 'Name', field: 'name', sortable: true},
-            {headerName: 'NetID', field: 'netid', sortable:true},
-            {headerName: 'Role', field: 'role', sortable:true, enableCellChangeFlash: true},
+            { headerName: 'Name', field: 'name', sortable: true },
+            { headerName: 'NetID', field: 'netid', sortable: true },
+            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true },
         ];
         let rowData = [];
         let columnNames = new Set();
@@ -57,7 +57,7 @@ class Projects_list_page extends React.Component {
 
                 let currentRole = currentSchedule.Role;
                 prevNetID = currentNetID;
-                currentJSON = {netid: currentNetID, name : fullName, role: currentRole};
+                currentJSON = { netid: currentNetID, name: fullName, role: currentRole };
             }
 
             let currentHours = currentSchedule.HoursPerWeek;
@@ -79,7 +79,7 @@ class Projects_list_page extends React.Component {
 
         rowData.push(currentJSON);
         let dates = columnDefs.slice(3);
-        let dateComparator = function(a,b) {
+        let dateComparator = function (a, b) {
             if (a.field < b.field) {
                 return 1;
             }
@@ -89,8 +89,8 @@ class Projects_list_page extends React.Component {
             return 0;
         };
         dates.sort(dateComparator);
-        columnDefs = columnDefs.slice(0,3).concat(dates);
-        return {"rowData" : rowData, "columnDefs" : columnDefs};
+        columnDefs = columnDefs.slice(0, 3).concat(dates);
+        return { "rowData": rowData, "columnDefs": columnDefs };
     }
 
     /***
@@ -105,9 +105,9 @@ class Projects_list_page extends React.Component {
         fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
-            .then(function(newStuff) {
-                this.setState({rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"]})
-                    }.bind(this))
+            .then(function (newStuff) {
+                this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
+            }.bind(this))
     }
 
     /***
@@ -124,7 +124,7 @@ class Projects_list_page extends React.Component {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({"projectID" : projectID, "data" : data})
+            body: JSON.stringify({ "projectID": projectID, "data": data })
         });
 
         console.log(updateSuccessful);
@@ -173,7 +173,7 @@ class Projects_list_page extends React.Component {
     }
 
     closeTypeWarningModal() {
-        this.setState({openTypeWarning: false});
+        this.setState({ openTypeWarning: false });
     }
 
     /***
@@ -190,23 +190,23 @@ class Projects_list_page extends React.Component {
             let currentRowData = this.state.rowData;
             let currentRow = currentRowData[rowIndex];
             currentRow[editedColumn] = Number(oldData);
-            this.setState({openTypeWarning: true, rowData: currentRowData});
+            this.setState({ openTypeWarning: true, rowData: currentRowData });
             event.api.refreshCells();
             return;
         }
-        this.updatedRows.add({"rowIndex" : rowIndex, "colIndex" : editedColumn});
+        this.updatedRows.add({ "rowIndex": rowIndex, "colIndex": editedColumn });
     }
 
 
     canEditCell(event) {
         if (event.value == undefined) {
-            this.setState({"openNoScheduleWarning":true});
+            this.setState({ "openNoScheduleWarning": true });
             return;
         }
     }
 
     closeNoScheduleWarningModal() {
-        this.setState({openNoScheduleWarning: false});
+        this.setState({ openNoScheduleWarning: false });
     }
 
     submitSave() {
@@ -220,7 +220,7 @@ class Projects_list_page extends React.Component {
                 },
                 {
                     label: 'No',
-                    onClick: () => {}
+                    onClick: () => { }
                 }
             ],
             closeOnEscape: true,
@@ -230,7 +230,7 @@ class Projects_list_page extends React.Component {
 
     async addOneWeek() {
         let projectID = this.props.match.params.projectID;
-        let newData = {"ProjectID" : projectID};
+        let newData = { "ProjectID": projectID };
         let response = await fetch('../api/addOneWeek', {
             method: "POST",
             headers: {
@@ -242,8 +242,8 @@ class Projects_list_page extends React.Component {
         fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
-            .then(function(newStuff) {
-                this.setState({rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"]})
+            .then(function (newStuff) {
+                this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this))
     }
 
@@ -258,7 +258,7 @@ class Projects_list_page extends React.Component {
                 },
                 {
                     label: 'No',
-                    onClick: () => {}
+                    onClick: () => { }
                 }
             ],
             closeOnEscape: true,
@@ -282,38 +282,38 @@ class Projects_list_page extends React.Component {
                     width: '100vw'
                 }}
             >
-                <Modal open={this.state.openTypeWarning} onClose = {this.closeTypeWarningModal.bind(this)} center closeIconSize = {14}>
-                    <h3 style = {{marginTop:'15px'}}>Please Enter An Integer</h3>
+                <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
+                    <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
                 </Modal>
 
-                <Modal open={this.state.openNoScheduleWarning} onClose = {this.closeNoScheduleWarningModal.bind(this)} center closeIconSize = {14}>
-                    <h3 style = {{marginTop:'15px'}}>Resource Did Not Work This Week</h3>
+                <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
+                    <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
                 </Modal>
 
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
-                    onCellValueChanged = {this.addUpdatedRow.bind(this)}
-                    onCellClicked = {this.canEditCell.bind(this)}
-                    suppressHorizontalScroll = {true}
-                    enableCellChangeFlash = {true}
+                    onCellValueChanged={this.addUpdatedRow.bind(this)}
+                    onCellClicked={this.canEditCell.bind(this)}
+                    suppressHorizontalScroll={true}
+                    enableCellChangeFlash={true}
                 >
                 </AgGridReact>
 
-                <button style = {{height:'30px',width:'100px',marginRight: '10px'}}
-                        onClick = {
-                            this.submitSave.bind(this)
-                        }
+                <button style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                    onClick={
+                        this.submitSave.bind(this)
+                    }
                 >
                     Save
                 </button>
-                <button style = {{height:'30px',width:'100px', marginRight: '10px'}}
-                        onClick = {this.restoreData.bind(this)
-                        }
+                <button style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                    onClick={this.restoreData.bind(this)
+                    }
                 >
                     Revert
                 </button>
-                <button style = {{height:'30px',width:'100px'}} onClick = {this.submitAddOneWeek.bind(this)}>Add One Week</button>
+                <button style={{ height: '30px', width: '100px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
             </div>
         );
     }
