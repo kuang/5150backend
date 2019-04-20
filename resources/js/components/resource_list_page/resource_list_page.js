@@ -3,22 +3,41 @@ import { Link } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
-import Modal from 'react-responsive-modal';
-import {cloneDeep} from 'lodash';
+import './popup.css'
 
 // const Resource_list_page = () => (
 // 	<h2>Resource List Page</h2>
 // )
+class Popup extends React.Component {
+	render() {
+		return (
+			<div className='popup'>
+				<div className='popup_inner'>
+					<h1>{this.props.text}</h1>
+					<button onClick={this.props.closePopup}>Cancel</button>
+				</div>
+			</div>
+		);
+	}
+}
+
 class Resource_list_page extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state =  {
+			showPopup: false,
 			columnDefs: [{
 				headerName: "Name", field: "name"
 			}],
 			rowData: []
 		}
 	}
+
+	togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
 
 	async processData(data) {
 		console.log(data);
@@ -70,6 +89,18 @@ class Resource_list_page extends React.Component {
 	        rowData={this.state.rowData}
 	      >
 	      </AgGridReact>
+
+	      <button
+	      	style={{height:'30px', width:'100px', marginRight: '10px'}}
+	      	onClick={this.togglePopup.bind(this)}
+	      >Add</button>
+	      {
+	      	this.state.showPopup ?
+	      	<Popup
+	      		text='This will be a form'
+	      		closePopup={this.togglePopup.bind(this)}
+	      	/> : null
+	      }
 			</div>
     );
 	}
