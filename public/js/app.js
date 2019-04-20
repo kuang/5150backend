@@ -93813,9 +93813,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -93830,10 +93830,104 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 // 	<h2>Resource List Page</h2>
 // )
 
-var Popup =
+var ResourceForm =
 /*#__PURE__*/
 function (_React$Component) {
-  _inherits(Popup, _React$Component);
+  _inherits(ResourceForm, _React$Component);
+
+  function ResourceForm(props) {
+    var _this;
+
+    _classCallCheck(this, ResourceForm);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ResourceForm).call(this, props));
+    _this.state = {
+      firstName: '',
+      lastName: '',
+      netID: '',
+      maxHourPerWeek: 0
+    };
+    _this.handleFirstNameChange = _this.handleFirstNameChange.bind(_assertThisInitialized(_this));
+    _this.handleLastNameChange = _this.handleLastNameChange.bind(_assertThisInitialized(_this));
+    _this.handleNetIDChange = _this.handleNetIDChange.bind(_assertThisInitialized(_this));
+    _this.handleMaxHourChange = _this.handleMaxHourChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(ResourceForm, [{
+    key: "handleFirstNameChange",
+    value: function handleFirstNameChange(event) {
+      this.setState({
+        firstName: event.target.value
+      });
+    }
+  }, {
+    key: "handleLastNameChange",
+    value: function handleLastNameChange(event) {
+      this.setState({
+        lastName: event.target.value
+      });
+    }
+  }, {
+    key: "handleNetIDChange",
+    value: function handleNetIDChange(event) {
+      this.setState({
+        netID: event.target.value
+      });
+    }
+  }, {
+    key: "handleMaxHourChange",
+    value: function handleMaxHourChange(event) {
+      this.setState({
+        maxHourPerWeek: event.target.value
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
+      event.preventDefault();
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "First Name:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        name: "firstName",
+        value: this.state.firstName,
+        onChange: this.handleFirstNameChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Last Name:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        name: "lastName",
+        value: this.state.lastName,
+        onChange: this.handleLastNameChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Net ID:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        name: "netID",
+        value: this.state.netID,
+        onChange: this.handleNetIDChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Max Hour Per Week:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "number",
+        name: "maxHourPerWeek",
+        value: this.state.maxHourPerWeek,
+        onChange: this.handleMaxHourChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "submit",
+        value: "Submit"
+      })));
+    }
+  }]);
+
+  return ResourceForm;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+var Popup =
+/*#__PURE__*/
+function (_React$Component2) {
+  _inherits(Popup, _React$Component2);
 
   function Popup() {
     _classCallCheck(this, Popup);
@@ -93848,7 +93942,9 @@ function (_React$Component) {
         className: "popup"
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
         className: "popup_inner"
-      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("h1", null, this.props.text), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ResourceForm, {
+        closePopup: this.props.closePopup
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
         onClick: this.props.closePopup
       }, "Cancel")));
     }
@@ -93859,16 +93955,16 @@ function (_React$Component) {
 
 var Resource_list_page =
 /*#__PURE__*/
-function (_React$Component2) {
-  _inherits(Resource_list_page, _React$Component2);
+function (_React$Component3) {
+  _inherits(Resource_list_page, _React$Component3);
 
   function Resource_list_page(props) {
-    var _this;
+    var _this2;
 
     _classCallCheck(this, Resource_list_page);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Resource_list_page).call(this, props));
-    _this.state = {
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Resource_list_page).call(this, props));
+    _this2.state = {
       showPopup: false,
       columnDefs: [{
         headerName: "Name",
@@ -93876,7 +93972,7 @@ function (_React$Component2) {
       }],
       rowData: []
     };
-    return _this;
+    return _this2;
   }
 
   _createClass(Resource_list_page, [{
@@ -93947,12 +94043,12 @@ function (_React$Component2) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this2 = this;
+      var _this3 = this;
 
       fetch("../api/displayAllResources").then(function (result) {
         return result.json();
       }).then(function (data) {
-        return _this2.processData(data);
+        return _this3.processData(data);
       }).then(function (newData) {
         this.setState({
           rowData: newData["rowData"],

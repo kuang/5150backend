@@ -8,12 +8,86 @@ import './popup.css'
 // const Resource_list_page = () => (
 // 	<h2>Resource List Page</h2>
 // )
+class ResourceForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    	firstName: '',
+    	lastName: '',
+    	netID: '',
+    	maxHourPerWeek: 0
+    };
+
+    this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
+    this.handleLastNameChange = this.handleLastNameChange.bind(this);
+    this.handleNetIDChange = this.handleNetIDChange.bind(this);
+    this.handleMaxHourChange = this.handleMaxHourChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleFirstNameChange(event) {
+    this.setState({
+    	firstName: event.target.value
+    });
+  }
+
+  handleLastNameChange(event) {
+    this.setState({
+    	lastName: event.target.value
+    });
+  }
+
+  handleNetIDChange(event) {
+    this.setState({
+    	netID: event.target.value
+    });
+  }
+
+	handleMaxHourChange(event) {
+    this.setState({
+    	maxHourPerWeek: event.target.value
+    });
+  }
+
+  handleSubmit(event) {
+    alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          First Name:
+          <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleFirstNameChange} />
+        </label>
+        <label>
+        	Last Name:
+          <input type="text" name="lastName" value={this.state.lastName} onChange={this.handleLastNameChange} />
+        </label>
+        <label>
+        	Net ID:
+          <input type="text" name="netID" value={this.state.netID} onChange={this.handleNetIDChange} />
+        </label>
+        <label>
+        	Max Hour Per Week:
+          <input type="number" name="maxHourPerWeek" value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
+        </label>
+        <label>
+        	<input type="submit" value="Submit" />
+        </label>
+      </form>
+    );
+  }
+}
+
+
 class Popup extends React.Component {
 	render() {
 		return (
 			<div className='popup'>
 				<div className='popup_inner'>
-					<h1>{this.props.text}</h1>
+					<ResourceForm closePopup={this.props.closePopup}/>
 					<button onClick={this.props.closePopup}>Cancel</button>
 				</div>
 			</div>
