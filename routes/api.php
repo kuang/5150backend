@@ -614,7 +614,7 @@ Route::get("/displayMostRecentRowData/{projectID}", function($projectID) {
 });
 
 /***
- * {ProjectID : projectID, Status: status}
+ * {ProjectID : projectID (integer), Status: status (string)}
  */
 Route::put("/updateProjectStatus", function(Request $request) {
     $data = $request->all();
