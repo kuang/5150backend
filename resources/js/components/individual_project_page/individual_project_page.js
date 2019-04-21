@@ -13,6 +13,12 @@ class Projects_list_page extends React.Component {
     constructor(props) {
         super(props);
         this.updatedRows = new Set();
+        this.statusOptions = [
+            { label: "Ongoing", value: 1 },
+            { label: "Inactive", value: 2 },
+            { label: "Done", value: 3 },
+            { label: "On Hold", value: 4 },
+        ];
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : null,
@@ -102,14 +108,38 @@ class Projects_list_page extends React.Component {
      * That is why when you load this page, it starts off empty and then data populates the grid.
      * It is called once, immediately after render() is first called
      */
-    componentDidMount() {
+    async componentDidMount() {
         let projectID = this.props.match.params.projectID;
-        fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+        await fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
             .then(function (newStuff) {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this))
+
+        let response = await fetch(`../api/displayProjectInfo/${projectID}`);
+        let actualResponse = await response.json();
+        console.log(actualResponse);
+        let currentStatus = actualResponse[0]["Status"];
+
+        if (currentStatus == "Ongoing") {
+            this.setState({selectedOption: { label: "Ongoing", value: 1 }});
+            return;
+        }
+
+        if (currentStatus == "Inactive") {
+            this.setState({selectedOption: { label: "Inactive", value: 2 }});
+            return;
+        }
+        if (currentStatus == "Done") {
+            this.setState({selectedOption: { label: "Done", value: 3 }});
+            return;
+        }
+
+        if (currentStatus == "On Hold") {
+            this.setState({selectedOption: { label: "On Hold", value: 4 }});
+            return;
+        }
     }
 
     /***
@@ -120,16 +150,24 @@ class Projects_list_page extends React.Component {
         console.log("Saving Data");
         let data = this.state.rowData;
         let projectID = this.props.match.params.projectID;
-        let updateSuccessful = await fetch('../api/updateMostRecentRowData', {
+        // let updateSuccessful = await fetch('../api/updateMostRecentRowData', {
+        //     method: "PUT",
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ "projectID": projectID, "data": data })
+        // });
+
+        let statusUpdateSuccessful = await fetch('../api/updateProjectStatus', {
             method: "PUT",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "projectID": projectID, "data": data })
+            body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
         });
-
-        console.log(updateSuccessful);
+        console.log(statusUpdateSuccessful);
 
         let updatedRows = this.updatedRows;
 
@@ -268,8 +306,8 @@ class Projects_list_page extends React.Component {
         });
     }
 
-    handleChange(selectedOption) {
-        console.log("hello");
+    handleChange(selection) {
+        this.setState({selectedOption: selection});
     }
     /***
      * Makes POST Request to save data
@@ -279,12 +317,6 @@ class Projects_list_page extends React.Component {
      * @returns {*}
      */
     render() {
-        const techCompanies = [
-            { label: "Ongoing", value: 1 },
-            { label: "Inactive", value: 2 },
-            { label: "Completed", value: 3 },
-            { label: "On Hold", value: 4 },
-        ];
 
         return (
             <div
@@ -327,7 +359,7 @@ class Projects_list_page extends React.Component {
                 </button>
                 <button style={{ height: '30px', width: '100px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
 
-                <Select options = {techCompanies} defaultValue = {{ label: "Ongoing", value: 1 }}>
+                <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
                 </Select>
 
             </div>
