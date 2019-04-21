@@ -49,9 +49,33 @@ class ResourceForm extends React.Component {
     });
   }
 
-  handleSubmit(event) {
-    alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
-    event.preventDefault();
+  async handleSubmit(event) {
+    // alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
+    console.log("Saving data");
+    let data = {
+    	"NetID": this.state.netID, 
+    	"FirstName": this.state.firstName, 
+    	"LastName": this.state.lastName,
+    	"MaxHoursPerWeek": this.state.maxHourPerWeek
+    }
+    
+    let response = await fetch('../api/addResource', {
+    	method: "POST", 
+    	headers: {
+    		'Accept': 'application/json',
+    		'Content-Type': 'application/json'
+    	},
+    	body: JSON.stringify(data)
+    });
+
+    fetch('../api/displayAllResources')
+			.then(result => result.json())
+			.then(data => this.processData(data))
+			.then(function(newData) {
+				this.setState({rowData: newData["rowData"], columnDefs: newData["columnDefs"]})
+			}.bind(this));
+
+		event.preventDefault();
   }
 
   render() {
@@ -59,23 +83,21 @@ class ResourceForm extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <label>
           First Name:
-          <input type="text" name="firstName" value={this.state.firstName} onChange={this.handleFirstNameChange} />
+          <input type="text" name="firstName" required value={this.state.firstName} onChange={this.handleFirstNameChange} />
         </label>
         <label>
         	Last Name:
-          <input type="text" name="lastName" value={this.state.lastName} onChange={this.handleLastNameChange} />
+          <input type="text" name="lastName" required value={this.state.lastName} onChange={this.handleLastNameChange} />
         </label>
         <label>
         	Net ID:
-          <input type="text" name="netID" value={this.state.netID} onChange={this.handleNetIDChange} />
+          <input type="text" name="netID" required value={this.state.netID} onChange={this.handleNetIDChange} />
         </label>
         <label>
         	Max Hour Per Week:
-          <input type="number" name="maxHourPerWeek" value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
+          <input type="number" name="maxHourPerWeek" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
         </label>
-        <label>
-        	<input type="submit" value="Submit" />
-        </label>
+        <button type="submit">Submit</button>
       </form>
     );
   }
@@ -140,12 +162,12 @@ class Resource_list_page extends React.Component {
 	}
 
 	componentDidMount() {
-		fetch(`../api/displayAllResources`)
+		fetch('../api/displayAllResources')
 			.then(result => result.json())
 			.then(data => this.processData(data))
 			.then(function(newData) {
 				this.setState({rowData: newData["rowData"], columnDefs: newData["columnDefs"]})
-			}.bind(this))
+			}.bind(this));
 	}
 
 	render() {
