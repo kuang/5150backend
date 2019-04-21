@@ -94665,23 +94665,20 @@ function (_React$Component) {
     value: function () {
       var _handleSubmit = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(event) {
-        var _this2 = this;
-
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         var data, response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                // alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
-                console.log("Saving data");
+                // event.preventDefault();
                 data = {
                   "NetID": this.state.netID,
                   "FirstName": this.state.firstName,
                   "LastName": this.state.lastName,
                   "MaxHoursPerWeek": this.state.maxHourPerWeek
                 };
-                _context.next = 4;
+                _context.next = 3;
                 return fetch('../api/addResource', {
                   method: "POST",
                   headers: {
@@ -94691,21 +94688,16 @@ function (_React$Component) {
                   body: JSON.stringify(data)
                 });
 
-              case 4:
+              case 3:
                 response = _context.sent;
-                fetch('../api/displayAllResources').then(function (result) {
-                  return result.json();
-                }).then(function (data) {
-                  return _this2.processData(data);
-                }).then(function (newData) {
-                  this.setState({
-                    rowData: newData["rowData"],
-                    columnDefs: newData["columnDefs"]
-                  });
-                }.bind(this));
-                event.preventDefault();
+                console.log(response); //  fetch('../api/displayAllResources')
+                // .then(result => result.json())
+                // .then(data => this.processData(data))
+                // .then(function(newData) {
+                // 	this.setState({rowData: newData["rowData"], columnDefs: newData["columnDefs"]})
+                // }.bind(this));
 
-              case 7:
+              case 5:
               case "end":
                 return _context.stop();
             }
@@ -94713,7 +94705,7 @@ function (_React$Component) {
         }, _callee, this);
       }));
 
-      function handleSubmit(_x) {
+      function handleSubmit() {
         return _handleSubmit.apply(this, arguments);
       }
 
@@ -94792,12 +94784,12 @@ function (_React$Component3) {
   _inherits(Resource_list_page, _React$Component3);
 
   function Resource_list_page(props) {
-    var _this3;
+    var _this2;
 
     _classCallCheck(this, Resource_list_page);
 
-    _this3 = _possibleConstructorReturn(this, _getPrototypeOf(Resource_list_page).call(this, props));
-    _this3.state = {
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Resource_list_page).call(this, props));
+    _this2.state = {
       showPopup: false,
       columnDefs: [{
         headerName: "Name",
@@ -94805,7 +94797,7 @@ function (_React$Component3) {
       }],
       rowData: []
     };
-    return _this3;
+    return _this2;
   }
 
   _createClass(Resource_list_page, [{
@@ -94838,7 +94830,7 @@ function (_React$Component3) {
                   field: 'maxHourPerWeek'
                 }];
                 rowData = [];
-                currJSON = {}; // let prevNetID = null;
+                currJSON = {};
 
                 for (i = 0; i < data.length; i++) {
                   curr = data[i];
@@ -94850,7 +94842,7 @@ function (_React$Component3) {
                     name: fullName,
                     maxHourPerWeek: maxHour
                   };
-                  rowData.push(currJSON); // console.log(currID);
+                  rowData.push(currJSON);
                 }
 
                 console.log(rowData);
@@ -94867,7 +94859,7 @@ function (_React$Component3) {
         }, _callee2);
       }));
 
-      function processData(_x2) {
+      function processData(_x) {
         return _processData.apply(this, arguments);
       }
 
@@ -94876,12 +94868,12 @@ function (_React$Component3) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this4 = this;
+      var _this3 = this;
 
       fetch('../api/displayAllResources').then(function (result) {
         return result.json();
       }).then(function (data) {
-        return _this4.processData(data);
+        return _this3.processData(data);
       }).then(function (newData) {
         this.setState({
           rowData: newData["rowData"],
@@ -94940,8 +94932,8 @@ function (_React$Component3) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /Users/kuang/code/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/kuang/code/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! /Users/GMZ/Desktop/CS5150_SoftwareEngineering/5150Backend/resources/js/app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! /Users/GMZ/Desktop/CS5150_SoftwareEngineering/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

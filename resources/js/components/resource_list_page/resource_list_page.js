@@ -49,9 +49,8 @@ class ResourceForm extends React.Component {
     });
   }
 
-  async handleSubmit(event) {
-    // alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
-    console.log("Saving data");
+  async handleSubmit() {
+    // event.preventDefault();
     let data = {
     	"NetID": this.state.netID, 
     	"FirstName": this.state.firstName, 
@@ -67,15 +66,14 @@ class ResourceForm extends React.Component {
     	},
     	body: JSON.stringify(data)
     });
+    console.log(response);
 
-    fetch('../api/displayAllResources')
-			.then(result => result.json())
-			.then(data => this.processData(data))
-			.then(function(newData) {
-				this.setState({rowData: newData["rowData"], columnDefs: newData["columnDefs"]})
-			}.bind(this));
-
-		event.preventDefault();
+   //  fetch('../api/displayAllResources')
+			// .then(result => result.json())
+			// .then(data => this.processData(data))
+			// .then(function(newData) {
+			// 	this.setState({rowData: newData["rowData"], columnDefs: newData["columnDefs"]})
+			// }.bind(this));
   }
 
   render() {
@@ -145,7 +143,6 @@ class Resource_list_page extends React.Component {
 
 		let rowData = [];
 		let currJSON = {};
-		// let prevNetID = null;
 		for (let i=0; i<data.length; i++) {
 			let curr = data[i];
 			let currID = curr.NetID;
@@ -154,8 +151,6 @@ class Resource_list_page extends React.Component {
 
 			currJSON = {netid: currID, name : fullName,  maxHourPerWeek: maxHour};
 			rowData.push(currJSON);
-
-			// console.log(currID);
 		}
 		console.log(rowData);
 		return {"rowData" : rowData, "columnDefs" : columnDefs};
