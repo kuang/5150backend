@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import ReactList from 'react-list';
 import { Link } from 'react-router-dom'
+import Modal from 'react-responsive-modal';
 
 class Individual_resource_page extends Component {
 
@@ -7,16 +9,21 @@ class Individual_resource_page extends Component {
         super(props);
         this.state = {
             resourceFullName: "",
-            projectIDs: "",
+            projects: "",
+            openEdit: false,
+
         };
+        this.renderItem = this.renderItem.bind(this);
     }
+
     componentDidMount() {
         fetch('/api/displayProjectsPerResource/' + this.props.match.params.resourceID)
             .then(res => res.json())
             .then(
                 (result) => {
-                    let string_result = JSON.stringify({ result })
-                    this.setState({ projectIDs: string_result });
+                    // let string_result = JSON.stringify({ result })
+                    console.log(result);
+                    this.setState({ projects: result });
                 },
                 // Note: it's important to handle errors here
                 // instead of a catch() block so that we don't swallow
@@ -40,12 +47,48 @@ class Individual_resource_page extends Component {
                 });
     }
 
+    closeEditModal() {
+        this.setState({ openEdit: false });
+    }
+    openEditModal() {
+        this.setState({ openEdit: true });
+    }
+
+
+
+    // renders each individual row of the projects list.
+    renderItem(index, key) {
+        if (this.state.projects.length != 0) {
+            return (
+                <div key={key} style={{ borderStyle: 'solid' }}>
+                    <div>{this.state.projects[index].ProjectName}</div>
+                    <div>Start Date: {this.state.projects[index].StartDate}</div>
+                </div >
+            );
+        }
+        else {
+            return <div></div>;
+        }
+    }
+
     render() {
         return (
             <div>
-                <h1>Resource name: {this.state.resourceFullName}</h1>
+                <Modal open={this.state.openEdit} onClose={this.closeEditModal.bind(this)} center closeIconSize={14}>
+                    <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
+                </Modal>
 
-                <h2>ProjectIDs: {this.state.projectIDs}</h2>
+                <div style={{ overflow: 'auto', width: '50%', float: 'left' }}>
+                    <h1>Resource name: {this.state.resourceFullName}</h1>
+                    <button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>
+                </div>
+                <div style={{ overflow: 'auto', maxHeight: 200, width: '50%', float: 'right' }}>
+                    <ReactList
+                        itemRenderer={this.renderItem}
+                        length={this.state.projects.length}
+                        type='uniform'
+                    />
+                </div >
             </div>
         );
     }
