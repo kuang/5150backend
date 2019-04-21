@@ -169,10 +169,10 @@ class twoList extends React.Component {
                 </form>
 
                 <form onSubmit={this.handleRemove} id="removeForm">
-                    <input type="submit" value="REMOVE" className="removeButton" />
                     <select multiple id="removeSelect" ref={this.Rref} onChange={this.handleSelectRemove}>
                         {rightList}
                     </select>
+                    <input type="submit" value="REMOVE" className="removeButton" />
                 </form>
             </div>
         );
@@ -182,6 +182,6 @@ class twoList extends React.Component {
 
 export default twoList
 
-if (document.getElementById('resources')) {
-    ReactDOM.render(<ResourceListPage />, document.getElementById('Resource_list_page'));
-}
+// if (document.getElementById('resources')) {
+//     ReactDOM.render(<ResourceListPage />, document.getElementById('Resource_list_page'));
+// }
