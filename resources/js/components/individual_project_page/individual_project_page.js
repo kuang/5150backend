@@ -6,6 +6,7 @@ import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Modal from 'react-responsive-modal';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import Select from 'react-select';
 
 class Projects_list_page extends React.Component {
 
@@ -14,6 +15,7 @@ class Projects_list_page extends React.Component {
         this.updatedRows = new Set();
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
+            selectedOption : null,
             openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
@@ -266,6 +268,9 @@ class Projects_list_page extends React.Component {
         });
     }
 
+    handleChange(selectedOption) {
+        console.log("hello");
+    }
     /***
      * Makes POST Request to save data
      */
@@ -274,11 +279,18 @@ class Projects_list_page extends React.Component {
      * @returns {*}
      */
     render() {
+        const techCompanies = [
+            { label: "Ongoing", value: 1 },
+            { label: "Inactive", value: 2 },
+            { label: "Completed", value: 3 },
+            { label: "On Hold", value: 4 },
+        ];
+
         return (
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '65vh',
+                    height: '60vh',
                     width: '100vw'
                 }}
             >
@@ -314,6 +326,10 @@ class Projects_list_page extends React.Component {
                     Revert
                 </button>
                 <button style={{ height: '30px', width: '100px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
+
+                <Select options = {techCompanies} defaultValue = {{ label: "Ongoing", value: 1 }}>
+                </Select>
+
             </div>
         );
     }
