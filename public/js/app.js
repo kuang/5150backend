@@ -94991,6 +94991,10 @@ function (_React$Component3) {
 
 /* harmony default export */ __webpack_exports__["default"] = (Resource_list_page);
 
+if (document.getElementById('resources')) {
+  ReactDOM.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ResourceListPage, null), document.getElementById('Resource_list_page'));
+}
+
 /***/ }),
 
 /***/ "./resources/sass/app.scss":
