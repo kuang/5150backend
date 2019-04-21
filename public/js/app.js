@@ -42387,6 +42387,25 @@ exports.push([module.i, "body.react-confirm-alert-body-element {\n  overflow: hi
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/js/components/resource_list_page/popup.css":
+/*!**********************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./resources/js/components/resource_list_page/popup.css ***!
+  \**********************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, ".popup {\n\tposition: fixed;\n\twidth: 100%;\n\theight: 100%;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n\tbottom: 0;\n\tmargin: auto;\n\tbackground-color: rgba(0, 0, 0, 0.5);\n}\n\n.popup_inner {\n\tposition: absolute;\n\tleft: 25%;\n\tright: 25%;\n\ttop: 25%;\n\tbottom: 25%;\n\tmargin: auto;\n\tbackground: white;\n}", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/lib/css-base.js":
 /*!*************************************************!*\
   !*** ./node_modules/css-loader/lib/css-base.js ***!
@@ -94574,14 +94593,406 @@ function (_React$Component) {
 
 /***/ }),
 
+/***/ "./resources/js/components/resource_list_page/popup.css":
+/*!**************************************************************!*\
+  !*** ./resources/js/components/resource_list_page/popup.css ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/postcss-loader/src??ref--6-2!./popup.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/js/components/resource_list_page/popup.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./resources/js/components/resource_list_page/resource_list_page.js":
 /*!**************************************************************************!*\
   !*** ./resources/js/components/resource_list_page/resource_list_page.js ***!
   \**************************************************************************/
 /*! exports provided: default */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nSyntaxError: /Users/kuang/code/5150Backend/resources/js/components/resource_list_page/resource_list_page.js: Unexpected token (47:1)\n\n\u001b[0m \u001b[90m 45 | \u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 46 | \u001b[39m\thandleMaxHourChange(event) {\u001b[0m\n\u001b[0m\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 47 | \u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<<\u001b[39m\u001b[33m<\u001b[39m \u001b[33mHEAD\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m    | \u001b[39m \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\u001b[0m\n\u001b[0m \u001b[90m 48 | \u001b[39m\t\t\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39msetState({\u001b[0m\n\u001b[0m \u001b[90m 49 | \u001b[39m\t\t\tmaxHourPerWeek\u001b[33m:\u001b[39m event\u001b[33m.\u001b[39mtarget\u001b[33m.\u001b[39mvalue\u001b[0m\n\u001b[0m \u001b[90m 50 | \u001b[39m\t\t})\u001b[33m;\u001b[39m\u001b[0m\n    at Object.raise (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3851:17)\n    at Object.unexpected (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:5165:16)\n    at Object.jsxParseIdentifier (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3350:12)\n    at Object.jsxParseNamespacedName (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3360:23)\n    at Object.jsxParseElementName (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3371:21)\n    at Object.jsxParseOpeningElementAt (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3456:22)\n    at Object.jsxParseElementAt (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3489:33)\n    at Object.jsxParseElement (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3558:17)\n    at Object.parseExprAtom (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:3565:19)\n    at Object.parseExprSubscripts (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:5916:23)\n    at Object.parseMaybeUnary (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:5896:21)\n    at Object.parseExprOps (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:5783:23)\n    at Object.parseMaybeConditional (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:5756:23)\n    at Object.parseMaybeAssign (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:5703:21)\n    at Object.parseExpression (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:5651:23)\n    at Object.parseStatementContent (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7422:23)\n    at Object.parseStatement (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7293:17)\n    at Object.parseBlockOrModuleBlockBody (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7879:25)\n    at Object.parseBlockBody (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7866:10)\n    at Object.parseBlock (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7850:10)\n    at Object.parseFunctionBody (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:6911:24)\n    at Object.parseFunctionBodyAndFinish (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:6881:10)\n    at Object.parseMethod (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:6837:10)\n    at Object.pushClassMethod (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:8272:30)\n    at Object.parseClassMemberWithIsStatic (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:8197:12)\n    at Object.parseClassMember (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:8136:10)\n    at withTopicForbiddingContext (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:8091:14)\n    at Object.withTopicForbiddingContext (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7187:14)\n    at Object.parseClassBody (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:8068:10)\n    at Object.parseClass (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:8042:22)\n    at Object.parseStatementContent (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7335:21)\n    at Object.parseStatement (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7293:17)\n    at Object.parseBlockOrModuleBlockBody (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7879:25)\n    at Object.parseBlockBody (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7866:10)\n    at Object.parseTopLevel (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:7222:10)\n    at Object.parse (/Users/kuang/code/5150Backend/node_modules/@babel/parser/lib/index.js:8871:17)");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ag-grid-react */ "./node_modules/ag-grid-react/main.js");
+/* harmony import */ var ag_grid_react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-grid.css */ "./node_modules/ag-grid-community/dist/styles/ag-grid.css");
+/* harmony import */ var ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_grid_css__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ag-grid-community/dist/styles/ag-theme-balham.css */ "./node_modules/ag-grid-community/dist/styles/ag-theme-balham.css");
+/* harmony import */ var ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(ag_grid_community_dist_styles_ag_theme_balham_css__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _popup_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./popup.css */ "./resources/js/components/resource_list_page/popup.css");
+/* harmony import */ var _popup_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_popup_css__WEBPACK_IMPORTED_MODULE_6__);
+
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+
+
+
+
+ // const Resource_list_page = () => (
+// 	<h2>Resource List Page</h2>
+// )
+
+var ResourceForm =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ResourceForm, _React$Component);
+
+  function ResourceForm(props) {
+    var _this;
+
+    _classCallCheck(this, ResourceForm);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ResourceForm).call(this, props));
+    _this.state = {
+      firstName: '',
+      lastName: '',
+      netID: '',
+      maxHourPerWeek: 0
+    };
+    _this.handleFirstNameChange = _this.handleFirstNameChange.bind(_assertThisInitialized(_this));
+    _this.handleLastNameChange = _this.handleLastNameChange.bind(_assertThisInitialized(_this));
+    _this.handleNetIDChange = _this.handleNetIDChange.bind(_assertThisInitialized(_this));
+    _this.handleMaxHourChange = _this.handleMaxHourChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(ResourceForm, [{
+    key: "handleFirstNameChange",
+    value: function handleFirstNameChange(event) {
+      this.setState({
+        firstName: event.target.value
+      });
+    }
+  }, {
+    key: "handleLastNameChange",
+    value: function handleLastNameChange(event) {
+      this.setState({
+        lastName: event.target.value
+      });
+    }
+  }, {
+    key: "handleNetIDChange",
+    value: function handleNetIDChange(event) {
+      this.setState({
+        netID: event.target.value
+      });
+    }
+  }, {
+    key: "handleMaxHourChange",
+    value: function handleMaxHourChange(event) {
+      this.setState({
+        maxHourPerWeek: event.target.value
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function () {
+      var _handleSubmit = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(event) {
+        var _this2 = this;
+
+        var data, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
+                console.log("Saving data");
+                data = {
+                  "NetID": this.state.netID,
+                  "FirstName": this.state.firstName,
+                  "LastName": this.state.lastName,
+                  "MaxHoursPerWeek": this.state.maxHourPerWeek
+                };
+                _context.next = 4;
+                return fetch('../api/addResource', {
+                  method: "POST",
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+                });
+
+              case 4:
+                response = _context.sent;
+                fetch('../api/displayAllResources').then(function (result) {
+                  return result.json();
+                }).then(function (data) {
+                  return _this2.processData(data);
+                }).then(function (newData) {
+                  this.setState({
+                    rowData: newData["rowData"],
+                    columnDefs: newData["columnDefs"]
+                  });
+                }.bind(this)); // event.preventDefault();
+
+              case 6:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function handleSubmit(_x) {
+        return _handleSubmit.apply(this, arguments);
+      }
+
+      return handleSubmit;
+    }()
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "First Name:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        name: "firstName",
+        required: true,
+        value: this.state.firstName,
+        onChange: this.handleFirstNameChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Last Name:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        name: "lastName",
+        required: true,
+        value: this.state.lastName,
+        onChange: this.handleLastNameChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Net ID:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "text",
+        name: "netID",
+        required: true,
+        value: this.state.netID,
+        onChange: this.handleNetIDChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Max Hour Per Week:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "number",
+        name: "maxHourPerWeek",
+        required: true,
+        value: this.state.maxHourPerWeek,
+        onChange: this.handleMaxHourChange
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        type: "submit"
+      }, "Submit"));
+    }
+  }]);
+
+  return ResourceForm;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+var Popup =
+/*#__PURE__*/
+function (_React$Component2) {
+  _inherits(Popup, _React$Component2);
+
+  function Popup() {
+    _classCallCheck(this, Popup);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Popup).apply(this, arguments));
+  }
+
+  _createClass(Popup, [{
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "popup"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "popup_inner"
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ResourceForm, {
+        closePopup: this.props.closePopup
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        onClick: this.props.closePopup
+      }, "Cancel")));
+    }
+  }]);
+
+  return Popup;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+var Resource_list_page =
+/*#__PURE__*/
+function (_React$Component3) {
+  _inherits(Resource_list_page, _React$Component3);
+
+  function Resource_list_page(props) {
+    var _this3;
+
+    _classCallCheck(this, Resource_list_page);
+
+    _this3 = _possibleConstructorReturn(this, _getPrototypeOf(Resource_list_page).call(this, props));
+    _this3.state = {
+      showPopup: false,
+      columnDefs: [{
+        headerName: "Name",
+        field: "name"
+      }],
+      rowData: []
+    };
+    return _this3;
+  }
+
+  _createClass(Resource_list_page, [{
+    key: "togglePopup",
+    value: function togglePopup() {
+      this.setState({
+        showPopup: !this.state.showPopup
+      });
+    }
+  }, {
+    key: "processData",
+    value: function () {
+      var _processData = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(data) {
+        var columnDefs, rowData, currJSON, i, curr, currID, fullName, maxHour;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                console.log(data);
+                columnDefs = [{
+                  headerName: 'NetID',
+                  field: 'netid'
+                }, {
+                  headerName: 'Name',
+                  field: 'name'
+                }, {
+                  headerName: 'Max Hour Per Week',
+                  field: 'maxHourPerWeek'
+                }];
+                rowData = [];
+                currJSON = {};
+
+                for (i = 0; i < data.length; i++) {
+                  curr = data[i];
+                  currID = curr.NetID;
+                  fullName = curr.FirstName + " " + curr.LastName;
+                  maxHour = curr.MaxHoursPerWeek;
+                  currJSON = {
+                    netid: currID,
+                    name: fullName,
+                    maxHourPerWeek: maxHour
+                  };
+                  rowData.push(currJSON);
+                }
+
+                console.log(rowData);
+                return _context2.abrupt("return", {
+                  "rowData": rowData,
+                  "columnDefs": columnDefs
+                });
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function processData(_x2) {
+        return _processData.apply(this, arguments);
+      }
+
+      return processData;
+    }()
+  }, {
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this4 = this;
+
+      fetch('../api/displayAllResources').then(function (result) {
+        return result.json();
+      }).then(function (data) {
+        return _this4.processData(data);
+      }).then(function (newData) {
+        this.setState({
+          rowData: newData["rowData"],
+          columnDefs: newData["columnDefs"]
+        });
+      }.bind(this));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "ag-theme-balham",
+        style: {
+          height: '70vh',
+          width: '600px'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ag_grid_react__WEBPACK_IMPORTED_MODULE_3__["AgGridReact"], {
+        columnDefs: this.state.columnDefs,
+        rowData: this.state.rowData
+      }), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        style: {
+          height: '30px',
+          width: '100px',
+          marginRight: '10px'
+        },
+        onClick: this.togglePopup.bind(this)
+      }, "Add"), this.state.showPopup ? react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(Popup, {
+        text: "This will be a form",
+        closePopup: this.togglePopup.bind(this)
+      }) : null);
+    }
+  }]);
+
+  return Resource_list_page;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+/* harmony default export */ __webpack_exports__["default"] = (Resource_list_page);
+
+if (document.getElementById('resources')) {
+  ReactDOM.render(react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ResourceListPage, null), document.getElementById('Resource_list_page'));
+}
 
 /***/ }),
 

@@ -44,7 +44,6 @@ class ResourceForm extends React.Component {
 	}
 
 	handleMaxHourChange(event) {
-<<<<<<< HEAD
 		this.setState({
 			maxHourPerWeek: event.target.value
 		});
@@ -76,41 +75,8 @@ class ResourceForm extends React.Component {
 				this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
 			}.bind(this));
 
-		event.preventDefault();
+		// event.preventDefault();
 	}
-=======
-    this.setState({
-    	maxHourPerWeek: event.target.value
-    });
-  }
-
-  async handleSubmit() {
-    // event.preventDefault();
-    let data = {
-    	"NetID": this.state.netID, 
-    	"FirstName": this.state.firstName, 
-    	"LastName": this.state.lastName,
-    	"MaxHoursPerWeek": this.state.maxHourPerWeek
-    }
-    
-    let response = await fetch('../api/addResource', {
-    	method: "POST", 
-    	headers: {
-    		'Accept': 'application/json',
-    		'Content-Type': 'application/json'
-    	},
-    	body: JSON.stringify(data)
-    });
-    console.log(response);
-
-   //  fetch('../api/displayAllResources')
-			// .then(result => result.json())
-			// .then(data => this.processData(data))
-			// .then(function(newData) {
-			// 	this.setState({rowData: newData["rowData"], columnDefs: newData["columnDefs"]})
-			// }.bind(this));
-  }
->>>>>>> a0f0ab7d198239a8be41cac6693c35b3f4b995dc
 
 	render() {
 		return (
@@ -179,12 +145,7 @@ class Resource_list_page extends React.Component {
 
 		let rowData = [];
 		let currJSON = {};
-<<<<<<< HEAD
-		// let prevNetID = null;
 		for (let i = 0; i < data.length; i++) {
-=======
-		for (let i=0; i<data.length; i++) {
->>>>>>> a0f0ab7d198239a8be41cac6693c35b3f4b995dc
 			let curr = data[i];
 			let currID = curr.NetID;
 			let fullName = curr.FirstName + " " + curr.LastName;
