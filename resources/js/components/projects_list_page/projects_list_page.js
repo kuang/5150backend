@@ -9,9 +9,17 @@ class Projects_list_page extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            columnDefs: [{
-                headerName: 'Project', field: 'projectName'
-            }],
+            columnDefs: [
+                { headerName: 'Project', field: 'projectName', sortable: true },
+                { headerName: 'Most Recent Updates', field: 'updates' },
+                { headerName: 'Start Date', field: 'startDate' },
+                { headerName: 'Due Date', field: 'dueDate' },
+                { headerName: 'Status', field: 'status' },
+                { headerName: 'Technology', field: 'tech' },
+                { headerName: 'Assigned Resources', field: 'resources' },
+                { headerName: 'Assigned Hours This Week', field: 'hoursWeek' },
+                { headerName: 'Total Assigned Hours', field: 'hoursTotal' }
+            ],
             rowData: []
         }
     }
@@ -23,36 +31,27 @@ class Projects_list_page extends React.Component {
         // need to access ResourcesPerProject table,
         // then find all ResourceID's that matches with the ProjectID,
         // then access Resources table and use the list of ResourceID's to find their names
-        fetch(`../api/displayResourcesPerProject/${projectID}`)
+        return fetch(`../api/displayResourcesPerProject/${projectID}`)
             .then(function (response) {
                 return response.json();
             })
             .then(function (myJSON) {
                 if (myJSON === undefined || myJSON.length == 0) {
-                    return "";
+                    return "None";
                 } else {
                     var names = myJSON.map(function (a) { return a.FirstName; });
                     names = names.join(", ");
+                    return names
                     }
             });
     }
 
     async processData(data) {
-        var columnDefs = [
-            { headerName: 'Project', field: 'projectName', sortable: true },
-            { headerName: 'Most Recent Updates', field: 'updates'},
-            { headerName: 'Start Date', field: 'startDate'},
-            { headerName: 'Due Date', field: 'dueDate'},
-            { headerName: 'Status', field: 'status'},
-            { headerName: 'Technology', field: 'tech'},
-            { headerName: 'Assigned Resources', field: 'resources'},
-            { headerName: 'Assigned Hours This Week', field: 'hoursWeek'},
-            { headerName: 'Total Assigned Hours', field: 'hoursTotal'}
-        ];
         var rowData = [];
         var rowJSON = {};
         for (let i = 0; i < data.length; i++) {
             let currJSON = data[i];
+            console.log(currJSON);
             let currProjectID = currJSON.ProjectID;
             let currProjectName = currJSON.ProjectName;
             let currStatus = currJSON.Status;
@@ -60,7 +59,8 @@ class Projects_list_page extends React.Component {
             let currStartDate = currJSON.StartDate;
             let currDueDate = currJSON.DueDate;
             let currHoursTotal= currJSON.EstMaxHours;
-            let currResources = getResourceNames(currProjectID); 
+            let currResources = await this.getResourceNames(currProjectID); 
+            console.log(currResources);
             let currHoursWeek = "";
             let currUpdates = "";
 
@@ -71,7 +71,7 @@ class Projects_list_page extends React.Component {
                 dueDate: currDueDate,
                 status : currStatus,
                 tech : currTech,
-                resoures: currResources,
+                resources: currResources,
                 hoursWeek : currHoursWeek,
                 hoursTotal: currHoursTotal
             };
@@ -79,7 +79,7 @@ class Projects_list_page extends React.Component {
         }
 
         console.log(rowData);
-        return { "rowData": rowData, "columnDefs": columnDefs };
+        return rowData
     }
 
     componentDidMount() {
@@ -87,7 +87,7 @@ class Projects_list_page extends React.Component {
             .then(result => result.json())
             .then(data => this.processData(data))
             .then(function (newData) {
-                this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
+                this.setState({ rowData: newData })
             }.bind(this))
     }
 

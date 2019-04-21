@@ -85931,7 +85931,7 @@ Object(react_lifecycles_compat__WEBPACK_IMPORTED_MODULE_2__["polyfill"])(Modal);
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, generatePath, matchPath, withRouter, __RouterContext */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -94471,76 +94471,67 @@ function (_React$Component) {
     _this.state = {
       columnDefs: [{
         headerName: 'Project',
-        field: 'projectName'
+        field: 'projectName',
+        sortable: true
+      }, {
+        headerName: 'Most Recent Updates',
+        field: 'updates'
+      }, {
+        headerName: 'Start Date',
+        field: 'startDate'
+      }, {
+        headerName: 'Due Date',
+        field: 'dueDate'
+      }, {
+        headerName: 'Status',
+        field: 'status'
+      }, {
+        headerName: 'Technology',
+        field: 'tech'
+      }, {
+        headerName: 'Assigned Resources',
+        field: 'resources'
+      }, {
+        headerName: 'Assigned Hours This Week',
+        field: 'hoursWeek'
+      }, {
+        headerName: 'Total Assigned Hours',
+        field: 'hoursTotal'
       }],
       rowData: []
     };
     return _this;
   }
+  /** Returns a concatenated string of a list of the first names of the resources
+   *  associated with a particular project with [projectID]
+   */
+
 
   _createClass(Projects_list_page, [{
-    key: "processData",
+    key: "getResourceNames",
     value: function () {
-      var _processData = _asyncToGenerator(
+      var _getResourceNames = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(data) {
-        var columnDefs, rowData, rowJSON, i, currJSON, currProjectName, currStatus, currTech, currMaxHour, currStartDate, currDueDate;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(projectID) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                columnDefs = [{
-                  headerName: 'Project',
-                  field: 'projectName',
-                  sortable: true
-                }, {
-                  headerName: 'Status',
-                  field: 'status',
-                  sortable: true
-                }, {
-                  headerName: 'Technology',
-                  field: 'tech',
-                  sortable: true
-                }, {
-                  headerName: 'Maximum Hours',
-                  field: 'maxHour',
-                  sortable: true
-                }, {
-                  headerName: 'Start Date',
-                  field: 'startDate'
-                }, {
-                  headerName: 'Due Date',
-                  field: 'dueDate'
-                }];
-                rowData = [];
-                rowJSON = {};
+                return _context.abrupt("return", fetch("../api/displayResourcesPerProject/".concat(projectID)).then(function (response) {
+                  return response.json();
+                }).then(function (myJSON) {
+                  if (myJSON === undefined || myJSON.length == 0) {
+                    return "None";
+                  } else {
+                    var names = myJSON.map(function (a) {
+                      return a.FirstName;
+                    });
+                    names = names.join(", ");
+                    return names;
+                  }
+                }));
 
-                for (i = 0; i < data.length; i++) {
-                  currJSON = data[i];
-                  currProjectName = currJSON.ProjectName;
-                  currStatus = currJSON.Status;
-                  currTech = currJSON.Technology;
-                  currMaxHour = currJSON.EstMaxHours;
-                  currStartDate = currJSON.StartDate;
-                  currDueDate = currJSON.DueDate;
-                  rowJSON = {
-                    projectName: currProjectName,
-                    status: currStatus,
-                    tech: currTech,
-                    maxHour: currMaxHour,
-                    startDate: currStartDate,
-                    dueDate: currDueDate
-                  };
-                  rowData.push(rowJSON);
-                }
-
-                console.log(rowData);
-                return _context.abrupt("return", {
-                  "rowData": rowData,
-                  "columnDefs": columnDefs
-                });
-
-              case 6:
+              case 1:
               case "end":
                 return _context.stop();
             }
@@ -94548,7 +94539,81 @@ function (_React$Component) {
         }, _callee);
       }));
 
-      function processData(_x) {
+      function getResourceNames(_x) {
+        return _getResourceNames.apply(this, arguments);
+      }
+
+      return getResourceNames;
+    }()
+  }, {
+    key: "processData",
+    value: function () {
+      var _processData = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(data) {
+        var rowData, rowJSON, i, currJSON, currProjectID, currProjectName, currStatus, currTech, currStartDate, currDueDate, currHoursTotal, currResources, currHoursWeek, currUpdates;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                rowData = [];
+                rowJSON = {};
+                i = 0;
+
+              case 3:
+                if (!(i < data.length)) {
+                  _context2.next = 24;
+                  break;
+                }
+
+                currJSON = data[i];
+                console.log(currJSON);
+                currProjectID = currJSON.ProjectID;
+                currProjectName = currJSON.ProjectName;
+                currStatus = currJSON.Status;
+                currTech = currJSON.Technology;
+                currStartDate = currJSON.StartDate;
+                currDueDate = currJSON.DueDate;
+                currHoursTotal = currJSON.EstMaxHours;
+                _context2.next = 15;
+                return this.getResourceNames(currProjectID);
+
+              case 15:
+                currResources = _context2.sent;
+                console.log(currResources);
+                currHoursWeek = "";
+                currUpdates = "";
+                rowJSON = {
+                  projectName: currProjectName,
+                  updates: currUpdates,
+                  startDate: currStartDate,
+                  dueDate: currDueDate,
+                  status: currStatus,
+                  tech: currTech,
+                  resources: currResources,
+                  hoursWeek: currHoursWeek,
+                  hoursTotal: currHoursTotal
+                };
+                rowData.push(rowJSON);
+
+              case 21:
+                i++;
+                _context2.next = 3;
+                break;
+
+              case 24:
+                console.log(rowData);
+                return _context2.abrupt("return", rowData);
+
+              case 26:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function processData(_x2) {
         return _processData.apply(this, arguments);
       }
 
@@ -94565,8 +94630,7 @@ function (_React$Component) {
         return _this2.processData(data);
       }).then(function (newData) {
         this.setState({
-          rowData: newData["rowData"],
-          columnDefs: newData["columnDefs"]
+          rowData: newData
         });
       }.bind(this));
     }
@@ -95014,13 +95078,8 @@ if (document.getElementById('resources')) {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-<<<<<<< HEAD
 __webpack_require__(/*! C:\Users\james\Documents\Cornell\Curriculum\2019SP\CS5150\Project-SourceCode\5150Backend\resources\js\app.js */"./resources/js/app.js");
 module.exports = __webpack_require__(/*! C:\Users\james\Documents\Cornell\Curriculum\2019SP\CS5150\Project-SourceCode\5150Backend\resources\sass\app.scss */"./resources/sass/app.scss");
-=======
-__webpack_require__(/*! /Users/kuang/code/5150Backend/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /Users/kuang/code/5150Backend/resources/sass/app.scss */"./resources/sass/app.scss");
->>>>>>> 1adf9bf4379483fe8cb2427d7f6d9d6ee6e1f2be
 
 
 /***/ })
