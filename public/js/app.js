@@ -94277,6 +94277,18 @@ function (_Component) {
       this.setState({
         openEdit: true
       });
+    } //TODO: handle HTTP PUT call
+
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      console.log("handleSubmit called");
+      return;
+    }
+  }, {
+    key: "handleChange",
+    value: function handleChange(inputID, event) {
+      console.log(inputID); // this.setState({ value: event.target.value.toUpperCase() });
     } // renders each individual row of the projects list.
 
   }, {
@@ -94294,6 +94306,12 @@ function (_Component) {
       }
     }
   }, {
+    key: "handleSubmit",
+    value: function handleSubmit(event) {
+      alert('submitted: ');
+      event.preventDefault();
+    }
+  }, {
     key: "render",
     value: function render() {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_responsive_modal__WEBPACK_IMPORTED_MODULE_3__["default"], {
@@ -94301,11 +94319,64 @@ function (_Component) {
         onClose: this.closeEditModal.bind(this),
         center: true,
         closeIconSize: 14
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", {
         style: {
           marginTop: '15px'
         }
-      }, "Please Enter An Integer")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      }, "Resource Information"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+        onSubmit: this.handleSubmit
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        style: {
+          marginRight: '15px'
+        }
+      }, "First Name:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        style: {
+          float: 'right'
+        },
+        type: "text",
+        id: "firstName",
+        value: this.state.value,
+        onChange: this.handleChange(this.id)
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        style: {
+          marginRight: '15px'
+        }
+      }, "Last Name:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        style: {
+          float: 'right'
+        },
+        type: "text",
+        id: "lastName",
+        value: this.state.value,
+        onChange: this.handleChange(this.id)
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        style: {
+          marginRight: '15px'
+        }
+      }, "netID:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        style: {
+          float: 'right'
+        },
+        type: "text",
+        id: "netID",
+        value: this.state.value,
+        onChange: this.handleChange(this.id)
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+        style: {
+          marginRight: '15px'
+        }
+      }, "Max hours per Week:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        style: {
+          float: 'right'
+        },
+        type: "text",
+        id: "maxHours",
+        value: this.state.value,
+        onChange: this.handleChange(this.id)
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        type: "submit",
+        value: "Submit"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           overflow: 'auto',
           width: '50%',

@@ -53,6 +53,16 @@ class Individual_resource_page extends Component {
     openEditModal() {
         this.setState({ openEdit: true });
     }
+    //TODO: handle HTTP PUT call
+    handleSubmit() {
+        console.log("handleSubmit called");
+        return;
+    }
+    handleChange(inputID, event) {
+        console.log(inputID);
+        // this.setState({ value: event.target.value.toUpperCase() });
+    }
+
 
 
 
@@ -70,12 +80,46 @@ class Individual_resource_page extends Component {
             return <div></div>;
         }
     }
+    handleSubmit(event) {
+        alert('submitted: ');
+        event.preventDefault();
+    }
+
 
     render() {
         return (
             <div>
                 <Modal open={this.state.openEdit} onClose={this.closeEditModal.bind(this)} center closeIconSize={14}>
-                    <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
+                    <h4 style={{ marginTop: '15px' }}>Resource Information</h4>
+                    <form onSubmit={this.handleSubmit}>
+                        <label style={{ marginRight: '15px' }}>
+                            First Name:
+                        </label>
+                        <input style={{ float: 'right' }} type="text" id="firstName" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <br></br>
+
+                        <label style={{ marginRight: '15px' }}>
+                            Last Name:
+                        </label>
+
+                        <input style={{ float: 'right' }} type="text" id="lastName" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <br></br>
+
+                        <label style={{ marginRight: '15px' }}>
+                            netID:
+                        </label>
+                        <input style={{ float: 'right' }} type="text" id="netID" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <br></br>
+
+                        <label style={{ marginRight: '15px' }}>
+                            Max hours per Week:
+                        </label>
+
+                        <input style={{ float: 'right' }} type="text" id="maxHours" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <br></br>
+                        <input type="submit" value="Submit" />
+                    </form>
+
                 </Modal>
 
                 <div style={{ overflow: 'auto', width: '50%', float: 'left' }}>
@@ -89,7 +133,7 @@ class Individual_resource_page extends Component {
                         type='uniform'
                     />
                 </div >
-            </div>
+            </div >
         );
     }
 }
