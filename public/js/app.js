@@ -93799,11 +93799,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _popup_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_popup_css__WEBPACK_IMPORTED_MODULE_6__);
 
 
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -93885,10 +93885,63 @@ function (_React$Component) {
     }
   }, {
     key: "handleSubmit",
-    value: function handleSubmit(event) {
-      alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
-      event.preventDefault();
-    }
+    value: function () {
+      var _handleSubmit = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(event) {
+        var _this2 = this;
+
+        var data, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                // alert(this.state.firstName + ", " + this.state.lastName + ", " + this.state.netID + ", " + this.state.maxHourPerWeek);
+                console.log("Saving data");
+                data = {
+                  "NetID": this.state.netID,
+                  "FirstName": this.state.firstName,
+                  "LastName": this.state.lastName,
+                  "MaxHoursPerWeek": this.state.maxHourPerWeek
+                };
+                _context.next = 4;
+                return fetch('../api/addResource', {
+                  method: "POST",
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(data)
+                });
+
+              case 4:
+                response = _context.sent;
+                fetch('../api/displayAllResources').then(function (result) {
+                  return result.json();
+                }).then(function (data) {
+                  return _this2.processData(data);
+                }).then(function (newData) {
+                  this.setState({
+                    rowData: newData["rowData"],
+                    columnDefs: newData["columnDefs"]
+                  });
+                }.bind(this));
+                event.preventDefault();
+
+              case 7:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function handleSubmit(_x) {
+        return _handleSubmit.apply(this, arguments);
+      }
+
+      return handleSubmit;
+    }()
   }, {
     key: "render",
     value: function render() {
@@ -93897,27 +93950,30 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "First Name:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "text",
         name: "firstName",
+        required: true,
         value: this.state.firstName,
         onChange: this.handleFirstNameChange
       })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Last Name:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "text",
         name: "lastName",
+        required: true,
         value: this.state.lastName,
         onChange: this.handleLastNameChange
       })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Net ID:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "text",
         name: "netID",
+        required: true,
         value: this.state.netID,
         onChange: this.handleNetIDChange
       })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Max Hour Per Week:", react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
         type: "number",
         name: "maxHourPerWeek",
+        required: true,
         value: this.state.maxHourPerWeek,
         onChange: this.handleMaxHourChange
-      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
-        type: "submit",
-        value: "Submit"
-      })));
+      })), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+        type: "submit"
+      }, "Submit"));
     }
   }]);
 
@@ -93959,12 +94015,12 @@ function (_React$Component3) {
   _inherits(Resource_list_page, _React$Component3);
 
   function Resource_list_page(props) {
-    var _this2;
+    var _this3;
 
     _classCallCheck(this, Resource_list_page);
 
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(Resource_list_page).call(this, props));
-    _this2.state = {
+    _this3 = _possibleConstructorReturn(this, _getPrototypeOf(Resource_list_page).call(this, props));
+    _this3.state = {
       showPopup: false,
       columnDefs: [{
         headerName: "Name",
@@ -93972,7 +94028,7 @@ function (_React$Component3) {
       }],
       rowData: []
     };
-    return _this2;
+    return _this3;
   }
 
   _createClass(Resource_list_page, [{
@@ -93987,11 +94043,11 @@ function (_React$Component3) {
     value: function () {
       var _processData = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(data) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(data) {
         var columnDefs, rowData, currJSON, i, curr, currID, fullName, maxHour;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 console.log(data);
                 columnDefs = [{
@@ -94021,20 +94077,20 @@ function (_React$Component3) {
                 }
 
                 console.log(rowData);
-                return _context.abrupt("return", {
+                return _context2.abrupt("return", {
                   "rowData": rowData,
                   "columnDefs": columnDefs
                 });
 
               case 7:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee);
+        }, _callee2);
       }));
 
-      function processData(_x) {
+      function processData(_x2) {
         return _processData.apply(this, arguments);
       }
 
@@ -94043,12 +94099,12 @@ function (_React$Component3) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      var _this3 = this;
+      var _this4 = this;
 
-      fetch("../api/displayAllResources").then(function (result) {
+      fetch('../api/displayAllResources').then(function (result) {
         return result.json();
       }).then(function (data) {
-        return _this3.processData(data);
+        return _this4.processData(data);
       }).then(function (newData) {
         this.setState({
           rowData: newData["rowData"],
