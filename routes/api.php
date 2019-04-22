@@ -182,7 +182,9 @@ Route::post('/addResourcePerProject', function(Request $request) {
         $dates = DB::table('resources_per_projects')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
             ->select('Dates')
-            ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+            ->where('resources_per_projects.ProjectID', '=', $project_id)
+            ->distinct()
+            ->get();
 //        echo($dates);
         foreach($dates as $d){
             DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0]);
