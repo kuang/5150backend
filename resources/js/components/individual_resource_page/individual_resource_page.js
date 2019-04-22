@@ -8,7 +8,11 @@ class Individual_resource_page extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            resourceFullName: "",
+            firstName: "",
+            lastName: "",
+            oldNetID: "",
+            netID: "",
+            hours: 0,
             projects: "",
             openEdit: false,
 
@@ -22,7 +26,7 @@ class Individual_resource_page extends Component {
             .then(
                 (result) => {
                     // let string_result = JSON.stringify({ result })
-                    console.log(result);
+                    // console.log(result);
                     this.setState({ projects: result });
                 },
                 // Note: it's important to handle errors here
@@ -36,8 +40,13 @@ class Individual_resource_page extends Component {
             .then(res => res.json())
             .then(
                 (result) => {
+                    // console.log(result)
                     this.setState({
-                        resourceFullName: result[0].FirstName + " " + result[0].LastName
+                        firstName: result[0].FirstName,
+                        lastName: result[0].LastName,
+                        oldNetID: result[0].NetID,
+                        netID: result[0].NetID,
+                        hours: result[0].MaxHoursPerWeek
                     })
                     console.log(result);
 
@@ -54,12 +63,29 @@ class Individual_resource_page extends Component {
         this.setState({ openEdit: true });
     }
     //TODO: handle HTTP PUT call
-    handleSubmit() {
+    async handleSubmit(event) {
+        let data = {
+            "OldNetID": this.state.oldNetID,
+            "NetID": this.state.netID,
+            "FirstName": this.state.firstName,
+            "LastName": this.state.lastName,
+            "MaxHoursPerWeek": this.state.hours
+        }
+
         console.log("handleSubmit called");
-        return;
+        let response = await fetch('../api/updateResource', {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        });
+        console.log(response);
+
     }
     handleChange(inputID, event) {
-        console.log(inputID);
+        // console.log(inputID);
         // this.setState({ value: event.target.value.toUpperCase() });
     }
 
@@ -80,10 +106,10 @@ class Individual_resource_page extends Component {
             return <div></div>;
         }
     }
-    handleSubmit(event) {
-        alert('submitted: ');
-        event.preventDefault();
-    }
+    // handleSubmit(event) {
+    //     alert('submitted: ');
+    //     event.preventDefault();
+    // }
 
 
     render() {
@@ -91,31 +117,31 @@ class Individual_resource_page extends Component {
             <div>
                 <Modal open={this.state.openEdit} onClose={this.closeEditModal.bind(this)} center closeIconSize={14}>
                     <h4 style={{ marginTop: '15px' }}>Resource Information</h4>
-                    <form onSubmit={this.handleSubmit}>
+                    <form onSubmit={this.handleSubmit.bind(this)}>
                         <label style={{ marginRight: '15px' }}>
                             First Name:
                         </label>
-                        <input style={{ float: 'right' }} type="text" id="firstName" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <input style={{ float: 'right' }} type="text" id="firstName" defaultValue={this.state.firstName} onChange={this.handleChange(this.id)} />
                         <br></br>
 
                         <label style={{ marginRight: '15px' }}>
                             Last Name:
                         </label>
 
-                        <input style={{ float: 'right' }} type="text" id="lastName" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <input style={{ float: 'right' }} type="text" id="lastName" defaultValue={this.state.lastName} onChange={this.handleChange(this.id)} />
                         <br></br>
 
                         <label style={{ marginRight: '15px' }}>
                             netID:
                         </label>
-                        <input style={{ float: 'right' }} type="text" id="netID" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <input style={{ float: 'right' }} type="text" id="netID" defaultValue={this.state.netID} onChange={this.handleChange(this.id)} />
                         <br></br>
 
                         <label style={{ marginRight: '15px' }}>
                             Max hours per Week:
                         </label>
 
-                        <input style={{ float: 'right' }} type="text" id="maxHours" value={this.state.value} onChange={this.handleChange(this.id)} />
+                        <input style={{ float: 'right' }} type="text" id="maxHours" defaultValue={this.state.hours} onChange={this.handleChange(this.id)} />
                         <br></br>
                         <input type="submit" value="Submit" />
                     </form>
@@ -123,7 +149,7 @@ class Individual_resource_page extends Component {
                 </Modal>
 
                 <div style={{ overflow: 'auto', width: '50%', float: 'left' }}>
-                    <h1>Resource name: {this.state.resourceFullName}</h1>
+                    <h1>Resource name: {this.state.firstName} {this.state.lastName}</h1>
                     <button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>
                 </div>
                 <div style={{ overflow: 'auto', maxHeight: 200, width: '50%', float: 'right' }}>
