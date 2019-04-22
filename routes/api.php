@@ -244,6 +244,7 @@ Route::post("/addOneWeek", function(Request $request) {
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
             ->where('resources_per_projects.ProjectID', '=', $project_id)
             ->count();
+
         if ($num_resources < 1) {
             return response('Add a resource before adding a week', 403);
         } elseif ($num_weeks < 1) {
@@ -257,6 +258,7 @@ Route::post("/addOneWeek", function(Request $request) {
             }
             return("Successfully inserted first week");
         } else {
+
             $last_week = DB::table('resources_per_projects')
                 ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
                 ->where('resources_per_projects.ProjectID', '=', $project_id)->max('Dates');
@@ -265,11 +267,12 @@ Route::post("/addOneWeek", function(Request $request) {
 //            return $monday;
             $ids = DB::table('resources_per_projects')->select('ScheduleID')
                 ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+            echo($ids);
             foreach($ids as $i){
                 $date = $monday[0];
                 $hours_array = DB::table('schedules')->select('HoursPerWeek')
                     ->where([['ScheduleID', $i->ScheduleID], ["Dates", $last_week]])->get();
-                $prev_hours = $hours_array[0]->HoursPerWeek;
+                $prev_hours = (count($hours_array) > 0 ? $hours_array[0]->HoursPerWeek : 40);
                 DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->Monday, 'HoursPerWeek' => $prev_hours]);
             }
             return("Successfully inserted next week");
