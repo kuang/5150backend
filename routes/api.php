@@ -50,23 +50,23 @@ Route::get('/displayResourceInfo/{resourceID}', function ($resourceID) {
 
 /** Route that returns all projects a given resource is currently staffed on */
 Route::get('/displayProjectsPerResource/{resourceID}', function ($resourceID) {
-   return DB::table('resources_per_projects')
-       ->rightJoin('projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
-       ->select('projects.ProjectName', 'resources_per_projects.Role', 'projects.Technology', 'projects.EstMaxHours', 'projects.Status', 'projects.StartDate', 'projects.DueDate')
-       ->where('resources_per_projects.ResourceID', '=', $resourceID)
-       ->get();
+    return DB::table('resources_per_projects')
+        ->rightJoin('projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
+        ->select('projects.ProjectName', 'resources_per_projects.Role', 'projects.Technology', 'projects.EstMaxHours', 'projects.Status', 'projects.StartDate', 'projects.DueDate')
+        ->where('resources_per_projects.ResourceID', '=', $resourceID)
+        ->get();
 });
 
 /** Route that returns all resources (and hours per week) working on a given project */
 Route::get('/displayResourceInfoPerProject/{projectID}', function ($projectID) {
     return DB::table('resources_per_projects')
-            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
-            ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
-            ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role', 'schedules.Dates', 'schedules.HoursPerWeek')
-            ->where('resources_per_projects.ProjectID', '=', $projectID)
-            ->orderBy('resources.NetID')
-            ->orderBy('schedules.Dates')
-            ->get();
+        ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+        ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+        ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role', 'schedules.Dates', 'schedules.HoursPerWeek')
+        ->where('resources_per_projects.ProjectID', '=', $projectID)
+        ->orderBy('resources.NetID')
+        ->orderBy('schedules.Dates')
+        ->get();
 });
 
 /** Route that returns all resources (and hours per week) working on a given project */
@@ -90,24 +90,24 @@ Route::get('/displayResourcesAvailable/{projectID}', function ($projectID) {
 
 /** Route that adds a new project to the projects table via POST Request
 {
-    "ProjectName": "P2",
-    "Technology": "T2",
-    "EstMaxHours": 48,
-    "Status": "Done",
-    "StartDate": "2019-03-07",
-    "DueDate": "2019-03-14"
+"ProjectName": "P2",
+"Technology": "T2",
+"EstMaxHours": 48,
+"Status": "Done",
+"StartDate": "2019-03-07",
+"DueDate": "2019-03-14"
 }
 
-*/
+ */
 Route::post("/addProject", function(Request $request) {
     $data = $request->all();
 
     try {
         DB::table('projects')->insertGetId(
-        ["ProjectID" => 0, "ProjectName" => $data["ProjectName"],
-            "Technology" => $data["Technology"], "EstMaxHours" => $data["EstMaxHours"],
-            "Status" => $data["Status"],"StartDate" => date_create($data["StartDate"]),
-            "DueDate" => date_create($data["DueDate"])]
+            ["ProjectID" => 0, "ProjectName" => $data["ProjectName"],
+                "Technology" => $data["Technology"], "EstMaxHours" => $data["EstMaxHours"],
+                "Status" => $data["Status"],"StartDate" => date_create($data["StartDate"]),
+                "DueDate" => date_create($data["DueDate"])]
         );
         return "Successfully Added New Project";
     } catch (Exception $e){
@@ -123,20 +123,20 @@ Route::post("/addProject", function(Request $request) {
 
 /** Route that adds a new resource to the resources table via POST Request
 {
-    "NetID": "jd111",
-    "FirstName": "John",
-    "LastName": "Doe",
-    "MaxHoursPerWeek": 40
+"NetID": "jd111",
+"FirstName": "John",
+"LastName": "Doe",
+"MaxHoursPerWeek": 40
 }
 
-*/
+ */
 Route::post('/addResource', function(Request $request) {
     $data = $request->all();
 
     try {
         DB::table('resources')->insertGetId(
-        ["ResourceID" => 0, "NetID" => $data["NetID"], "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
-            "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
+            ["ResourceID" => 0, "NetID" => $data["NetID"], "FirstName" => $data["FirstName"], "LastName" => $data["LastName"],
+                "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
         return "Successfully Added New Resource";
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
@@ -146,22 +146,22 @@ Route::post('/addResource', function(Request $request) {
             }
         }
         return response('This resource could not be added. Please try again.', 403);
-    }  
+    }
 });
 
 /** Route that adds a new entry to the resources_per_projects table via POST request
- * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter 
+ * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter
 
 {
-    "ProjectName": "P2",
-    "NetID": "jd111",
-    "Role": "Product Manager"
+"ProjectName": "P2",
+"NetID": "jd111",
+"Role": "Product Manager"
 }
 
  */
 Route::post('/addResourcePerProject', function(Request $request) {
     $data = $request->all();
-    
+
     try {
         $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
         $project_id_json = json_decode(json_encode($project_id_array{0}), true);
@@ -173,29 +173,46 @@ Route::post('/addResourcePerProject', function(Request $request) {
 
         DB::table('resources_per_projects')->insertGetId(
             ["ResourceID" => $resource_id, "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
-        return ("Sucessfully Added New ResourcePerProject");
+
+        // adding default schedule for most recent week
+        $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
+        $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+        $schedule_id = $schedule_id_json["ScheduleID"];
+
+        $dates = DB::table('resources_per_projects')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->select('Dates')
+            ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+//        echo($dates);
+        foreach($dates as $d){
+            DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0]);
+        }
+
+        return ("Successfully Added New ResourcePerProject");
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
             $error_code= $e->errorInfo[1];
             if($error_code == 1062){
+                echo($e->getMessage());
                 return response('This resource is already working on this project', 403);
             }
         }
+        echo($e->getMessage());
         return response('The resource could not be added to this project. Please try again.', 403);
-    }  
+    }
 });
 
 /** Route that adds a new entry to the schedules table
 {
-    "ProjectName": "P2",
-    "NetID": "jd111",
-    "Dates": "2019-03-07",
-    "HoursPerWeek": 30
+"ProjectName": "P2",
+"NetID": "jd111",
+"Dates": "2019-03-07",
+"HoursPerWeek": 30
 }
 
  */
 Route::post('/addSchedule', function(Request $request) {
-   $data = $request->all();
+    $data = $request->all();
     try {
         $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
         $project_id_json = json_decode(json_encode($project_id_array{0}), true);
@@ -210,9 +227,9 @@ Route::post('/addSchedule', function(Request $request) {
         $schedule_id = $schedule_id_json["ScheduleID"];
 
         DB::table('schedules')->insertGetId(
-           ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
+            ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
         return "Successfully Added New Schedule";
-   } catch (Exception $e){
+    } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
             $error_code= $e->errorInfo[1];
             if($error_code == 1062){
@@ -244,6 +261,7 @@ Route::post("/addOneWeek", function(Request $request) {
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
             ->where('resources_per_projects.ProjectID', '=', $project_id)
             ->count();
+
         if ($num_resources < 1) {
             return response('Add a resource before adding a week', 403);
         } elseif ($num_weeks < 1) {
@@ -255,8 +273,9 @@ Route::post("/addOneWeek", function(Request $request) {
                 $date = $monday[0];
                 DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->LastMonday, 'HoursPerWeek' => 40]);
             }
-            return("Successfully inserted first week");
+            return response("Successfully inserted first week", 200);
         } else {
+
             $last_week = DB::table('resources_per_projects')
                 ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
                 ->where('resources_per_projects.ProjectID', '=', $project_id)->max('Dates');
@@ -265,14 +284,15 @@ Route::post("/addOneWeek", function(Request $request) {
 //            return $monday;
             $ids = DB::table('resources_per_projects')->select('ScheduleID')
                 ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+            echo($ids);
             foreach($ids as $i){
                 $date = $monday[0];
                 $hours_array = DB::table('schedules')->select('HoursPerWeek')
                     ->where([['ScheduleID', $i->ScheduleID], ["Dates", $last_week]])->get();
-                $prev_hours = $hours_array[0]->HoursPerWeek;
+                $prev_hours = (count($hours_array) > 0 ? $hours_array[0]->HoursPerWeek : 40);
                 DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->Monday, 'HoursPerWeek' => $prev_hours]);
             }
-            return("Successfully inserted next week");
+            return response("Successfully inserted next week", 200);
         }
 
     } catch (Exception $e){
@@ -287,27 +307,49 @@ Route::post("/addOneWeek", function(Request $request) {
     }
 });
 
-/** Route that updates a project in the projects table
- * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
+/** Route that deletes the last week in the schedules table
 
 {
-    "OldProjectName": "P2",
-    "NewProjectName": "P2'",
-    "Technology": "T2",
-    "EstMaxHours": 48,
-    "Status": "Done",
-    "StartDate": "2019-03-07",
-    "DueDate": "2019-03-14"
+"ProjectID": "25"
 }
 
-*/
+ */
+Route::delete('/deleteLastWeek', function(Request $request) {
+    $data = $request->all();
+    try {
+        $project_id = $data["ProjectID"];
+        $last_week = DB::table('resources_per_projects')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->where('resources_per_projects.ProjectID', '=', $project_id)->max('Dates');
+        DB::table('schedules')->where('Dates', $last_week)->delete();
+
+        return "Successfully Deleted Last Week";
+    } catch (Exception $e){
+        return response('This week could not be deleted. Please try again.', 403);
+    }
+});
+
+/** Route that updates a project in the projects table
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter
+
+{
+"OldProjectName": "P2",
+"NewProjectName": "P2'",
+"Technology": "T2",
+"EstMaxHours": 48,
+"Status": "Done",
+"StartDate": "2019-03-07",
+"DueDate": "2019-03-14"
+}
+
+ */
 Route::put('/updateProject', function(Request $request) {
     $data = $request->all();
     try {
         DB::table('projects')->where('ProjectName', $data["OldProjectName"])->update(
-        ["ProjectName" => $data["NewProjectName"], "Technology" => $data["Technology"],
-        "EstMaxHours" => $data["EstMaxHours"], "Status" => $data["Status"],
-        "StartDate" => $data["StartDate"], "DueDate" => $data["DueDate"]]);
+            ["ProjectName" => $data["NewProjectName"], "Technology" => $data["Technology"],
+                "EstMaxHours" => $data["EstMaxHours"], "Status" => $data["Status"],
+                "StartDate" => $data["StartDate"], "DueDate" => $data["DueDate"]]);
         return "Successfully Updated Existing Project";
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
@@ -321,23 +363,23 @@ Route::put('/updateProject', function(Request $request) {
 });
 
 /** Route that updates a resource in the resources table
- * ResourceID: auto-incrementing key, so value that is inputted for it does not matter 
+ * ResourceID: auto-incrementing key, so value that is inputted for it does not matter
 
 {
-    "OldNetID": "jd111",
-    "NewNetID": "jd111",
-    "FirstName": "John",
-    "LastName": "Doe",
-    "MaxHoursPerWeek": 40
+"OldNetID": "jd111",
+"NewNetID": "jd111",
+"FirstName": "John",
+"LastName": "Doe",
+"MaxHoursPerWeek": 40
 }
 
-*/
+ */
 Route::put('/updateResource', function(Request $request) {
     $data = $request->all();
     try {
         DB::table('resources')->where('NetID', $data["OldNetID"])->update(
-        ["NetID" => $data["NewNetID"], "FirstName" => $data["FirstName"],
-        "LastName" => $data["LastName"], "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
+            ["NetID" => $data["NewNetID"], "FirstName" => $data["FirstName"],
+                "LastName" => $data["LastName"], "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
         return "Successfully Updated Existing Resource";
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
@@ -347,22 +389,22 @@ Route::put('/updateResource', function(Request $request) {
             }
         }
         return response('This resource could not be updated. Please try again.', 403);
-    }  
+    }
 });
 
 /** Route that updates an entry to the resources_per_projects table
- * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter 
+ * ResourceID, ProjectID, ScheduleID: auto-incrementing key, so value that is inputted for it does not matter
 
 {
-    "ProjectName": "P2",
-    "NetID": "jd111",
-    "Role": "Product Manager"
+"ProjectName": "P2",
+"NetID": "jd111",
+"Role": "Product Manager"
 }
 
  */
 Route::put('/updateResourcePerProject', function(Request $request) {
     $data = $request->all();
-    
+
     $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
     $project_id_json = json_decode(json_encode($project_id_array{0}), true);
     $project_id = $project_id_json["ProjectID"];
@@ -373,7 +415,7 @@ Route::put('/updateResourcePerProject', function(Request $request) {
 
     try {
         DB::table('resources_per_projects')->where([['ProjectID', $project_id], ['ResourceID', $resource_id]])->update(
-        ["Role" => $data["Role"]]);
+            ["Role" => $data["Role"]]);
         return "Successfully Updated Existing ResourcePerProject";
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
@@ -383,11 +425,11 @@ Route::put('/updateResourcePerProject', function(Request $request) {
             }
         }
         return response('This resource could not be updated. Please try again.', 403);
-    }  
+    }
 });
 
 /** Route that updates an entry to the schedules table
- * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter 
+ * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter
 
 //{
 //    "ProjectID": "26",
@@ -463,14 +505,14 @@ Route::put('/updateSchedule', function(Request $request) {
     }
 });
 
-/** Route that deletes a  project in the projects table 
- * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
+/** Route that deletes a  project in the projects table
+ * ProjectID: auto-incrementing key, so value that is inputted for it does not matter
 
 {
-    "ProjectName": "P2"
+"ProjectName": "P2"
 }
 
-*/
+ */
 Route::delete("/deleteProject", function(Request $request) {
     $data = $request->all();
 
