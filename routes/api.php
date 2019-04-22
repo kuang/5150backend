@@ -179,19 +179,25 @@ Route::post('/addResourcePerProject', function(Request $request) {
         $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
         $schedule_id = $schedule_id_json["ScheduleID"];
 
-        $monday = DB::select(DB::raw('select DATE(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) ) as CurrentWeek'));
-        $date = $monday[0]->CurrentWeek;
-
-        DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $date, 'HoursPerWeek' => 35]);
+        $dates = DB::table('resources_per_projects')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->select('Dates')
+            ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+//        echo($dates);
+        foreach($dates as $d){
+            DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0]);
+        }
 
         return ("Successfully Added New ResourcePerProject");
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
             $error_code= $e->errorInfo[1];
             if($error_code == 1062){
+                echo($e->getMessage());
                 return response('This resource is already working on this project', 403);
             }
         }
+        echo($e->getMessage());
         return response('The resource could not be added to this project. Please try again.', 403);
     }  
 });
