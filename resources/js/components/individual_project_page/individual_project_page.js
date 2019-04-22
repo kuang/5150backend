@@ -333,6 +333,45 @@ class Projects_list_page extends React.Component {
         });
     }
 
+    async deleteOneWeek() {
+        console.log("deleting a week");
+        let projectID = this.props.match.params.projectID;
+        let newData = { "ProjectID": projectID };
+        let response = await fetch('../api/deleteLastWeek', {
+            method: "DELETE",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        });
+        console.log(response);
+        fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(function (newStuff) {
+                this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
+            }.bind(this))
+    }
+    async submitDeleteLastWeek() {
+        confirmAlert({
+            title: 'Confirm To Delete Last Week',
+            message: 'Are you sure to do this?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.deleteOneWeek()
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ],
+            closeOnEscape: true,
+            closeOnClickOutside: true
+        });
+    }
+
     handleChange(selection) {
         this.setState({selectedOption: selection});
     }
@@ -384,7 +423,9 @@ class Projects_list_page extends React.Component {
                 {/*>*/}
                 {/*    Revert*/}
                 {/*</button>*/}
-                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
+
+                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
 
                 <Link to="/add_res_to_project/25">Add Resource</Link>
 
