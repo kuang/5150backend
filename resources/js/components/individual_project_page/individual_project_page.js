@@ -294,6 +294,7 @@ class Projects_list_page extends React.Component {
      * @returns {Promise<void>}
      */
     async addOneWeek() {
+        console.log("adding a week");
         let projectID = this.props.match.params.projectID;
         let newData = { "ProjectID": projectID };
         let response = await fetch('../api/addOneWeek', {
@@ -304,6 +305,7 @@ class Projects_list_page extends React.Component {
             },
             body: JSON.stringify(newData)
         });
+        console.log(response);
         fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
