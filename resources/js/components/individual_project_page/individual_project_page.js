@@ -347,7 +347,7 @@ class Projects_list_page extends React.Component {
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '65vh',
+                    height: '62vh',
                     width: '100vw'
                 }}
             >
@@ -382,7 +382,10 @@ class Projects_list_page extends React.Component {
                 {/*>*/}
                 {/*    Revert*/}
                 {/*</button>*/}
-                <button style={{ height: '30px', width: '100px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
+
+                <Link to="/add_res_to_project/25">Add Resource</Link>
+
                 <div style = {{width: '200px', float :'right'}}>
                     <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
                     </Select>
