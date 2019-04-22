@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Request;
 /** Displays initial webpage */
 Route::view('/', 'app');
 Route::view('/resource', 'app');
+Route::view('/individual_resource/{id}', 'app');
