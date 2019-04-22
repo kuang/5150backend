@@ -13,6 +13,7 @@ class twoList extends React.Component {
         }
         this.Rref = React.createRef();
         this.Lref = React.createRef();
+        this.projectID = this.props.match.params.projectID;
 
         this.handlePlus = this.handlePlus.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
@@ -25,33 +26,45 @@ class twoList extends React.Component {
         // console.log(data);
         var dict = {};
 
-        for (var i in data) {
-            let id = data[i].NetID;
-            dict[id] = data[i];
-        }
+
         // console.log("+++++++++++++++++++++++++");
         // console.log(dict);
         if (flag == 0) {
+            for (var i in data) {
+                let id = data[i].NetID;
+                dict[id] = data[i];
+            }
             this.setState({ currentResources: dict });
         } else {
+            for(var i in data) {
+                let id = data[i].NetID;
+                if(!(this.state.currentResources.hasOwnProperty(id))){
+                    dict[id] = data[i]
+                }
+            }
             this.setState({ avaliableResources: dict });
         }
     }
 
     componentDidMount() {
-        let projectID = this.props.match.params.projectID;
-        this.fetchResources(projectID);
+        // let projectID = this.props.match.params.projectID;
+        this.fetchResources(this.projectID);
         //fetch returns a promise
     }
 
     async fetchResources(projectID) {
+        // fetch(`../api/displayProjectInfo/${projectID}`)
+        //     .then(result => result.json())
+        //     .then(data => console.log(data[0]));
+
         fetch(`../api/displayResourcesPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data, 0));
 
-        fetch(`../api/displayResourcesAvailable/${projectID}`)
+        fetch(`../api/displayAllResources`)
             .then(result => result.json())
             .then(data => this.processData(data, 1));
+
     }
 
     renderList(resDic) {
@@ -96,29 +109,49 @@ class twoList extends React.Component {
 
     async handlePlus(event) {
         console.log(this.state.toadd);
-        // /addResourcePerProject
+        //addResourcePerProject
         for (var i = 0, len = this.state.toadd.length; i < len; i++) {
             let data = {
-                "ProjectID": this.props.match.params.projectID,
+                "ProjectName": "P2",
                 "NetID": this.state.toadd[i],
                 "Role": "Prgrammer",
             };
-            await fetch(`../api/addResourcePerProject`, {
+            let response = await fetch(`../api/addResourcePerProject`, {
                 method: 'POST',
                 headers: {
                     'Accepter': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(data),
             });
+
+            console.log(data);
         }
+
 
         this.fetchResources(this.props.match.params.projectID);
 
         event.preventDefault();
     }
 
-    handleRemove(event) {
+    async handleRemove(event) {
+        for (var i = 0, len = this.state.toremove.length; i < len; i++) {
+            let data = {
+                "ProjectName": "P2",
+                "NetID": this.state.toremove[i],
+            };
+            let response = await fetch(`../api/deleteResourcePerProject`, {
+                method: 'DELETE',
+                headers: {
+                    'Accepter': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            console.log(data);
+        }
+
         event.preventDefault();
     }
 
@@ -127,7 +160,7 @@ class twoList extends React.Component {
         var rightList = this.renderList(this.state.currentResources);
 
         return (
-            <div>
+            <div >
                 <form onSubmit={this.handlePlus} id="addForm">
                     <select multiple id="addSelect" ref={this.Lref} onChange={this.handleSelectPlus}>
                         {leftList}
@@ -136,10 +169,10 @@ class twoList extends React.Component {
                 </form>
 
                 <form onSubmit={this.handleRemove} id="removeForm">
-                    <input type="submit" value="REMOVE" className="removeButton" />
                     <select multiple id="removeSelect" ref={this.Rref} onChange={this.handleSelectRemove}>
                         {rightList}
                     </select>
+                    <input type="submit" value="REMOVE" className="removeButton" />
                 </form>
             </div>
         );
@@ -149,4 +182,6 @@ class twoList extends React.Component {
 
 export default twoList
 
-
+// if (document.getElementById('resources')) {
+//     ReactDOM.render(<ResourceListPage />, document.getElementById('Resource_list_page'));
+// }
