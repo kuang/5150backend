@@ -301,6 +301,28 @@ Route::post("/addOneWeek", function(Request $request) {
     }
 });
 
+/** Route that deletes the last week in the schedules table
+
+{
+"ProjectID": "25"
+}
+
+ */
+Route::delete('/deleteLastWeek', function(Request $request) {
+    $data = $request->all();
+    try {
+        $project_id = $data["ProjectID"];
+        $last_week = DB::table('resources_per_projects')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->where('resources_per_projects.ProjectID', '=', $project_id)->max('Dates');
+        DB::table('schedules')->where('Dates', $last_week)->delete();
+
+        return "Successfully Deleted Last Week";
+    } catch (Exception $e){
+        return response('This week could not be deleted. Please try again.', 403);
+    }
+});
+
 /** Route that updates a project in the projects table
  * ProjectID: auto-incrementing key, so value that is inputted for it does not matter 
 
