@@ -29,11 +29,11 @@ class Projects_list_page extends React.Component {
             openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
-                headerName: "Name", field: "name" // headerName is the name of the column, field is what is
+                headerName: "Name", field: "name", filter: "agTextColumnFilter"// headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
                 // [{"name" : Jonathan Ou}, {"role": "Product Manager"}]
             }, {
-                headerName: "Role", field: "role"
+                headerName: "Role", field: "role", filter: "agTextColumnFilter"
             }],
             rowData: []
         }
@@ -49,9 +49,9 @@ class Projects_list_page extends React.Component {
     async processData(data) {
         console.log(data);
         let columnDefs = [
-            { headerName: 'Name', field: 'name', sortable: true },
-            { headerName: 'NetID', field: 'netid', sortable: true },
-            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true },
+            { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter" },
+            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter" },
+            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter" },
         ];
         let rowData = [];
         let columnNames = new Set();
@@ -83,7 +83,8 @@ class Projects_list_page extends React.Component {
                     field: currentHeader,
                     sortable: true,
                     enableCellChangeFlash: true,
-                    editable: true
+                    editable: true,
+                    filter: "agTextColumnFilter"
                 };
                 columnDefs.push(newColumnDef);
             }
@@ -333,6 +334,45 @@ class Projects_list_page extends React.Component {
         });
     }
 
+    async deleteOneWeek() {
+        console.log("deleting a week");
+        let projectID = this.props.match.params.projectID;
+        let newData = { "ProjectID": projectID };
+        let response = await fetch('../api/deleteLastWeek', {
+            method: "DELETE",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        });
+        console.log(response);
+        fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(function (newStuff) {
+                this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
+            }.bind(this))
+    }
+    async submitDeleteLastWeek() {
+        confirmAlert({
+            title: 'Confirm To Delete Last Week',
+            message: 'Are you sure to do this?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.deleteOneWeek()
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ],
+            closeOnEscape: true,
+            closeOnClickOutside: true
+        });
+    }
+
     handleChange(selection) {
         this.setState({selectedOption: selection});
     }
@@ -371,7 +411,7 @@ class Projects_list_page extends React.Component {
                 >
                 </AgGridReact>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }}
                     onClick={
                         this.submitSave.bind(this)
                     }
@@ -384,11 +424,13 @@ class Projects_list_page extends React.Component {
                 {/*>*/}
                 {/*    Revert*/}
                 {/*</button>*/}
-                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
+
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
 
                 <Link to="/add_res_to_project/25">Add Resource</Link>
 
-                <div style = {{width: '200px', float :'right'}}>
+                <div style = {{width: '200px', float :'right', marginTop: '20px'}}>
                     <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
                     </Select>
                 </div>

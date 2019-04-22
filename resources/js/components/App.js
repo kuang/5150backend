@@ -31,7 +31,7 @@ class App extends Component {
                                 <Link to="/individual_resource/4">individual_resource</Link>
                             </li>
                             <li>
-                                <Link to="/individual_project/25">projects</Link>
+                                <Link to="/individual_project/26">projects</Link>
                             </li>
                             <li>
                                 <Link to="/projects_list/">List of projects</Link>
