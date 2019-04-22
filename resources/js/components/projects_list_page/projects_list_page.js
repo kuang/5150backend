@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import Modal from 'react-responsive-modal';
 
 class Projects_list_page extends React.Component {
 
@@ -20,8 +21,24 @@ class Projects_list_page extends React.Component {
                 { headerName: 'Assigned Hours This Week', field: 'hoursWeek' },
                 { headerName: 'Total Assigned Hours', field: 'hoursTotal' }
             ],
-            rowData: []
-        }
+            rowData: [],
+
+            // Modal for adding new project modal
+            showPopup: false,
+            newProjectName: "",
+            newTechnology: "",
+            newEstMaxHours: "",
+            newStatus: "Ongoing",
+            newStartDate: "",      //string of format YYYY-MM-DD
+            newDueDate: "",        //string of format YYYY-MM-DD
+        };
+        // handlers for adding new prject modal
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSetProjName = this.handleSetProjName.bind(this); 
+        this.handleSetTech = this.handleSetTech.bind(this); 
+        this.handleSetHours = this.handleSetHours.bind(this); 
+        this.handleSetStartDate = this.handleSetStartDate.bind(this); 
+        this.handleSetDueDate = this.handleSetDueDate.bind(this); 
     }
 
     /** Returns a concatenated string of a list of the first names of the resources
@@ -165,6 +182,63 @@ class Projects_list_page extends React.Component {
         return rowData
     }
 
+    /* Methods for the adding project modal */
+    togglePopup() {
+        this.setState({
+            showPopup: !(this.state.showPopup)
+        });
+    }
+
+    handleSetProjName(event) {
+        this.setState({
+            newProjectName : event.target.value
+        });
+    }
+
+    handleSetTech(event) {
+        this.setState({
+            newTechnology: event.target.value
+        });
+    }
+
+    handleSetHours(event) {
+        this.setState({
+            newEstMaxHours: event.target.value
+        });
+    }
+
+    handleSetStartDate(event) {
+        this.setState({
+            newStartDate : event.target.value
+        });
+    }
+
+    handleSetDueDate(event) {
+        this.setState({
+            newDueDate: event.target.value
+        });
+    }
+    
+    async handleSubmit(event) {
+        let newProjData = {
+            "ProjectName" : this.state.newProjectName,
+            "Technology" : this.state.newTechnology,
+            "EstMaxHours": this.state.newEstMaxHours,
+            "Status": this.state.newStatus,
+            "StartDate": this.state.newStartDate,
+            "DueDate": this.state.newDueDate
+        }
+        let response = await fetch(`../api/addProject`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newProjData),
+        });
+    }
+    /* Methods for the adding project modal */
+
     componentDidMount() {
         fetch(`../api/displayAllProjects`)
             .then(result => result.json())
@@ -180,7 +254,7 @@ class Projects_list_page extends React.Component {
                 className="ag-theme-balham"
                 style={{
                     height: '65vh',
-                    width: '100vw'
+                    width: '1500px'
                 }}
             >
 
@@ -189,6 +263,33 @@ class Projects_list_page extends React.Component {
                     rowData={this.state.rowData}
                 >
                 </AgGridReact>
+
+                <Modal open={this.state.showPopup} onClose={this.togglePopup.bind(this)} center closeIconSize={14}>
+                    <h4 style={{ marginTop: '15px' }}>Adding a New Project</h4>
+                    <form onSubmit={this.handleSubmit}>
+                        <label style={{ marginRight: '15px' }}>Project Name:</label>
+                        <input style={{ float: 'right' }} type="text" required value={this.state.newProjectName} onChange={this.handleSetProjName} />
+                        <br></br>
+                        <label style={{ marginRight: '15px' }}>Technology:</label>
+                        <input style={{ float: 'right' }} type="text" required value={this.state.newTechnology} onChange={this.handleSetTech} />
+                        <br></br>
+                        <label style={{ marginRight: '15px' }}>Estimated Maximum Hours for This Project:</label>
+                        <input style={{ float: 'right' }} type="number" required value={this.state.newEstMaxHours} onChange={this.handleSetHours} />
+                        <br></br>
+                        <label style={{ marginRight: '15px' }}>Start Date (YYYY-MM-DD):</label>
+                        <input style={{ float: 'right' }} type="text" required value={this.state.newStartDate} onChange={this.handleSetStartDate} />
+                        <br></br>
+                        <label style={{ marginRight: '15px' }}>Due Date (YYYY-MM-DD):</label>
+                        <input style={{ float: 'right' }} type="text" required value={this.state.newDueDate} onChange={this.handleSetDueDate} />
+                        <br></br>
+                        <input type="submit" value="Submit" />
+                    </form>
+                </Modal>
+
+                <button
+                    style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                    onClick={this.togglePopup.bind(this)}
+                >Add Project</button>
             </div>
         );
     }
