@@ -34,12 +34,23 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
+	// cellClicked(event) {
+	// 	if (event.value == undefined) {
+	// 		console.log("undefined");
+	// 	}
+	// }
+
 	async processData(data) {
 		console.log(data);
 		let columnDefs = [
 			{ headerName: 'NetID', field: 'netid' },
 			{ headerName: 'Name', field: 'name' },
-			{ headerName: 'Max Hour Per Week', field: 'maxHourPerWeek' }
+			{ headerName: 'Max Hour Per Week', field: 'maxHourPerWeek' },
+			{ headerName: 'Details', field: 'detailLink', cellRenderer: function(params) {
+				// console.log(params.value);
+      	// return '<a href="https://www.google.com" target="_blank">'+ params.value+'</a>'
+				return "<a href='/individual_resource/" + params.value +"'>Details</a>"
+  		}}
 		]
 
 		let rowData = [];
@@ -49,8 +60,14 @@ class Resource_list_page extends React.Component {
 			let currID = curr.NetID;
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
+			let id = curr.ResourceID;
 
-			currJSON = { netid: currID, name: fullName, maxHourPerWeek: maxHour };
+			currJSON = {
+				netid: currID,
+				name: fullName,
+				maxHourPerWeek: maxHour,
+				detailLink: id
+			};
 			rowData.push(currJSON);
 		}
 		// console.log(rowData);
@@ -121,12 +138,13 @@ class Resource_list_page extends React.Component {
 				className="ag-theme-balham"
 				style={{
 					height: '70vh',
-					width: '600px'
+					width: '800px'
 				}}
 			>
 				<AgGridReact
 					columnDefs={this.state.columnDefs}
 					rowData={this.state.rowData}
+					// onCellClicked={this.cellClicked.bind(this)}
 				></AgGridReact>
 
 				<Modal open={this.state.showPopup} onClose={this.togglePopup.bind(this)} center closeIconSize={14}>
@@ -152,6 +170,7 @@ class Resource_list_page extends React.Component {
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
 					onClick={this.togglePopup.bind(this)}
 				>Add Resource</button>
+				<Link to='/individual_resource/4'>click</Link>
 			</div>
 		);
 	}
