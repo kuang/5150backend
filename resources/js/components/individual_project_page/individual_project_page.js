@@ -411,7 +411,7 @@ class Projects_list_page extends React.Component {
                 >
                 </AgGridReact>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }}
                     onClick={
                         this.submitSave.bind(this)
                     }
@@ -424,13 +424,13 @@ class Projects_list_page extends React.Component {
                 {/*>*/}
                 {/*    Revert*/}
                 {/*</button>*/}
-                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
 
                 <Link to="/add_res_to_project/25">Add Resource</Link>
 
-                <div style = {{width: '200px', float :'right'}}>
+                <div style = {{width: '200px', float :'right', marginTop: '20px'}}>
                     <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
                     </Select>
                 </div>
