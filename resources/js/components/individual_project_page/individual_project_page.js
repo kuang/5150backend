@@ -29,11 +29,11 @@ class Projects_list_page extends React.Component {
             openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
-                headerName: "Name", field: "name" // headerName is the name of the column, field is what is
+                headerName: "Name", field: "name", filter: "agTextColumnFilter"// headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
                 // [{"name" : Jonathan Ou}, {"role": "Product Manager"}]
             }, {
-                headerName: "Role", field: "role"
+                headerName: "Role", field: "role", filter: "agTextColumnFilter"
             }],
             rowData: []
         }
@@ -49,9 +49,9 @@ class Projects_list_page extends React.Component {
     async processData(data) {
         console.log(data);
         let columnDefs = [
-            { headerName: 'Name', field: 'name', sortable: true },
-            { headerName: 'NetID', field: 'netid', sortable: true },
-            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true },
+            { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter" },
+            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter" },
+            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter" },
         ];
         let rowData = [];
         let columnNames = new Set();
@@ -83,7 +83,8 @@ class Projects_list_page extends React.Component {
                     field: currentHeader,
                     sortable: true,
                     enableCellChangeFlash: true,
-                    editable: true
+                    editable: true,
+                    filter: "agTextColumnFilter"
                 };
                 columnDefs.push(newColumnDef);
             }

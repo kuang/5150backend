@@ -273,7 +273,7 @@ Route::post("/addOneWeek", function(Request $request) {
                 $date = $monday[0];
                 DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->LastMonday, 'HoursPerWeek' => 40]);
             }
-            return("Successfully inserted first week");
+            return response("Successfully inserted first week", 200);
         } else {
 
             $last_week = DB::table('resources_per_projects')
@@ -292,7 +292,7 @@ Route::post("/addOneWeek", function(Request $request) {
                 $prev_hours = (count($hours_array) > 0 ? $hours_array[0]->HoursPerWeek : 40);
                 DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->Monday, 'HoursPerWeek' => $prev_hours]);
             }
-            return("Successfully inserted next week");
+            return response("Successfully inserted next week", 200);
         }
 
     } catch (Exception $e){
