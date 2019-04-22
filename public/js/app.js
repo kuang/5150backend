@@ -94521,7 +94521,7 @@ function (_React$Component) {
                   return response.json();
                 }).then(function (myJSON) {
                   if (myJSON === undefined || myJSON.length == 0) {
-                    return "None";
+                    return "N/A";
                   } else {
                     var names = myJSON.map(function (a) {
                       return a.FirstName;
@@ -94545,16 +94545,144 @@ function (_React$Component) {
 
       return getResourceNames;
     }()
+    /** Returns the hours per week assgined to this project [projectID] */
+
+  }, {
+    key: "getHoursWeek",
+    value: function () {
+      var _getHoursWeek = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(projectID) {
+        var todayDate, scheduleIDArr, validSchedules, isInSameWeek, hoursArr, totalHours;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                // get an array of [ScheduleID] that are matched with [projectID];
+                // check the current Date;
+                // for all Schedules with [Dates] in same week as the current Date, 
+                // sum their values of [HoursPerWeek]
+                // projectID = 25
+                todayDate = new Date();
+                _context2.next = 3;
+                return fetch("../api/displayResourcesPerProject/").then(function (response) {
+                  return response.json();
+                }).then(function (myJSON) {
+                  if (myJSON === undefined || myJSON.length == 0) {
+                    return [];
+                  } else {
+                    var result = myJSON.filter(function (obj) {
+                      return obj.ProjectID === projectID;
+                    });
+                    console.log(result);
+                    var scheduleIDs = result.map(function (a) {
+                      return a.ScheduleID;
+                    });
+                    console.log(scheduleIDs);
+                    return scheduleIDs;
+                  }
+                });
+
+              case 3:
+                scheduleIDArr = _context2.sent;
+
+                if (!(scheduleIDArr.length == 0)) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                return _context2.abrupt("return", 0);
+
+              case 6:
+                _context2.next = 8;
+                return fetch("../api/displaySchedules/").then(function (response) {
+                  return response.json();
+                }).then(function (myJSON) {
+                  if (myJSON === undefined || myJSON.length === 0) {
+                    return [];
+                  } else {
+                    // get all schedules in scheduleIDArr
+                    var validschedules = myJSON.filter(function (obj) {
+                      return !(scheduleIDArr.indexOf(obj.ScheduleID) === -1);
+                    });
+                    console.log(validschedules);
+                    return validschedules;
+                  }
+                });
+
+              case 8:
+                validSchedules = _context2.sent;
+
+                if (!(validSchedules.length === 0)) {
+                  _context2.next = 11;
+                  break;
+                }
+
+                return _context2.abrupt("return", 0);
+
+              case 11:
+                /** Compares two dates and return true if they are in same week and false otherwise
+                *  [anyDate] can be any Date object, but [weekDate] must be a Monday
+                */
+                isInSameWeek = function isInSameWeek(anyDate, weekDate) {
+                  var lowerbound = new Date(weekDate + "EST");
+                  var upperbound = new Date(lowerbound.getTime());
+                  upperbound.setDate(upperbound.getDate() + 7);
+
+                  if (lowerbound <= anyDate && anyDate < upperbound) {
+                    return true;
+                  } else {
+                    return false;
+                  }
+                }; // filter again with respect to date
+
+
+                validSchedules = validSchedules.filter(function (obj) {
+                  return isInSameWeek(todayDate, obj.Dates);
+                });
+                console.log(validSchedules);
+                hoursArr = validSchedules.map(function (a) {
+                  return a.HoursPerWeek;
+                });
+                console.log(hoursArr);
+
+                if (!(hoursArr.length === 0)) {
+                  _context2.next = 20;
+                  break;
+                }
+
+                return _context2.abrupt("return", 0);
+
+              case 20:
+                totalHours = hoursArr.reduce(function (acc, a) {
+                  return acc + a;
+                });
+                return _context2.abrupt("return", totalHours);
+
+              case 22:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }));
+
+      function getHoursWeek(_x2) {
+        return _getHoursWeek.apply(this, arguments);
+      }
+
+      return getHoursWeek;
+    }()
   }, {
     key: "processData",
     value: function () {
       var _processData = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(data) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(data) {
         var rowData, rowJSON, i, currJSON, currProjectID, currProjectName, currStatus, currTech, currStartDate, currDueDate, currHoursTotal, currResources, currHoursWeek, currUpdates;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
                 rowData = [];
                 rowJSON = {};
@@ -94562,12 +94690,11 @@ function (_React$Component) {
 
               case 3:
                 if (!(i < data.length)) {
-                  _context2.next = 24;
+                  _context3.next = 24;
                   break;
                 }
 
                 currJSON = data[i];
-                console.log(currJSON);
                 currProjectID = currJSON.ProjectID;
                 currProjectName = currJSON.ProjectName;
                 currStatus = currJSON.Status;
@@ -94575,13 +94702,16 @@ function (_React$Component) {
                 currStartDate = currJSON.StartDate;
                 currDueDate = currJSON.DueDate;
                 currHoursTotal = currJSON.EstMaxHours;
-                _context2.next = 15;
+                _context3.next = 14;
                 return this.getResourceNames(currProjectID);
 
-              case 15:
-                currResources = _context2.sent;
-                console.log(currResources);
-                currHoursWeek = "";
+              case 14:
+                currResources = _context3.sent;
+                _context3.next = 17;
+                return this.getHoursWeek(currProjectID);
+
+              case 17:
+                currHoursWeek = _context3.sent;
                 currUpdates = "";
                 rowJSON = {
                   projectName: currProjectName,
@@ -94598,22 +94728,21 @@ function (_React$Component) {
 
               case 21:
                 i++;
-                _context2.next = 3;
+                _context3.next = 3;
                 break;
 
               case 24:
-                console.log(rowData);
-                return _context2.abrupt("return", rowData);
+                return _context3.abrupt("return", rowData);
 
-              case 26:
+              case 25:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
-      function processData(_x2) {
+      function processData(_x3) {
         return _processData.apply(this, arguments);
       }
 

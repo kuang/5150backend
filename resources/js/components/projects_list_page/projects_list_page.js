@@ -37,7 +37,7 @@ class Projects_list_page extends React.Component {
             })
             .then(function (myJSON) {
                 if (myJSON === undefined || myJSON.length == 0) {
-                    return "None";
+                    return "N/A";
                 } else {
                     var names = myJSON.map(function (a) { return a.FirstName; });
                     names = names.join(", ");
@@ -46,12 +46,96 @@ class Projects_list_page extends React.Component {
             });
     }
 
+    /** Returns the hours per week assgined to this project [projectID] */
+    async getHoursWeek(projectID) {
+        // get an array of [ScheduleID] that are matched with [projectID];
+        // check the current Date;
+        // for all Schedules with [Dates] in same week as the current Date, 
+        // sum their values of [HoursPerWeek]
+        
+        // projectID = 25
+        const todayDate = new Date();
+        const scheduleIDArr = 
+            await fetch(`../api/displayResourcesPerProject/`)
+            .then(function(response) {
+                return response.json()
+            })
+            .then(function(myJSON) {
+                if (myJSON === undefined || myJSON.length == 0) {
+                    return [];
+                } else {
+                    var result = myJSON.filter(function(obj) {
+                        return obj.ProjectID === projectID;
+                    })
+                    console.log(result);
+                    var scheduleIDs = result.map(function (a) { return a.ScheduleID; });
+                    console.log(scheduleIDs);
+                    return scheduleIDs;
+                }
+            });
+        
+        if (scheduleIDArr.length == 0) {
+            return 0; // no schedule <=> zero hour assigned
+        } 
+        // scheduleIDArr = [15, 23, 24, 25, 26]
+        var validSchedules = 
+            await fetch(`../api/displaySchedules/`)
+            .then(function (response) {
+                return response.json()
+            })
+            .then(function (myJSON) {
+                if (myJSON === undefined || myJSON.length === 0) {
+                    return [];
+                } else {
+                    // get all schedules in scheduleIDArr
+                    var validschedules = myJSON.filter(function (obj) {
+                        return !(scheduleIDArr.indexOf(obj.ScheduleID) === -1);
+                    });
+                    console.log(validschedules);
+                    return validschedules;
+                }
+            });
+
+        
+        if (validSchedules.length === 0) {
+            return 0;
+        }
+
+        /** Compares two dates and return true if they are in same week and false otherwise
+        *  [anyDate] can be any Date object, but [weekDate] must be a Monday
+        */
+        let isInSameWeek = function(anyDate, weekDate) {
+            var lowerbound = new Date(weekDate + "EST");
+            var upperbound = new Date(lowerbound.getTime());
+            upperbound.setDate(upperbound.getDate() + 7);
+            if (lowerbound <= anyDate && anyDate < upperbound) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+        // filter again with respect to date
+        validSchedules = validSchedules.filter(function (obj) {
+            return isInSameWeek(todayDate, obj.Dates);
+        })
+        console.log(validSchedules);
+        
+        var hoursArr = validSchedules.map(function (a) { return a.HoursPerWeek; });
+        console.log(hoursArr);
+
+        if (hoursArr.length === 0) {
+            return 0;
+        } else {
+            var totalHours = hoursArr.reduce((acc, a) => acc + a);
+            return totalHours;
+        }
+    }
+
     async processData(data) {
         var rowData = [];
         var rowJSON = {};
         for (let i = 0; i < data.length; i++) {
             let currJSON = data[i];
-            console.log(currJSON);
             let currProjectID = currJSON.ProjectID;
             let currProjectName = currJSON.ProjectName;
             let currStatus = currJSON.Status;
@@ -59,9 +143,8 @@ class Projects_list_page extends React.Component {
             let currStartDate = currJSON.StartDate;
             let currDueDate = currJSON.DueDate;
             let currHoursTotal= currJSON.EstMaxHours;
-            let currResources = await this.getResourceNames(currProjectID); 
-            console.log(currResources);
-            let currHoursWeek = "";
+            let currResources = await this.getResourceNames(currProjectID);
+            let currHoursWeek = await this.getHoursWeek(currProjectID);
             let currUpdates = "";
 
             rowJSON = {
@@ -75,10 +158,10 @@ class Projects_list_page extends React.Component {
                 hoursWeek : currHoursWeek,
                 hoursTotal: currHoursTotal
             };
+
             rowData.push(rowJSON);
         }
 
-        console.log(rowData);
         return rowData
     }
 
