@@ -7,7 +7,7 @@ import Individual_project_page from './individual_project_page/individual_projec
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Projects_list_page from './projects_list_page/projects_list_page.js'
 import Resource_list_page from './resource_list_page/resource_list_page.js'
-
+import add_res_to_project from './add_resource_to_project_page/add_resource_to_project_page.js';
 class App extends Component {
     render() {
         return (
@@ -36,6 +36,9 @@ class App extends Component {
                             <li>
                                 <Link to="/projects_list/">List of projects</Link>
                             </li>
+                            <li>
+                                <Link to="/add_res_to_project/25">add_resource_to_project</Link>
+                            </li>
                         </ul>
                     </nav>
 
@@ -52,6 +55,7 @@ class App extends Component {
                         component={Individual_project_page}
                     />
                     <Route path="/projects_list/" component={Projects_list_page} />
+                    <Route path="/add_res_to_project/:projectID" component = {add_res_to_project} />
                 </div>
             </Router>
         );

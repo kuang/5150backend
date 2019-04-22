@@ -1,0 +1,27 @@
+body {
+    width:650px;
+    height: 300px;
+}
+
+#addForm{
+    width:300px;
+    height:200px;
+    float: left;
+}
+
+#removeForm{
+    width:300px;
+    height:200px;
+    margin-top: 5px;
+    margin-left: 10px;
+    float: right;
+}
+#addSelect {
+    width: 290px;
+    height: 190px;
+}
+
+#removeSelect {
+    width:290px;
+    height: 190px;
+}
