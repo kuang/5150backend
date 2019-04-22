@@ -10,9 +10,19 @@ import Select from 'react-select';
 
 class Projects_list_page extends React.Component {
 
+    /*** Constructor that is called when component is initialized. Entry point of this component
+     *
+     * @param props
+     */
     constructor(props) {
         super(props);
         this.updatedRows = new Set();
+        this.statusOptions = [
+            { label: "Ongoing", value: 1 },
+            { label: "Inactive", value: 2 },
+            { label: "Done", value: 3 },
+            { label: "On Hold", value: 4 },
+        ];
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : null,
@@ -30,9 +40,11 @@ class Projects_list_page extends React.Component {
     }
 
     /***
-     * Processes
+     * Processes data from /api/displayResourceInfoPerProject
+     *
      * @param data
-     * @returns {{rowData: Array, columnDefs: []}}
+     * @returns {{rowData: Array, columnDefs: []}}, where rowData is the data to be placed in the grid, and column
+     * defs is the names of each of the individual columns
      */
     async processData(data) {
         console.log(data);
@@ -96,40 +108,74 @@ class Projects_list_page extends React.Component {
     }
 
     /***
-     * This function is always called right after the constructor for this class is called
+     * This function is always called right after the constructor for this class is called, and the component is
+     * loaded onto a screen via render()
      * It makes a GET request to the api (argument to the fetch function), retrieves it, then processes the data
      * using processData to create new row data and column definitions, and then updates the state to those values.
      * That is why when you load this page, it starts off empty and then data populates the grid.
      * It is called once, immediately after render() is first called
      */
-    componentDidMount() {
+    async componentDidMount() {
         let projectID = this.props.match.params.projectID;
-        fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+        await fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
             .then(function (newStuff) {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this))
+
+        let response = await fetch(`../api/displayProjectInfo/${projectID}`);
+        let actualResponse = await response.json();
+        console.log(actualResponse);
+        let currentStatus = actualResponse[0]["Status"];
+
+        if (currentStatus == "Ongoing") {
+            this.setState({selectedOption: { label: "Ongoing", value: 1 }});
+            return;
+        }
+
+        if (currentStatus == "Inactive") {
+            this.setState({selectedOption: { label: "Inactive", value: 2 }});
+            return;
+        }
+        if (currentStatus == "Done") {
+            this.setState({selectedOption: { label: "Done", value: 3 }});
+            return;
+        }
+
+        if (currentStatus == "On Hold") {
+            this.setState({selectedOption: { label: "On Hold", value: 4 }});
+            return;
+        }
     }
 
     /***
-     * Makes API call to update all the edited rows prior to this call
+     * Makes API call to update all the edited rows prior to this call in the database
+     * Also, if project status is updated, saveData() makes an API call to update that as well
      * Clears the edited rows so we don't save the same information twice
      */
     async saveData() {
         console.log("Saving Data");
         let data = this.state.rowData;
         let projectID = this.props.match.params.projectID;
-        let updateSuccessful = await fetch('../api/updateMostRecentRowData', {
+        // let updateSuccessful = await fetch('../api/updateMostRecentRowData', {
+        //     method: "PUT",
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ "projectID": projectID, "data": data })
+        // });
+
+        let statusUpdateSuccessful = await fetch('../api/updateProjectStatus', {
             method: "PUT",
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ "projectID": projectID, "data": data })
+            body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
         });
-
-        console.log(updateSuccessful);
+        console.log(statusUpdateSuccessful);
 
         let updatedRows = this.updatedRows;
 
@@ -174,12 +220,15 @@ class Projects_list_page extends React.Component {
         console.log(response.json());
     }
 
+    /***
+     * Closes the type warning modal, which is shown when a user types a non-integer value into a week
+     */
     closeTypeWarningModal() {
         this.setState({ openTypeWarning: false });
     }
 
     /***
-     * Add the row index of the row that was just edited
+     * Adds the row index of the row that was just edited to this.updatedRows
      * @param event
      */
     addUpdatedRow(event) {
@@ -199,7 +248,10 @@ class Projects_list_page extends React.Component {
         this.updatedRows.add({ "rowIndex": rowIndex, "colIndex": editedColumn });
     }
 
-
+    /***
+     * Determines if a cell is editable
+     * @param event
+     */
     canEditCell(event) {
         if (event.value == undefined) {
             this.setState({ "openNoScheduleWarning": true });
@@ -207,10 +259,17 @@ class Projects_list_page extends React.Component {
         }
     }
 
+    /***
+     * Closes no schedule warning modal, which is created when an admin adds data to a week where a resource
+     * was not working
+     */
     closeNoScheduleWarningModal() {
         this.setState({ openNoScheduleWarning: false });
     }
 
+    /*** Opens the confirmation model
+     *
+     */
     submitSave() {
         confirmAlert({
             title: 'Confirm To Save',
@@ -230,6 +289,10 @@ class Projects_list_page extends React.Component {
         });
     };
 
+    /***
+     * Adds another week to the schedule, with the update being reflected in the database
+     * @returns {Promise<void>}
+     */
     async addOneWeek() {
         let projectID = this.props.match.params.projectID;
         let newData = { "ProjectID": projectID };
@@ -268,8 +331,8 @@ class Projects_list_page extends React.Component {
         });
     }
 
-    handleChange(selectedOption) {
-        console.log("hello");
+    handleChange(selection) {
+        this.setState({selectedOption: selection});
     }
     /***
      * Makes POST Request to save data
@@ -279,18 +342,12 @@ class Projects_list_page extends React.Component {
      * @returns {*}
      */
     render() {
-        const techCompanies = [
-            { label: "Ongoing", value: 1 },
-            { label: "Inactive", value: 2 },
-            { label: "Completed", value: 3 },
-            { label: "On Hold", value: 4 },
-        ];
 
         return (
             <div
                 className="ag-theme-balham"
                 style={{
-                    height: '60vh',
+                    height: '62vh',
                     width: '100vw'
                 }}
             >
@@ -319,17 +376,21 @@ class Projects_list_page extends React.Component {
                 >
                     Save
                 </button>
-                <button style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                    onClick={this.restoreData.bind(this)
-                    }
-                >
-                    Revert
-                </button>
-                <button style={{ height: '30px', width: '100px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
+                {/*<button style={{ height: '30px', width: '100px', marginRight: '10px' }}*/}
+                {/*    onClick={this.restoreData.bind(this)*/}
+                {/*    }*/}
+                {/*>*/}
+                {/*    Revert*/}
+                {/*</button>*/}
+                <button style={{ height: '30px', width: '100px', marginRight: '10px' }} onClick={this.submitAddOneWeek.bind(this)}>Add One Week</button>
 
-                <Select options = {techCompanies} defaultValue = {{ label: "Ongoing", value: 1 }}>
-                </Select>
+                <Link to="/add_res_to_project/25">Add Resource</Link>
 
+                <div style = {{width: '200px', float :'right'}}>
+                    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
+                    </Select>
+                </div>
+                {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
             </div>
         );
     }
