@@ -173,7 +173,18 @@ Route::post('/addResourcePerProject', function(Request $request) {
 
         DB::table('resources_per_projects')->insertGetId(
             ["ResourceID" => $resource_id, "ProjectID" => $project_id, "Role" => $data["Role"], "ScheduleID" => 0]);
-        return ("Sucessfully Added New ResourcePerProject");
+
+        // adding default schedule for most recent week
+        $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
+        $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+        $schedule_id = $schedule_id_json["ScheduleID"];
+
+        $monday = DB::select(DB::raw('select DATE(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) ) as CurrentWeek'));
+        $date = $monday[0]->CurrentWeek;
+
+        DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $date, 'HoursPerWeek' => 35]);
+
+        return ("Successfully Added New ResourcePerProject");
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
             $error_code= $e->errorInfo[1];
