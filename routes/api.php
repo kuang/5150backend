@@ -142,7 +142,7 @@ Route::post('/addResource', function(Request $request) {
         if ($e instanceof \Illuminate\Database\QueryException) {
             $error_code= $e->errorInfo[1];
             if($error_code == 1062){
-                return response('A resource already exists with this name', 403);
+                return response('A resource already exists with this NetID', 403);
             }
         }
         return response('This resource could not be added. Please try again.', 403);
@@ -182,7 +182,9 @@ Route::post('/addResourcePerProject', function(Request $request) {
         $dates = DB::table('resources_per_projects')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
             ->select('Dates')
-            ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+            ->where('resources_per_projects.ProjectID', '=', $project_id)
+            ->distinct()
+            ->get();
 //        echo($dates);
         foreach($dates as $d){
             DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0]);
