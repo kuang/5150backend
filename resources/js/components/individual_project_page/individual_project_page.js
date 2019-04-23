@@ -29,11 +29,11 @@ class Projects_list_page extends React.Component {
             openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
-                headerName: "Name", field: "name", filter: "agTextColumnFilter"// headerName is the name of the column, field is what is
+                headerName: "Name", field: "name", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"// headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
                 // [{"name" : Jonathan Ou}, {"role": "Product Manager"}]
             }, {
-                headerName: "Role", field: "role", filter: "agTextColumnFilter"
+                headerName: "Role", field: "role", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"
             }],
             rowData: []
         }
@@ -49,9 +49,9 @@ class Projects_list_page extends React.Component {
     async processData(data) {
         console.log(data);
         let columnDefs = [
-            { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter" },
-            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter" },
-            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter" },
+            { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
+            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
+            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
         ];
         let rowData = [];
         let columnNames = new Set();
@@ -84,7 +84,8 @@ class Projects_list_page extends React.Component {
                     sortable: true,
                     enableCellChangeFlash: true,
                     editable: true,
-                    filter: "agTextColumnFilter"
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
                 };
                 columnDefs.push(newColumnDef);
             }
@@ -406,12 +407,11 @@ class Projects_list_page extends React.Component {
                     rowData={this.state.rowData}
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
                     onCellClicked={this.canEditCell.bind(this)}
-                    suppressHorizontalScroll={true}
                     enableCellChangeFlash={true}
                 >
                 </AgGridReact>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }}
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
                     onClick={
                         this.submitSave.bind(this)
                     }
@@ -424,13 +424,13 @@ class Projects_list_page extends React.Component {
                 {/*>*/}
                 {/*    Revert*/}
                 {/*</button>*/}
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '20px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
 
                 <Link to="/add_res_to_project/25">Add Resource</Link>
 
-                <div style = {{width: '200px', float :'right', marginTop: '20px'}}>
+                <div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>
                     <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
                     </Select>
                 </div>
