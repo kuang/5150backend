@@ -377,9 +377,9 @@ Route::put('/updateProject', function(Request $request) {
 Route::put('/updateResource', function(Request $request) {
     $data = $request->all();
     try {
-        DB::table('resources')->where('NetID', $data["OldNetID"])->update(
-            ["NetID" => $data["NewNetID"], "FirstName" => $data["FirstName"],
-                "LastName" => $data["LastName"], "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
+        DB::table('resources')->where('NetID', '=', $data["OldNetID"])->update(
+        ["NetID" => $data["NewNetID"], "FirstName" => $data["FirstName"],
+        "LastName" => $data["LastName"], "MaxHoursPerWeek" => $data["MaxHoursPerWeek"]]);
         return "Successfully Updated Existing Resource";
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {

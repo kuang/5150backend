@@ -66,13 +66,14 @@ class Individual_resource_page extends Component {
     async handleSubmit(event) {
         let data = {
             "OldNetID": this.state.oldNetID,
-            "NetID": this.state.netID,
+            "NewNetID": this.state.netID,
             "FirstName": this.state.firstName,
             "LastName": this.state.lastName,
             "MaxHoursPerWeek": this.state.hours
         }
 
         console.log("handleSubmit called");
+        console.log(data);
         let response = await fetch('../api/updateResource', {
             method: "PUT",
             headers: {
@@ -81,12 +82,13 @@ class Individual_resource_page extends Component {
             },
             body: JSON.stringify(data),
         });
-        console.log(response);
 
     }
-    handleChange(inputID, event) {
-        // console.log(inputID);
-        // this.setState({ value: event.target.value.toUpperCase() });
+    // sorta wacky- e.target.id is the id of the input, which corresponds to keys in State.
+    handleChange(e) {
+        this.setState({
+            [e.target.id]: e.target.value
+        });
     }
 
 
@@ -106,11 +108,6 @@ class Individual_resource_page extends Component {
             return <div></div>;
         }
     }
-    // handleSubmit(event) {
-    //     alert('submitted: ');
-    //     event.preventDefault();
-    // }
-
 
     render() {
         return (
@@ -118,30 +115,28 @@ class Individual_resource_page extends Component {
                 <Modal open={this.state.openEdit} onClose={this.closeEditModal.bind(this)} center closeIconSize={14}>
                     <h4 style={{ marginTop: '15px' }}>Resource Information</h4>
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <label style={{ marginRight: '15px' }}>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
                             First Name:
+                            <input style={{ float: 'right' }} type="text" id="firstName" defaultValue={this.state.firstName} onChange={this.handleChange.bind(this)} />
                         </label>
-                        <input style={{ float: 'right' }} type="text" id="firstName" defaultValue={this.state.firstName} onChange={this.handleChange(this.id)} />
                         <br></br>
 
-                        <label style={{ marginRight: '15px' }}>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
                             Last Name:
+                        <input style={{ float: 'right' }} type="text" id="lastName" defaultValue={this.state.lastName} onChange={this.handleChange.bind(this)} />
                         </label>
-
-                        <input style={{ float: 'right' }} type="text" id="lastName" defaultValue={this.state.lastName} onChange={this.handleChange(this.id)} />
                         <br></br>
 
-                        <label style={{ marginRight: '15px' }}>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
                             netID:
+                            <input style={{ float: 'right' }} type="text" id="netID" defaultValue={this.state.netID} onChange={this.handleChange.bind(this)} />
                         </label>
-                        <input style={{ float: 'right' }} type="text" id="netID" defaultValue={this.state.netID} onChange={this.handleChange(this.id)} />
                         <br></br>
 
-                        <label style={{ marginRight: '15px' }}>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
                             Max hours per Week:
+                            <input style={{ float: 'right' }} type="text" id="hours" defaultValue={this.state.hours} onChange={this.handleChange.bind(this)} />
                         </label>
-
-                        <input style={{ float: 'right' }} type="text" id="maxHours" defaultValue={this.state.hours} onChange={this.handleChange(this.id)} />
                         <br></br>
                         <input type="submit" value="Submit" />
                     </form>
