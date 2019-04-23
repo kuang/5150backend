@@ -407,7 +407,6 @@ class Projects_list_page extends React.Component {
                     rowData={this.state.rowData}
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
                     onCellClicked={this.canEditCell.bind(this)}
-                    suppressHorizontalScroll={true}
                     enableCellChangeFlash={true}
                 >
                 </AgGridReact>
