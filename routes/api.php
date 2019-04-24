@@ -88,6 +88,26 @@ Route::get('/displayResourcesAvailable/{projectID}', function ($projectID) {
         ->get();
 });
 
+/** Route that returns all resources and their hours for up to last 5 weeks */
+Route::get('/displayResourceHours', function () {
+    try {
+        $monday = DB::select(DB::raw('select DATE(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) ) as Monday'));
+        $curr_week = $monday[0]->Monday;
+        $table = DB::table('resources_per_projects')
+            ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources.MaxHoursPerWeek', 'schedules.Dates', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursPerWeek'))
+            ->where('schedules.Dates', '>=', $curr_week)
+            ->groupBy('resources.NetID', 'schedules.Dates')
+            ->get();
+        return $table;
+    } catch (Exception $e){
+        echo $e->getMessage();
+        return response('This information could not be displayed. Please try again.', 403);
+    }
+});
+
+
 /** Route that adds a new project to the projects table via POST Request
 {
 "ProjectName": "P2",
