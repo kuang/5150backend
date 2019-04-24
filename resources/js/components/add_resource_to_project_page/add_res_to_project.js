@@ -13,7 +13,6 @@ class twoList extends React.Component {
             toremove: [],                //array, NetID
             currentList: [],            //array, ResourceValue
             avaliableList: [],          //array, ResourceValue
-            bc: "#eee",
         }
         this.projectID = this.props.match.params.projectID;
 
@@ -75,29 +74,29 @@ class twoList extends React.Component {
         if (evt.currentTarget.dataset.selected == 0) {
             evt.currentTarget.style.backgroundColor = "#19e88e";
             evt.currentTarget.dataset.selected = 1;
-        }else{
+        } else {
             evt.currentTarget.style.backgroundColor = "#f6f6f6";
             evt.currentTarget.dataset.selected = 0;
             flag = false;
         }
         var netid = evt.currentTarget.dataset.id;
-        if(this.state.avaliableResources.hasOwnProperty(netid)){
-            if(flag){
+        if (this.state.avaliableResources.hasOwnProperty(netid)) {
+            if (flag) {
                 //add to toadd
                 this.state.toadd.push(netid);
-            }else{
+            } else {
                 //remove from toadd
                 let index = this.state.toadd.indexOf(netid);
-                this.state.toadd.splice(index,1);
+                this.state.toadd.splice(index, 1);
             }
-        }else{
-            if(flag){
+        } else {
+            if (flag) {
                 //add to toremove
                 this.state.toremove.push(netid);
-            }else{
+            } else {
                 //remove from toremove
                 let index = this.state.toremove.indexOf(netid);
-                this.state.toremove.splice(index,1);
+                this.state.toremove.splice(index, 1);
             }
         }
         console.log('----------');
@@ -112,10 +111,17 @@ class twoList extends React.Component {
 
 
         var resourcesList = renderList.map(function (resource) {
-            return <li key={resource.NetID} data-selected={0} data-id={resource.NetID} onClick={handler}>
-                <span className="liname">{resource.FirstName} {resource.LastName}</span>
-                {resource.Role}
-            </li>
+            if (actionList.indexOf(resource.NetID) > -1) {
+                return <li key={resource.NetID} data-selected={1} data-id={resource.NetID} onClick={handler} style={{ backgroundColor: "#19e88e" }}>
+                    <span className="liname">{resource.FirstName} {resource.LastName}</span>
+                    {resource.Role}
+                </li>
+            } else {
+                return <li key={resource.NetID} data-selected={0} data-id={resource.NetID} onClick={handler}>
+                    <span className="liname">{resource.FirstName} {resource.LastName}</span>
+                    {resource.Role}
+                </li>
+            }
         });
         return resourcesList;
     }
@@ -161,27 +167,50 @@ class twoList extends React.Component {
         }
     }
 
-    async handleAdd(evt){
-
-    }
-
-    async handleRemove(evt){
-        if(this.state.toremove.length>0){
+    async handleAdd(evt) {
+        // let newCurrentResources = this.state.currentResources;
+        // let newCurrentList = [];
+        // let newAvaliableResources = this.state.avaliableResources;
+        // let newAvaliableList = [];
+        for (var i = 0, len = this.state.toadd.length; i < len; i++) {
+            let netid = this.state.toadd[i];
             let data = {
                 "ProjectName": "P2",
-                "NetID": this.state.toremove[0],
+                "NetID": netid,
+                "Role": "Prgrammer",
             };
-            await fetch(`../api/deleteResourcePerProject`,{
-                method: `DELETE`,
-                headers:{
+            await fetch(`../api/addResourcePerProject`, {
+                method: 'POST',
+                headers: {
                     'Accepter': 'application/json',
                     'Content-Type': 'application/json',
                 },
-                body:JSON.stringify(data),
+                body: JSON.stringify(data),
             });
         }
+        console.log('add done');
+        this.state.toadd = [];
+        this.fetchResources(this.projectID);
+    }
 
-        evt.preventDefault();
+    async handleRemove(evt) {
+        for (var i = 0, len = this.state.toremove.length; i < len; i++) {
+            let data = {
+                "ProjectName": "P2",
+                "NetID": this.state.toremove[i],
+            };
+            await fetch(`../api/deleteResourcePerProject`, {
+                method: `DELETE`,
+                headers: {
+                    'Accepter': 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+        }
+        console.log('remove done');
+        this.state.toremove = [];
+        this.fetchResources(this.projectID);
     }
 
 
@@ -191,6 +220,7 @@ class twoList extends React.Component {
         return (
             <div>
                 <div className="leftContainer">
+                    <p>Avaliable resources to add to this project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 0)} placeholder="Search for names..." />
                     <ul className="myUL">
                         {leftList}
@@ -198,6 +228,7 @@ class twoList extends React.Component {
                     <button onClick={this.handleAdd}>Add Resources</button>
                 </div>
                 <div className="rightContainer">
+                    <p>Current resources in this project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 1)} placeholder="Search for names..." />
                     <ul className="myUL">
                         {rightList}
