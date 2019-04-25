@@ -13,6 +13,7 @@ class twoList extends React.Component {
             toremove: [],                //array, NetID
             currentList: [],            //array, ResourceValue
             avaliableList: [],          //array, ResourceValue
+            projectName: "",
         }
         this.projectID = this.props.match.params.projectID;
 
@@ -54,6 +55,7 @@ class twoList extends React.Component {
     componentDidMount() {
         this.fetchResources(this.projectID);
         //fetch returns a promise
+        this.getProjectName(this.projectID);
     }
 
     async fetchResources(projectID) {
@@ -65,7 +67,12 @@ class twoList extends React.Component {
         fetch(`../api/displayAllResources`)
             .then(result => result.json())
             .then(data => this.processData(data, 1));
+    }
 
+    async getProjectName(projectID){
+        fetch(`../api/displayProjectNameById/${projectID}`)
+            .then(result => result.json())
+            .then(data => this.setState({projectName:data[0].ProjectName}));
     }
 
 
@@ -99,9 +106,9 @@ class twoList extends React.Component {
                 this.state.toremove.splice(index, 1);
             }
         }
-        console.log('----------');
-        console.log(this.state.toadd);
-        console.log(this.state.toremove);
+        // console.log('----------');
+        // console.log(this.state.toadd);
+        // console.log(this.state.toremove);
     }
 
 
@@ -167,16 +174,15 @@ class twoList extends React.Component {
         }
     }
 
-    async handleAdd(evt,rolename) {
+    async handleAdd(evt, rolename) {
         // let newCurrentResources = this.state.currentResources;
         // let newCurrentList = [];
         // let newAvaliableResources = this.state.avaliableResources;
         // let newAvaliableList = [];
-        this.setState({ showPopup: true });
         for (var i = 0, len = this.state.toadd.length; i < len; i++) {
             let netid = this.state.toadd[i];
             let data = {
-                "ProjectName": "P2",
+                "ProjectName": this.state.projectName,
                 "NetID": netid,
                 "Role": rolename,
             };
@@ -189,15 +195,16 @@ class twoList extends React.Component {
                 body: JSON.stringify(data),
             });
         }
-        console.log('add done');
+        // console.log('add done');
         this.state.toadd = [];
         this.fetchResources(this.projectID);
     }
 
     async handleRemove(evt) {
+        // console.log(this.projectName);
         for (var i = 0, len = this.state.toremove.length; i < len; i++) {
             let data = {
-                "ProjectName": "P2",
+                "ProjectName": this.state.projectName,
                 "NetID": this.state.toremove[i],
             };
             await fetch(`../api/deleteResourcePerProject`, {
@@ -209,7 +216,7 @@ class twoList extends React.Component {
                 body: JSON.stringify(data),
             });
         }
-        console.log('remove done');
+        // console.log('remove done');
         this.state.toremove = [];
         this.fetchResources(this.projectID);
     }
@@ -218,15 +225,16 @@ class twoList extends React.Component {
         var leftList = this.generateListElements(this.state.avaliableList, this.state.toadd, this.clickHandler);
         var rightList = this.generateListElements(this.state.currentList, this.state.toremove, this.clickHandler);
         return (
-            <div>
+            <div style={{height:'550px'}}>
+                <h1>Project: {this.state.projectName}</h1>
                 <div className="leftContainer">
-                    <p>Avaliable resources to add to this project</p>
+                    <p>Avaliable resources to add to project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 0)} placeholder="Search for names..." />
                     <ul className="myUL">
                         {leftList}
                     </ul>
-                    <button onClick={(event)=>this.handleAdd(event,"Programmer")}>Add as Programmer</button>
-                    <button onClick={(event)=>this.handleAdd(event,"Product Manager")}>Add as PM</button>
+                    <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
+                    <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>
                 </div>
                 <div className="rightContainer">
                     <p>Current resources in this project</p>

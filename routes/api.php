@@ -24,7 +24,7 @@ Route::get('/displayAllProjects', function () {
 
 /** Route that returns all of the rows in the resources table */
 Route::get('/displayAllResources', function() {
-    return DB::table("resources")->get();
+    return DB::table("resources")->orderBy('FirstName')->orderBy('LastName')->get();
 });
 
 /** Route that returns all of the rows in the resources_per_projects table */
@@ -45,6 +45,11 @@ Route::get('/displayProjectInfo/{projectID}', function ($projectID) {
 /** Route that returns all general info on a given resource */
 Route::get('/displayResourceInfo/{resourceID}', function ($resourceID) {
     return DB::table("resources")->where('resourceID', '=', $resourceID)->get();
+});
+
+/** Route that returns project Name of a given projectID */
+Route::get('/displayProjectNameById/{projectID}', function ($projectID){
+    return DB::table("projects")->select('ProjectName')->where('ProjectID','=',$projectID)->get();
 });
 
 
@@ -75,6 +80,8 @@ Route::get('/displayResourcesPerProject/{projectID}', function ($projectID) {
         ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
         ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role')
         ->where('resources_per_projects.ProjectID', '=', $projectID)
+        ->orderBy('resources.FirstName')
+        ->orderBy('resources.LastName')
         ->get();
 });
 
