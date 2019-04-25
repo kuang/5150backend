@@ -167,17 +167,18 @@ class twoList extends React.Component {
         }
     }
 
-    async handleAdd(evt) {
+    async handleAdd(evt,rolename) {
         // let newCurrentResources = this.state.currentResources;
         // let newCurrentList = [];
         // let newAvaliableResources = this.state.avaliableResources;
         // let newAvaliableList = [];
+        this.setState({ showPopup: true });
         for (var i = 0, len = this.state.toadd.length; i < len; i++) {
             let netid = this.state.toadd[i];
             let data = {
                 "ProjectName": "P2",
                 "NetID": netid,
-                "Role": "Prgrammer",
+                "Role": rolename,
             };
             await fetch(`../api/addResourcePerProject`, {
                 method: 'POST',
@@ -213,7 +214,6 @@ class twoList extends React.Component {
         this.fetchResources(this.projectID);
     }
 
-
     render() {
         var leftList = this.generateListElements(this.state.avaliableList, this.state.toadd, this.clickHandler);
         var rightList = this.generateListElements(this.state.currentList, this.state.toremove, this.clickHandler);
@@ -225,7 +225,8 @@ class twoList extends React.Component {
                     <ul className="myUL">
                         {leftList}
                     </ul>
-                    <button onClick={this.handleAdd}>Add Resources</button>
+                    <button onClick={(event)=>this.handleAdd(event,"Programmer")}>Add as Programmer</button>
+                    <button onClick={(event)=>this.handleAdd(event,"Product Manager")}>Add as PM</button>
                 </div>
                 <div className="rightContainer">
                     <p>Current resources in this project</p>
