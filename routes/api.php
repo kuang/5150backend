@@ -24,7 +24,7 @@ Route::get('/displayAllProjects', function () {
 
 /** Route that returns all of the rows in the resources table */
 Route::get('/displayAllResources', function() {
-    return DB::table("resources")->get();
+    return DB::table("resources")->orderBy('FirstName')->orderBy('LastName')->get();
 });
 
 /** Route that returns all of the rows in the resources_per_projects table */
@@ -45,6 +45,11 @@ Route::get('/displayProjectInfo/{projectID}', function ($projectID) {
 /** Route that returns all general info on a given resource */
 Route::get('/displayResourceInfo/{resourceID}', function ($resourceID) {
     return DB::table("resources")->where('resourceID', '=', $resourceID)->get();
+});
+
+/** Route that returns project Name of a given projectID */
+Route::get('/displayProjectNameById/{projectID}', function ($projectID){
+    return DB::table("projects")->select('ProjectName')->where('ProjectID','=',$projectID)->get();
 });
 
 
@@ -75,6 +80,8 @@ Route::get('/displayResourcesPerProject/{projectID}', function ($projectID) {
         ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
         ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources_per_projects.Role')
         ->where('resources_per_projects.ProjectID', '=', $projectID)
+        ->orderBy('resources.FirstName')
+        ->orderBy('resources.LastName')
         ->get();
 });
 
@@ -87,6 +94,26 @@ Route::get('/displayResourcesAvailable/{projectID}', function ($projectID) {
         ->groupBy('resources.NetID')
         ->get();
 });
+
+/** Route that returns all resources and their hours for up to last 5 weeks */
+Route::get('/displayResourceHours', function () {
+    try {
+        $monday = DB::select(DB::raw('select DATE(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) ) as Monday'));
+        $curr_week = $monday[0]->Monday;
+        $table = DB::table('resources_per_projects')
+            ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources.MaxHoursPerWeek', 'schedules.Dates', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursPerWeek'))
+            ->where('schedules.Dates', '>=', $curr_week)
+            ->groupBy('resources.NetID', 'schedules.Dates')
+            ->get();
+        return $table;
+    } catch (Exception $e){
+        echo $e->getMessage();
+        return response('This information could not be displayed. Please try again.', 403);
+    }
+});
+
 
 /** Route that adds a new project to the projects table via POST Request
 {
@@ -142,7 +169,7 @@ Route::post('/addResource', function(Request $request) {
         if ($e instanceof \Illuminate\Database\QueryException) {
             $error_code= $e->errorInfo[1];
             if($error_code == 1062){
-                return response('A resource already exists with this name', 403);
+                return response('A resource already exists with this NetID', 403);
             }
         }
         return response('This resource could not be added. Please try again.', 403);
@@ -182,7 +209,9 @@ Route::post('/addResourcePerProject', function(Request $request) {
         $dates = DB::table('resources_per_projects')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
             ->select('Dates')
-            ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
+            ->where('resources_per_projects.ProjectID', '=', $project_id)
+            ->distinct()
+            ->get();
 //        echo($dates);
         foreach($dates as $d){
             DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0]);

@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Request;
 Route::view('/', 'app');
 Route::view('/resource', 'app');
 Route::view('/individual_resource/{id}', 'app');
+Route::view('/add_res_to_project/{projectID}', 'app');

@@ -7,7 +7,7 @@ import Individual_project_page from './individual_project_page/individual_projec
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import Projects_list_page from './projects_list_page/projects_list_page.js'
 import Resource_list_page from './resource_list_page/resource_list_page.js'
-import add_res_to_project from './add_resource_to_project_page/add_resource_to_project_page.js';
+import add_res_to_project from './add_resource_to_project_page/add_res_to_project.js';
 class App extends Component {
     render() {
         return (
