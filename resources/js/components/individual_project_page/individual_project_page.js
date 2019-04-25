@@ -385,7 +385,7 @@ class Projects_list_page extends React.Component {
      * @returns {*}
      */
     render() {
-
+        let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
         return (
             <div
                 className="ag-theme-balham"
@@ -428,7 +428,7 @@ class Projects_list_page extends React.Component {
 
                 <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
 
-                <Link to="/add_res_to_project/25">Add Resource</Link>
+                <Link to={addResPageUrl}>Add Resource</Link>
 
                 <div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>
                     <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
