@@ -393,6 +393,8 @@ class Projects_list_page extends React.Component {
     async addOldWeek() {
         this.currentDate = this.currentDate.subtract(7, 'days');
         let projectID = this.props.match.params.projectID;
+
+        // TODO: perhaps cache the data so there is no need to keep on maybe API calls
         await fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
