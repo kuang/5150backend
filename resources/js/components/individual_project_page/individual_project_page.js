@@ -7,6 +7,7 @@ import Modal from 'react-responsive-modal';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Select from 'react-select';
+var moment = require('moment');
 
 class Projects_list_page extends React.Component {
 
@@ -23,6 +24,7 @@ class Projects_list_page extends React.Component {
             { label: "Done", value: 3 },
             { label: "On Hold", value: 4 },
         ];
+        this.currentDate = moment();
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : null,
@@ -57,11 +59,21 @@ class Projects_list_page extends React.Component {
         let columnNames = new Set();
         let prevNetID = null;
         let currentJSON = {};
-
+        let currentWeekRecorded = false;
+        let dataIndex = 0;
         for (let i = 0; i < data.length; i++) {
             let currentSchedule = data[i];
             let currentNetID = currentSchedule.NetID;
             let currentHeader = currentSchedule.Dates;
+            if (!moment(currentHeader).isSameOrAfter(this.currentDate, 'week')) {
+                continue;
+            }
+            if (!currentWeekRecorded) {
+                this.dataIndex = i;
+                console.log(this.dataIndex);
+                currentWeekRecorded = true;
+            }
+
             let fullName = currentSchedule.FirstName + " " + currentSchedule.LastName;
 
             if (currentNetID != prevNetID) {
@@ -97,10 +109,10 @@ class Projects_list_page extends React.Component {
         let dates = columnDefs.slice(3);
         let dateComparator = function (a, b) {
             if (a.field < b.field) {
-                return 1;
+                return -1;
             }
             if (a.field > b.field) {
-                return -1;
+                return 1;
             }
             return 0;
         };
@@ -124,7 +136,7 @@ class Projects_list_page extends React.Component {
             .then(data => this.processData(data))
             .then(function (newStuff) {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
-            }.bind(this))
+            }.bind(this));
 
         let response = await fetch(`../api/displayProjectInfo/${projectID}`);
         let actualResponse = await response.json();
@@ -377,6 +389,18 @@ class Projects_list_page extends React.Component {
     handleChange(selection) {
         this.setState({selectedOption: selection});
     }
+
+    async addOldWeek() {
+        this.currentDate = this.currentDate.subtract(7, 'days');
+        let projectID = this.props.match.params.projectID;
+        await fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(function (newStuff) {
+                this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
+            }.bind(this));
+    }
+
     /***
      * Makes POST Request to save data
      */
@@ -424,17 +448,22 @@ class Projects_list_page extends React.Component {
                 {/*>*/}
                 {/*    Revert*/}
                 {/*</button>*/}
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>+ Week</button>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
-
-                <Link to={addResPageUrl}>Add Resource</Link>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
 
                 <div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>
                     <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
                     </Select>
                 </div>
+
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.addOldWeek.bind(this)}
+                >
+                    See Old Week
+                </button>
                 {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
+
+                <Link to={addResPageUrl}>Add Resource</Link>
             </div>
         );
     }
