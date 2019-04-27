@@ -330,10 +330,10 @@ class Projects_list_page extends React.Component {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this));
         
-        if (moment(this.latestDate).isSameOrAfter(this.dueDate)) {
+        if (moment(this.latestDate).isAfter(this.dueDate)) {
             this.addDueDateNotification();
             let updatedData = {"ProjectID" : projectID, "DueDate" : this.latestDate};
-            fetch('../api/updateProjectDueDate', {
+            await fetch('../api/updateProjectDueDate', {
                 method: "PUT",
                 headers: {
                     'Accept': 'application/json',
