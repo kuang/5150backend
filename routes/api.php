@@ -701,3 +701,10 @@ Route::put("/updateProjectStatus", function(Request $request) {
 //     DB::table('projects')->delete();
 //     return('Database cleared successfully');
 // });
+
+Route::put("/updateProjectDueDate", function(Request $request) {
+    $data = $request->all();
+    echo("here");
+    DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
+    return "Successfully Updated Existing Project";
+});

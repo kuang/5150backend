@@ -323,7 +323,6 @@ class Projects_list_page extends React.Component {
             },
             body: JSON.stringify(newData)
         });
-        console.log(response);
         let response2 = await fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
@@ -333,6 +332,15 @@ class Projects_list_page extends React.Component {
         
         if (moment(this.latestDate).isSameOrAfter(this.dueDate)) {
             this.addDueDateNotification();
+            let updatedData = {"ProjectID" : projectID, "DueDate" : this.latestDate};
+            fetch('../api/updateProjectDueDate', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            });
         }
     }
 
