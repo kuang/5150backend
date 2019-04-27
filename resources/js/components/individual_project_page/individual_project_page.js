@@ -7,7 +7,9 @@ import Modal from 'react-responsive-modal';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Select from 'react-select';
-var moment = require('moment');
+import Popup from 'reactjs-popup';
+
+let moment = require('moment');
 
 class Projects_list_page extends React.Component {
 
@@ -24,6 +26,7 @@ class Projects_list_page extends React.Component {
             { label: "Done", value: 3 },
             { label: "On Hold", value: 4 },
         ];
+        this.dueDate = undefined; // dueDate of the project
         this.currentDate = moment();
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
@@ -60,7 +63,6 @@ class Projects_list_page extends React.Component {
         let prevNetID = null;
         let currentJSON = {};
         let currentWeekRecorded = false;
-        let dataIndex = 0;
         for (let i = 0; i < data.length; i++) {
             let currentSchedule = data[i];
             let currentNetID = currentSchedule.NetID;
@@ -69,8 +71,6 @@ class Projects_list_page extends React.Component {
                 continue;
             }
             if (!currentWeekRecorded) {
-                this.dataIndex = i;
-                console.log(this.dataIndex);
                 currentWeekRecorded = true;
             }
 
@@ -142,6 +142,7 @@ class Projects_list_page extends React.Component {
         let actualResponse = await response.json();
         console.log(actualResponse);
         let currentStatus = actualResponse[0]["Status"];
+        this.dueDate = actualResponse[0]["DueDate"];
 
         if (currentStatus == "Ongoing") {
             this.setState({selectedOption: { label: "Ongoing", value: 1 }});
@@ -308,7 +309,6 @@ class Projects_list_page extends React.Component {
      * @returns {Promise<void>}
      */
     async addOneWeek() {
-        console.log("adding a week");
         let projectID = this.props.match.params.projectID;
         let newData = { "ProjectID": projectID };
         let response = await fetch('../api/addOneWeek', {
@@ -327,6 +327,7 @@ class Projects_list_page extends React.Component {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this))
     }
+
 
     async submitAddOneWeek() {
         confirmAlert({
@@ -463,6 +464,7 @@ class Projects_list_page extends React.Component {
                 >
                     See Old Week
                 </button>
+
                 {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
 
                 <Link to={addResPageUrl}>Add Resource</Link>
