@@ -341,6 +341,7 @@ class Projects_list_page extends React.Component {
                 },
                 body: JSON.stringify(updatedData)
             });
+            this.dueDate = this.latestDate;
         }
     }
 
