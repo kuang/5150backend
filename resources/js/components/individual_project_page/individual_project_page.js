@@ -399,7 +399,6 @@ class Projects_list_page extends React.Component {
     }
 
     async addOldWeek() {
-        this.addDueDateNotification();
         this.currentDate = this.currentDate.subtract(7, 'days');
         let projectID = this.props.match.params.projectID;
 
