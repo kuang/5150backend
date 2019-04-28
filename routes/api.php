@@ -256,7 +256,8 @@ Route::post('/addSchedule', function(Request $request) {
         $schedule_id = $schedule_id_json["ScheduleID"];
 
         DB::table('schedules')->insertGetId(
-            ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]), "HoursPerWeek" => $data["HoursPerWeek"]]);
+            ["ScheduleID" => $schedule_id, "Dates" => date_create($data["Dates"]),
+                "HoursPerWeek" => $data["HoursPerWeek"], "Comment" => ""]);
         return "Successfully Added New Schedule";
     } catch (Exception $e){
         if ($e instanceof \Illuminate\Database\QueryException) {
@@ -300,7 +301,7 @@ Route::post("/addOneWeek", function(Request $request) {
                 ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
             foreach($ids as $i){
                 $date = $monday[0];
-                DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->LastMonday, 'HoursPerWeek' => 40]);
+                DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->LastMonday, 'HoursPerWeek' => 40, "Comment" => ""]);
             }
             return response("Successfully inserted first week", 200);
         } else {
@@ -313,13 +314,13 @@ Route::post("/addOneWeek", function(Request $request) {
 //            return $monday;
             $ids = DB::table('resources_per_projects')->select('ScheduleID')
                 ->where('resources_per_projects.ProjectID', '=', $project_id)->get();
-            echo($ids);
+//            echo($ids);
             foreach($ids as $i){
                 $date = $monday[0];
                 $hours_array = DB::table('schedules')->select('HoursPerWeek')
                     ->where([['ScheduleID', $i->ScheduleID], ["Dates", $last_week]])->get();
                 $prev_hours = (count($hours_array) > 0 ? $hours_array[0]->HoursPerWeek : 40);
-                DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->Monday, 'HoursPerWeek' => $prev_hours]);
+                DB::table('schedules')->insert(['ScheduleID' =>  $i->ScheduleID, 'Dates' => $date->Monday, 'HoursPerWeek' => $prev_hours, "Comment" => ""]);
             }
             return response("Successfully inserted next week", 200);
         }
