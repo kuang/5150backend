@@ -7,7 +7,9 @@ import Modal from 'react-responsive-modal';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Select from 'react-select';
+import ReactNotification from "react-notifications-component";
 
+let moment = require('moment');
 class Projects_list_page extends React.Component {
 
     /*** Constructor that is called when component is initialized. Entry point of this component
@@ -16,6 +18,8 @@ class Projects_list_page extends React.Component {
      */
     constructor(props) {
         super(props);
+        this.addDueDateNotification = this.addDueDateNotification.bind(this);
+        this.notificationDOMRef = React.createRef();
         this.updatedRows = new Set();
         this.statusOptions = [
             { label: "Ongoing", value: 1 },
@@ -23,6 +27,9 @@ class Projects_list_page extends React.Component {
             { label: "Done", value: 3 },
             { label: "On Hold", value: 4 },
         ];
+        this.dueDate = undefined; // dueDate of the project
+        this.currentDate = moment();
+        this.latestDate = undefined
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : null,
@@ -57,11 +64,18 @@ class Projects_list_page extends React.Component {
         let columnNames = new Set();
         let prevNetID = null;
         let currentJSON = {};
-
+        let currentWeekRecorded = false;
         for (let i = 0; i < data.length; i++) {
             let currentSchedule = data[i];
             let currentNetID = currentSchedule.NetID;
             let currentHeader = currentSchedule.Dates;
+            if (!moment(currentHeader).isSameOrAfter(this.currentDate, 'week')) {
+                continue;
+            }
+            if (!currentWeekRecorded) {
+                currentWeekRecorded = true;
+            }
+
             let fullName = currentSchedule.FirstName + " " + currentSchedule.LastName;
 
             if (currentNetID != prevNetID) {
@@ -97,14 +111,16 @@ class Projects_list_page extends React.Component {
         let dates = columnDefs.slice(3);
         let dateComparator = function (a, b) {
             if (a.field < b.field) {
-                return 1;
+                return -1;
             }
             if (a.field > b.field) {
-                return -1;
+                return 1;
             }
             return 0;
         };
         dates.sort(dateComparator);
+        this.latestDate = dates[dates.length-1].field;
+        console.log(this.latestDate);
         columnDefs = columnDefs.slice(0, 3).concat(dates);
         return { "rowData": rowData, "columnDefs": columnDefs };
     }
@@ -124,12 +140,13 @@ class Projects_list_page extends React.Component {
             .then(data => this.processData(data))
             .then(function (newStuff) {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
-            }.bind(this))
+            }.bind(this));
 
         let response = await fetch(`../api/displayProjectInfo/${projectID}`);
         let actualResponse = await response.json();
         console.log(actualResponse);
         let currentStatus = actualResponse[0]["Status"];
+        this.dueDate = actualResponse[0]["DueDate"];
 
         if (currentStatus == "Ongoing") {
             this.setState({selectedOption: { label: "Ongoing", value: 1 }});
@@ -296,7 +313,6 @@ class Projects_list_page extends React.Component {
      * @returns {Promise<void>}
      */
     async addOneWeek() {
-        console.log("adding a week");
         let projectID = this.props.match.params.projectID;
         let newData = { "ProjectID": projectID };
         let response = await fetch('../api/addOneWeek', {
@@ -307,13 +323,26 @@ class Projects_list_page extends React.Component {
             },
             body: JSON.stringify(newData)
         });
-        console.log(response);
-        fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+        let response2 = await fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
             .then(function (newStuff) {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
-            }.bind(this))
+            }.bind(this));
+        
+        if (moment(this.latestDate).isAfter(this.dueDate)) {
+            this.addDueDateNotification();
+            let updatedData = {"ProjectID" : projectID, "DueDate" : this.latestDate};
+            await fetch('../api/updateProjectDueDate', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData)
+            });
+            this.dueDate = this.latestDate;
+        }
     }
 
     async submitAddOneWeek() {
@@ -377,6 +406,34 @@ class Projects_list_page extends React.Component {
     handleChange(selection) {
         this.setState({selectedOption: selection});
     }
+
+    async addOldWeek() {
+        this.currentDate = this.currentDate.subtract(7, 'days');
+        let projectID = this.props.match.params.projectID;
+
+        // TODO: perhaps cache the data so there is no need to keep on maybe API calls
+        await fetch(`../api/displayResourceInfoPerProject/${projectID}`)
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(function (newStuff) {
+                this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
+            }.bind(this));
+    }
+
+    addDueDateNotification() {
+        this.notificationDOMRef.current.addNotification({
+            title: "Warning",
+            message: "Project Will Be Overdue",
+            type: "warning",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: { duration: 5000 },
+            dismissable: { click: true }
+        });
+    }
+
     /***
      * Makes POST Request to save data
      */
@@ -385,7 +442,7 @@ class Projects_list_page extends React.Component {
      * @returns {*}
      */
     render() {
-
+        let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
         return (
             <div
                 className="ag-theme-balham"
@@ -401,6 +458,8 @@ class Projects_list_page extends React.Component {
                 <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
                     <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
                 </Modal>
+
+                <ReactNotification ref={this.notificationDOMRef} />
 
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
@@ -418,23 +477,23 @@ class Projects_list_page extends React.Component {
                 >
                     Save
                 </button>
-                {/*<button style={{ height: '30px', width: '100px', marginRight: '10px' }}*/}
-                {/*    onClick={this.restoreData.bind(this)*/}
-                {/*    }*/}
-                {/*>*/}
-                {/*    Revert*/}
-                {/*</button>*/}
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>Add Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>+ Week</button>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>Delete Week</button>
-
-                <Link to="/add_res_to_project/25">Add Resource</Link>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
 
                 <div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>
                     <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
                     </Select>
                 </div>
+
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.addOldWeek.bind(this)}
+                >
+                    See Old Week
+                </button>
+
                 {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
+
+                <Link to={addResPageUrl}>Add Resource</Link>
             </div>
         );
     }
