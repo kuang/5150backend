@@ -705,7 +705,19 @@ Route::put("/updateProjectStatus", function(Request $request) {
 
 Route::put("/updateProjectDueDate", function(Request $request) {
     $data = $request->all();
-    echo("here");
-    DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
+    DB::table('projects')->where('ProjectID' ,"=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
+    return "Successfully Updated Existing Project";
+});
+
+/***
+ * {
+ * ScheduleID: scheduleID,
+ * Dates: date
+ * Comment: comment
+ * }
+ */
+Route::put("/updateComment", function(Request $request) {
+    $data = $request->all();
+    DB::table('schedules')->where([['ScheduleID' ,"=", $data["ScheduleID"]], ['Dates', "=", $data["Dates"]]])->update(["Comment" => $data["Comment"]]);
     return "Successfully Updated Existing Project";
 });
