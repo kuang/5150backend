@@ -93,7 +93,6 @@ class Resource_list_page extends React.Component {
 			currJSON[currHeader] = currHours;
 		}
 		rowData.push(currJSON);
-		// console.log(rowData);
 		return { "rowData": rowData, "columnDefs": columnDefs };
 	}
 
