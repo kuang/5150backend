@@ -692,7 +692,7 @@ Route::put("/updateProjectStatus", function(Request $request) {
     $data = $request->all();
     DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(
         ["Status" => $data["Status"]]);
-    return "Successfully Updated Existing Project";
+    return "Successfully Updated Project Status";
 });
 /** Route that clears all records from all tables */
 // Route::get('/clear', function() {
@@ -706,18 +706,30 @@ Route::put("/updateProjectStatus", function(Request $request) {
 Route::put("/updateProjectDueDate", function(Request $request) {
     $data = $request->all();
     DB::table('projects')->where('ProjectID' ,"=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
-    return "Successfully Updated Existing Project";
+    return "Successfully Updated Project Due Date";
 });
 
 /***
  * {
- * ScheduleID: scheduleID,
- * Dates: date
+ * ProjectID: projectID,
+ * NetID: netID,
+ * Dates: date,
  * Comment: comment
  * }
  */
 Route::put("/updateComment", function(Request $request) {
     $data = $request->all();
-    DB::table('schedules')->where([['ScheduleID' ,"=", $data["ScheduleID"]], ['Dates', "=", $data["Dates"]]])->update(["Comment" => $data["Comment"]]);
-    return "Successfully Updated Existing Project";
+
+    $project_id = $data["ProjectID"];
+
+    $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+    $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+    $resource_id = $resource_id_json["ResourceID"];
+
+    $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
+    $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+    $schedule_id = $schedule_id_json["ScheduleID"];
+
+    DB::table('schedules')->where([['ScheduleID' ,"=", $schedule_id], ['Dates', "=", $data["Dates"]]])->update(["Comment" => $data["Comment"]]);
+    return "Successfully Updated Comment";
 });
