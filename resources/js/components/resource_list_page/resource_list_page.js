@@ -41,7 +41,7 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
-		console.log(data);
+		// console.log(data);
 		let columnDefs = [
 			{ headerName: 'NetID', field: 'netid' },
 			{ headerName: 'Name', field: 'name' },
@@ -55,27 +55,56 @@ class Resource_list_page extends React.Component {
 
 		let rowData = [];
 		let currJSON = {};
+		let colNames = new Set();
+		let prevNetId = null;
+
 		for (let i = 0; i < data.length; i++) {
 			let curr = data[i];
 			let currID = curr.NetID;
+			let currHeader = curr.Dates;
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
 
-			currJSON = {
-				netid: currID,
-				name: fullName,
-				maxHourPerWeek: maxHour,
-				detailLink: id
-			};
-			rowData.push(currJSON);
+			if (currID != prevNetId) {
+				if (prevNetId != null) {
+					rowData.push(currJSON);
+				}
+				prevNetId = currID;
+				currJSON = {
+					netid: currID,
+					name: fullName,
+					maxHourPerWeek: maxHour,
+					detailLink: id
+				};
+			}
+			let currHours = curr.TotalHoursPerWeek;
+			if (!colNames.has(currHeader)) {
+				colNames.add(currHeader);
+				let newColDef = {
+					headerName: currHeader,
+					field: currHeader,
+					sortable: true,
+					filter: "agTextColumnFilter",
+					suppressMovable: true
+				};
+				columnDefs.push(newColDef);
+			}
+			currJSON[currHeader] = currHours;
 		}
+		rowData.push(currJSON);
 		// console.log(rowData);
 		return { "rowData": rowData, "columnDefs": columnDefs };
 	}
 
 	componentDidMount() {
-		fetch('../api/displayAllResources')
+		// fetch('../api/displayAllResources')
+		// 	.then(result => result.json())
+		// 	.then(data => this.processData(data))
+		// 	.then(function (newData) {
+		// 		this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
+		// 	}.bind(this));
+		fetch('../api/displayResourceHours')
 			.then(result => result.json())
 			.then(data => this.processData(data))
 			.then(function (newData) {
@@ -170,7 +199,6 @@ class Resource_list_page extends React.Component {
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
 					onClick={this.togglePopup.bind(this)}
 				>Add Resource</button>
-				<Link to='/individual_resource/4'>click</Link>
 			</div>
 		);
 	}
