@@ -43,7 +43,7 @@ class Individual_project_page extends React.Component {
                 headerName: "Role", field: "role", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"
             }],
             rowData: [],
-            openProjectFormModal: true,
+            openProjectFormModal: false,
             updatedProjectName: "",
             updatedProjectTechnology: "",
             updatedProjectDueDate: "",
@@ -481,6 +481,9 @@ class Individual_project_page extends React.Component {
 
     }
 
+    openProjectForm() {
+        this.setState({openProjectFormModal : true});
+    }
     /***
      * Makes POST Request to save data
      */
@@ -587,6 +590,10 @@ class Individual_project_page extends React.Component {
 
                 <Link to={addResPageUrl}>Add Resource</Link>
 
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openProjectForm.bind(this)}
+                >
+                    Edit Project
+                </button>
             </div>
         );
     }
