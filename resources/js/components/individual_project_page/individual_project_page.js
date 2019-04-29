@@ -10,7 +10,7 @@ import Select from 'react-select';
 import ReactNotification from "react-notifications-component";
 
 let moment = require('moment');
-class Projects_list_page extends React.Component {
+class Individual_project_page extends React.Component {
 
     /*** Constructor that is called when component is initialized. Entry point of this component
      *
@@ -29,7 +29,7 @@ class Projects_list_page extends React.Component {
         ];
         this.dueDate = undefined; // dueDate of the project
         this.currentDate = moment();
-        this.latestDate = undefined
+        this.latestDate = undefined;
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : null,
@@ -42,7 +42,13 @@ class Projects_list_page extends React.Component {
             }, {
                 headerName: "Role", field: "role", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"
             }],
-            rowData: []
+            rowData: [],
+            openProjectFormModal: true,
+            updatedProjectName: "",
+            updatedProjectTechnology: "",
+            updatedProjectDueDate: "",
+            updatedProjectStartDate: "",
+            updatedProjectMaxHours: ""
         }
     }
 
@@ -57,7 +63,7 @@ class Projects_list_page extends React.Component {
         console.log(data);
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
-            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
+            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
             { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
         ];
         let rowData = [];
@@ -120,7 +126,6 @@ class Projects_list_page extends React.Component {
         };
         dates.sort(dateComparator);
         this.latestDate = dates[dates.length-1].field;
-        console.log(this.latestDate);
         columnDefs = columnDefs.slice(0, 3).concat(dates);
         return { "rowData": rowData, "columnDefs": columnDefs };
     }
@@ -144,7 +149,6 @@ class Projects_list_page extends React.Component {
 
         let response = await fetch(`../api/displayProjectInfo/${projectID}`);
         let actualResponse = await response.json();
-        console.log(actualResponse);
         let currentStatus = actualResponse[0]["Status"];
         this.dueDate = actualResponse[0]["DueDate"];
 
@@ -174,7 +178,6 @@ class Projects_list_page extends React.Component {
      * Clears the edited rows so we don't save the same information twice
      */
     async saveData() {
-        console.log("Saving Data");
         let data = this.state.rowData;
         let projectID = this.props.match.params.projectID;
         // let updateSuccessful = await fetch('../api/updateMostRecentRowData', {
@@ -194,7 +197,6 @@ class Projects_list_page extends React.Component {
             },
             body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
         });
-        console.log(statusUpdateSuccessful);
 
         let updatedRows = this.updatedRows;
 
@@ -211,7 +213,6 @@ class Projects_list_page extends React.Component {
                 "Dates": key,
                 "HoursPerWeek": hours
             };
-            console.log(newData);
             let response = await fetch('../api/updateSchedule', {
                 method: "PUT",
                 headers: {
@@ -220,7 +221,6 @@ class Projects_list_page extends React.Component {
                 },
                 body: JSON.stringify(newData)
             });
-            console.log(response);
         }
         updatedRows.forEach(processData);
         this.updatedRows.clear();
@@ -251,7 +251,6 @@ class Projects_list_page extends React.Component {
      * @param event
      */
     addUpdatedRow(event) {
-        console.log("SUP");
         let numericalInput = Number(event.value);
         let editedColumn = event.colDef.field;
         let rowIndex = event.rowIndex;
@@ -273,7 +272,7 @@ class Projects_list_page extends React.Component {
      */
     canEditCell(event) {
         if (event.value == undefined) {
-            this.setState({ "openNoScheduleWarning": true });
+            this.setState({ openNoScheduleWarning: true });
             return;
         }
     }
@@ -365,7 +364,6 @@ class Projects_list_page extends React.Component {
     }
 
     async deleteOneWeek() {
-        console.log("deleting a week");
         let projectID = this.props.match.params.projectID;
         let newData = { "ProjectID": projectID };
         let response = await fetch('../api/deleteLastWeek', {
@@ -376,7 +374,6 @@ class Projects_list_page extends React.Component {
             },
             body: JSON.stringify(newData)
         });
-        console.log(response);
         fetch(`../api/displayResourceInfoPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data))
@@ -434,6 +431,27 @@ class Projects_list_page extends React.Component {
         });
     }
 
+    displayComment(event) {
+        console.log(event);
+    }
+
+    closeFormModal() {
+        this.setState({openProjectFormModal :false});
+    }
+
+    handleFormInputChange(e) {
+        console.log(this);
+        this.setState({[e.target.id] : e.target.value});
+    }
+
+    /*** Handle PUT Request upon form being submitted
+     *
+     * @param event
+     */
+    async handleFormSubmit(event) {
+        console.log("hello");
+        console.log(event);
+    }
     /***
      * Makes POST Request to save data
      */
@@ -459,13 +477,48 @@ class Projects_list_page extends React.Component {
                     <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
                 </Modal>
 
+                <Modal open ={this.state.openProjectFormModal} onClose= {this.closeFormModal.bind(this)}
+                >
+                    <form onSubmit={this.handleFormSubmit.bind(this)}>
+                        <br></br>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Name:
+                            <input id  = "updatedProjectName" style = {{float: 'right'}} type="text" value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
+                        </label>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Technology:
+                            <input id = "updatedProjectTechnology" style = {{float: 'right'}} type="text" value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
+                        </label>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            MaxHours:
+                            <input id = "updatedProjectMaxHours" style = {{float: 'right'}} type="number" min="0" value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
+                        </label>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            StartDate:
+                            <input id = "updatedProjectStartDate" style = {{float: 'right'}} type="date" value={this.state.updatedProjectStartDate}
+                                   onChange={this.handleFormInputChange.bind(this)} />
+                        </label>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            DueDate:
+                            <input id = "updatedProjectDueDate" style = {{float: 'right'}} type="date" value={this.state.updatedProjectDueDate}
+                                   onChange={this.handleFormInputChange.bind(this)} />
+                        </label>
+                        <br></br>
+                        <input type="submit" value="Submit" />
+
+                    </form>
+                </Modal>
                 <ReactNotification ref={this.notificationDOMRef} />
 
                 <AgGridReact
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
-                    onCellClicked={this.canEditCell.bind(this)}
+                    onCellClicked={this.displayComment.bind(this)}
                     enableCellChangeFlash={true}
                 >
                 </AgGridReact>
@@ -494,9 +547,10 @@ class Projects_list_page extends React.Component {
                 {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
 
                 <Link to={addResPageUrl}>Add Resource</Link>
+
             </div>
         );
     }
 }
 
-export default Projects_list_page
+export default Individual_project_page
