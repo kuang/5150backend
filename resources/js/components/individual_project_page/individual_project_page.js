@@ -302,7 +302,7 @@ class Individual_project_page extends React.Component {
      */
     submitSave() {
         confirmAlert({
-            title: 'Save Confirmation',
+            title: 'Confirm Save',
             message: 'Are you sure you want to save?',
             buttons: [
                 {
@@ -359,7 +359,7 @@ class Individual_project_page extends React.Component {
     async submitAddOneWeek() {
         confirmAlert({
             title: 'Confirm To Add One Week',
-            message: 'Are you sure to do this?',
+            message: 'Are you sure you want to add one week?',
             buttons: [
                 {
                     label: 'Yes',
@@ -396,7 +396,7 @@ class Individual_project_page extends React.Component {
     async submitDeleteLastWeek() {
         confirmAlert({
             title: 'Confirm To Delete Last Week',
-            message: 'Are you sure to do this?',
+            message: 'Are you sure you want to delete the last week?',
             buttons: [
                 {
                     label: 'Yes',
