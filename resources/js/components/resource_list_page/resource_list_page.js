@@ -42,12 +42,36 @@ class Resource_list_page extends React.Component {
 
 	async processData(data) {
 
-		let columnDefs = [
-			{ headerName: 'NetID', field: 'netid', width:100, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
-			{ headerName: 'Name', field: 'name', width:160, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
-			{ headerName: 'Max Hour Per Week', width: 160, field: 'maxHourPerWeek',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
-			{ headerName: 'Details', field: 'detailLink', width:100, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left',  cellRenderer: function(params) {
-				console.log(params.value);
+		let columnDefs = [{
+			headerName: 'NetID',
+			field: 'netid',
+			width:100,
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left'
+		},{
+			headerName: 'Name',
+			field: 'name',
+			width:160,
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left'
+		},{
+			headerName: 'Max Hour Per Week',
+			width: 160,
+			field: 'maxHourPerWeek',
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left'
+		},{
+			headerName: 'Details',
+			field: 'detailLink',
+			width:100,
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left',
+			cellRenderer: function(params) {
+				// console.log(params.value);
       	// return '<a href="https://www.google.com" target="_blank">'+ params.value+'</a>'
 				return "<a href='/individual_resource/" + params.value +"'>Details</a>"
   		}}
@@ -65,7 +89,6 @@ class Resource_list_page extends React.Component {
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
-			// console.log(id);
 
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
@@ -104,6 +127,7 @@ class Resource_list_page extends React.Component {
 		// 	.then(function (newData) {
 		// 		this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
 		// 	}.bind(this));
+		
 		fetch('../api/displayResourceHours')
 			.then(result => result.json())
 			.then(data => this.processData(data))
