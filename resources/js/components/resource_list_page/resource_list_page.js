@@ -43,10 +43,10 @@ class Resource_list_page extends React.Component {
 	async processData(data) {
 
 		let columnDefs = [
-			{ headerName: 'NetID', field: 'netid', filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
-			{ headerName: 'Name', field: 'name',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
-			{ headerName: 'Max Hour Per Week', field: 'maxHourPerWeek',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
-			{ headerName: 'Details', field: 'detailLink',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left',  cellRenderer: function(params) {
+			{ headerName: 'NetID', field: 'netid', width:100, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
+			{ headerName: 'Name', field: 'name', width:160, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
+			{ headerName: 'Max Hour Per Week', width: 160, field: 'maxHourPerWeek',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
+			{ headerName: 'Details', field: 'detailLink', width:100, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left',  cellRenderer: function(params) {
 				console.log(params.value);
       	// return '<a href="https://www.google.com" target="_blank">'+ params.value+'</a>'
 				return "<a href='/individual_resource/" + params.value +"'>Details</a>"
