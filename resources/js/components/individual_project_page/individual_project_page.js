@@ -359,6 +359,7 @@ class Individual_project_page extends React.Component {
     async submitAddOneWeek() {
         confirmAlert({
             title: 'Confirm To Add One Week',
+
             message: 'Are you sure you want to do this?',
             buttons: [
                 {
