@@ -63,7 +63,7 @@ class Individual_project_page extends React.Component {
         console.log(data);
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
-            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
+            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide:true},
             { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
         ];
         let rowData = [];
@@ -589,12 +589,12 @@ class Individual_project_page extends React.Component {
 
                 {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
 
-                <Link to={addResPageUrl}>Add Resource</Link>
-
                 <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openProjectForm.bind(this)}
                 >
                     Edit Project
                 </button>
+
+                <Link to={addResPageUrl}>Add Resource</Link>
             </div>
         );
     }
