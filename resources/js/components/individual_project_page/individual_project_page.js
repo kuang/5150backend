@@ -23,9 +23,9 @@ class Individual_project_page extends React.Component {
         this.updatedRows = new Set();
         this.statusOptions = [
             { label: "Ongoing", value: 1 },
-            { label: "Inactive", value: 2 },
-            { label: "Done", value: 3 },
-            { label: "On Hold", value: 4 },
+            { label: "Inactive", value: 1 },
+            { label: "Done", value: 1 },
+            { label: "On Hold", value: 1 },
         ];
         this.dueDate = undefined; // dueDate of the project
         this.currentDate = moment();
@@ -152,7 +152,7 @@ class Individual_project_page extends React.Component {
         let actualResponse = await response.json();
         let currentStatus = actualResponse[0]["Status"];
         this.dueDate = actualResponse[0]["DueDate"];
-        let theSelectedOption = {}
+        let theSelectedOption = {};
         if (currentStatus == "Ongoing") {
             theSelectedOption= { label: "Ongoing", value: 1 };
         }
