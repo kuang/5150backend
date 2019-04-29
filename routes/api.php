@@ -685,15 +685,6 @@ Route::get("/displayMostRecentRowData/{projectID}", function($projectID) {
     return response($mostRecentData, 200);
 });
 
-/***
- * {ProjectID : projectID (integer), Status: status (string)}
- */
-Route::put("/updateProjectStatus", function(Request $request) {
-    $data = $request->all();
-    DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(
-        ["Status" => $data["Status"]]);
-    return "Successfully Updated Project Status";
-});
 /** Route that clears all records from all tables */
 // Route::get('/clear', function() {
 //     DB::table('schedules')->delete();
@@ -734,6 +725,96 @@ Route::put("/updateComment", function(Request $request) {
     return "Successfully Updated Comment";
 });
 
+/***
+ * {
+ * ProjectID: projectID
+ * ProjectName: projectName
+ * }
+ */
 Route::put("/updateProjectName", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["ProjectName" => $data["ProjectName"]]);
+    return "Successfully Updated Project Name";
+});
 
+/***
+ * {
+ * ProjectID: projectID
+ * Technology: technology
+ * }
+ */
+Route::put("/updateProjectTechnology", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["Technology" => $data["Technology"]]);
+    return "Successfully Updated Project Technology";
+});
+
+/***
+ * {
+ * ProjectID: projectID
+ * EstMaxHours: max hours
+ * }
+ *
+ */
+Route::put("/updateProjectMaxHours", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["EstMaxHours" => $data["EstMaxHours"]]);
+    return "Successfully Updated Project Max Hours";
+});
+
+/***
+ * {
+ * ProjectID: projectID
+ * StartDate: start date
+ * }
+ *
+ */
+Route::put("/updateProjectStartDate", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["StartDate" => $data["StartDate"]]);
+    return "Successfully Updated Project Start Date";
+});
+
+/***
+ * {
+ * ProjectID: projectID
+ * DueDate: due date
+ * }
+ *
+ */
+Route::put("/updateProjectDueDate", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
+    return "Successfully Updated Project Due Date";
+});
+
+/***
+ * {ProjectID : projectID (integer), Status: status (string)}
+ */
+Route::put("/updateProjectStatus", function(Request $request) {
+    $data = $request->all();
+    DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(
+        ["Status" => $data["Status"]]);
+    return "Successfully Updated Project Status";
+});
+
+/***
+ * {
+ * ProjectID: projectID
+ * DueDate: due date
+ * EstMaxHours: max hours
+ * ProjectName: projectName
+ * StartDate: start date
+ * Technology: technology
+ * Status: status
+ * }
+ *
+ */
+Route::put("/updateIndividualProjectInfo", function(Request $request) {
+    $data = $request->all();
+    DB::table('projects')->where('ProjectID', "=", $data["ProjectID"])->update(
+        ["Status" => $data["Status"], "DueDate" => $data["DueDate"],
+            "StartDate" => $data["StartDate"], "EstMaxHours" => $data["EstMaxHours"],
+            "Technology" => $data["Technology"], "ProjectName" => $data["ProjectName"]]);
+    return "Successfully Updated Data";
 });

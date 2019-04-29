@@ -32,7 +32,7 @@ class Individual_project_page extends React.Component {
         this.latestDate = undefined;
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
-            selectedOption : null,
+            selectedOption : "",
             openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
@@ -43,7 +43,7 @@ class Individual_project_page extends React.Component {
                 headerName: "Role", field: "role", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"
             }],
             rowData: [],
-            openProjectFormModal: true,
+            openProjectFormModal: false,
             updatedProjectName: "",
             updatedProjectTechnology: "",
             updatedProjectDueDate: "",
@@ -63,7 +63,7 @@ class Individual_project_page extends React.Component {
         console.log(data);
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
-            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
+            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide:true},
             { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
         ];
         let rowData = [];
@@ -151,25 +151,36 @@ class Individual_project_page extends React.Component {
         let actualResponse = await response.json();
         let currentStatus = actualResponse[0]["Status"];
         this.dueDate = actualResponse[0]["DueDate"];
-
+        let theSelectedOption = {}
         if (currentStatus == "Ongoing") {
-            this.setState({selectedOption: { label: "Ongoing", value: 1 }});
-            return;
+            theSelectedOption= { label: "Ongoing", value: 1 };
         }
 
-        if (currentStatus == "Inactive") {
-            this.setState({selectedOption: { label: "Inactive", value: 2 }});
-            return;
-        }
-        if (currentStatus == "Done") {
-            this.setState({selectedOption: { label: "Done", value: 3 }});
-            return;
+        else if (currentStatus == "Inactive") {
+            theSelectedOption={ label: "Inactive", value: 2 };
         }
 
-        if (currentStatus == "On Hold") {
-            this.setState({selectedOption: { label: "On Hold", value: 4 }});
-            return;
+        else if (currentStatus == "Done") {
+            theSelectedOption = { label: "Done", value: 3 };
         }
+
+        else if (currentStatus == "On Hold") {
+           theSelectedOption = { label: "On Hold", value: 4 };
+        }
+
+        let projectName = actualResponse[0]["ProjectName"];
+        let technology = actualResponse[0]["Technology"];
+        let maxHours = actualResponse[0]["EstMaxHours"];
+        let startDate = actualResponse[0]["StartDate"];
+        let dueDate = actualResponse[0]["DueDate"];
+        this.setState({
+            updatedProjectName: projectName,
+            updatedProjectTechnology: technology,
+            updatedProjectMaxHours: maxHours,
+            updatedProjectStartDate: startDate,
+            updatedProjectDueDate: dueDate,
+            selectedOption: theSelectedOption
+        });
     }
 
     /***
@@ -189,14 +200,14 @@ class Individual_project_page extends React.Component {
         //     body: JSON.stringify({ "projectID": projectID, "data": data })
         // });
 
-        let statusUpdateSuccessful = await fetch('../api/updateProjectStatus', {
-            method: "PUT",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
-        });
+        // let statusUpdateSuccessful = await fetch('../api/updateProjectStatus', {
+        //     method: "PUT",
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
+        // });
 
         let updatedRows = this.updatedRows;
 
@@ -263,6 +274,7 @@ class Individual_project_page extends React.Component {
             event.api.refreshCells();
             return;
         }
+        
         this.updatedRows.add({ "rowIndex": rowIndex, "colIndex": editedColumn });
     }
 
@@ -291,7 +303,7 @@ class Individual_project_page extends React.Component {
     submitSave() {
         confirmAlert({
             title: 'Confirm To Save',
-            message: 'Are you sure to do this?',
+            message: 'Are you sure you want to do this?',
             buttons: [
                 {
                     label: 'Yes',
@@ -347,7 +359,8 @@ class Individual_project_page extends React.Component {
     async submitAddOneWeek() {
         confirmAlert({
             title: 'Confirm To Add One Week',
-            message: 'Are you sure to do this?',
+
+            message: 'Are you sure you want to do this?',
             buttons: [
                 {
                     label: 'Yes',
@@ -384,7 +397,7 @@ class Individual_project_page extends React.Component {
     async submitDeleteLastWeek() {
         confirmAlert({
             title: 'Confirm To Delete Last Week',
-            message: 'Are you sure to do this?',
+            message: 'Are you sure you want to do this?',
             buttons: [
                 {
                     label: 'Yes',
@@ -440,17 +453,38 @@ class Individual_project_page extends React.Component {
     }
 
     handleFormInputChange(e) {
-        console.log(this);
         this.setState({[e.target.id] : e.target.value});
     }
 
-    /*** Handle PUT Request upon form being submitted
+    /*** Handle PUT Request(s) upon form being submitted
      *
      * @param event
      */
     async handleFormSubmit(event) {
-        console.log("hello");
-        console.log(event);
+        let projectID = this.props.match.params.projectID;
+        let newData = {
+            "ProjectID" : projectID,
+            "DueDate" : this.state.updatedProjectDueDate,
+            "StartDate" : this.state.updatedProjectStartDate,
+            "Technology" : this.state.updatedProjectTechnology,
+            "Status" : this.state.selectedOption["label"],
+            "ProjectName" : this.state.updatedProjectName,
+            "EstMaxHours" : this.state.updatedProjectMaxHours
+        };
+
+        let response = await fetch('../api/updateIndividualProjectInfo', {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        });
+
+    }
+
+    openProjectForm() {
+        this.setState({openProjectFormModal : true});
     }
     /***
      * Makes POST Request to save data
@@ -508,6 +542,16 @@ class Individual_project_page extends React.Component {
                                    onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Project Status
+                            <br></br>
+                            <br></br>
+                            <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
+                            </Select>
+                        </label>
+
+                        <br></br>
+                        <br></br>
                         <input type="submit" value="Submit" />
 
                     </form>
@@ -534,10 +578,10 @@ class Individual_project_page extends React.Component {
 
                 <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
 
-                <div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>
-                    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
-                    </Select>
-                </div>
+                {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
+                {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
+                {/*    </Select>*/}
+                {/*</div>*/}
 
                 <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.addOldWeek.bind(this)}
                 >
@@ -546,8 +590,12 @@ class Individual_project_page extends React.Component {
 
                 {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
 
-                <Link to={addResPageUrl}>Add Resource</Link>
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openProjectForm.bind(this)}
+                >
+                    Edit Project
+                </button>
 
+                <Link to={addResPageUrl}>Add Resource</Link>
             </div>
         );
     }
