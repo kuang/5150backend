@@ -114,6 +114,30 @@ Route::get('/displayResourceHours', function () {
     }
 });
 
+/** Route that returns a particular comment */
+Route::get('/getComment/{projectID}/{netID}/{date}', function ($projectID, $netID, $date) {
+    try {
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $netID)->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
+
+        $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $projectID], ['ResourceID', '=', $resource_id]])->get();
+        $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+        $schedule_id = $schedule_id_json["ScheduleID"];
+
+        $comment = DB::table('schedules')
+            ->select('Comment')
+            ->where([['schedules.ScheduleID', '=', $schedule_id], ['schedules.Dates', '=', $date]])
+            ->get();
+
+        return $comment;
+
+    } catch (Exception $e){
+        echo $e->getMessage();
+        return response('This comment could not be returned. Please try again.', 403);
+    }
+});
+
 
 /** Route that adds a new project to the projects table via POST Request
 {
@@ -818,3 +842,4 @@ Route::put("/updateIndividualProjectInfo", function(Request $request) {
             "Technology" => $data["Technology"], "ProjectName" => $data["ProjectName"]]);
     return "Successfully Updated Data";
 });
+

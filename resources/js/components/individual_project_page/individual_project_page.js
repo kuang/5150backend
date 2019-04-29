@@ -23,9 +23,9 @@ class Individual_project_page extends React.Component {
         this.updatedRows = new Set();
         this.statusOptions = [
             { label: "Ongoing", value: 1 },
-            { label: "Inactive", value: 2 },
-            { label: "Done", value: 3 },
-            { label: "On Hold", value: 4 },
+            { label: "Inactive", value: 1 },
+            { label: "Done", value: 1 },
+            { label: "On Hold", value: 1 },
         ];
         this.dueDate = undefined; // dueDate of the project
         this.currentDate = moment();
@@ -48,7 +48,8 @@ class Individual_project_page extends React.Component {
             updatedProjectTechnology: "",
             updatedProjectDueDate: "",
             updatedProjectStartDate: "",
-            updatedProjectMaxHours: ""
+            updatedProjectMaxHours: "",
+            openCommentView: false
         }
     }
 
@@ -151,7 +152,7 @@ class Individual_project_page extends React.Component {
         let actualResponse = await response.json();
         let currentStatus = actualResponse[0]["Status"];
         this.dueDate = actualResponse[0]["DueDate"];
-        let theSelectedOption = {}
+        let theSelectedOption = {};
         if (currentStatus == "Ongoing") {
             theSelectedOption= { label: "Ongoing", value: 1 };
         }
@@ -444,8 +445,28 @@ class Individual_project_page extends React.Component {
         });
     }
 
-    displayComment(event) {
+    async displayComment(event) {
+        let projectID = this.props.match.params.projectID;
+        let netID = event.data.netid;
+        let date = event.colDef.headerName;
+        let name = event.data.name;
         console.log(event);
+        let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
+        let commentData = await response.json();
+        let comment = commentData[0]["Comment"];
+        if (comment != "") {
+            this.notificationDOMRef.current.addNotification({
+                title: name + " For The Week Of " + date,
+                message: comment,
+                type: "warning",
+                insert: "top-right",
+                container: "top-right",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: { duration: 0 },
+                dismissable: { click: true }
+            });
+        }
     }
 
     closeFormModal() {
@@ -486,6 +507,18 @@ class Individual_project_page extends React.Component {
     openProjectForm() {
         this.setState({openProjectFormModal : true});
     }
+
+    viewComments() {
+
+    }
+
+    closeCommentViewModal() {
+        this.setState({openCommentView : false});
+    }
+
+    openCommentViewModal() {
+        this.setState({openCommentView : true});
+    }
     /***
      * Makes POST Request to save data
      */
@@ -493,6 +526,10 @@ class Individual_project_page extends React.Component {
      *
      * @returns {*}
      */
+
+    handleCommentFormSubmit() {
+
+    }
     render() {
         let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
         return (
@@ -507,6 +544,35 @@ class Individual_project_page extends React.Component {
                     <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
                 </Modal>
 
+                <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
+                    <form onSubmit={this.handleCommentFormSubmit.bind(this)}>
+                        <br></br>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Name:
+
+                        </label>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            NetID:
+
+                        </label>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Week:
+                        </label>
+
+
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Comment:
+                        </label>
+
+                        <input type="submit" value="Submit" />
+
+                    </form>
+                </Modal>
+
                 <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
                     <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
                 </Modal>
@@ -518,27 +584,27 @@ class Individual_project_page extends React.Component {
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
-                            <input id  = "updatedProjectName" style = {{float: 'right'}} type="text" value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id  = "updatedProjectName" style = {{float: 'right'}} type="text" required value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Technology:
-                            <input id = "updatedProjectTechnology" style = {{float: 'right'}} type="text" value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id = "updatedProjectTechnology" style = {{float: 'right'}} type="text" required value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             MaxHours:
-                            <input id = "updatedProjectMaxHours" style = {{float: 'right'}} type="number" min="0" value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id = "updatedProjectMaxHours" style = {{float: 'right'}} type="number" min="0" required value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             StartDate:
-                            <input id = "updatedProjectStartDate" style = {{float: 'right'}} type="date" value={this.state.updatedProjectStartDate}
+                            <input id = "updatedProjectStartDate" style = {{float: 'right'}} type="date" required value={this.state.updatedProjectStartDate}
                                    onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             DueDate:
-                            <input id = "updatedProjectDueDate" style = {{float: 'right'}} type="date" value={this.state.updatedProjectDueDate}
+                            <input id = "updatedProjectDueDate" style = {{float: 'right'}} type="date" required value={this.state.updatedProjectDueDate}
                                    onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
@@ -562,7 +628,7 @@ class Individual_project_page extends React.Component {
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
-                    onCellClicked={this.displayComment.bind(this)}
+                    onCellDoubleClicked={this.displayComment.bind(this)}
                     enableCellChangeFlash={true}
                 >
                 </AgGridReact>
@@ -593,6 +659,11 @@ class Individual_project_page extends React.Component {
                 <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openProjectForm.bind(this)}
                 >
                     Edit Project
+                </button>
+
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openCommentViewModal.bind(this)}
+                >
+                    Edit Comment
                 </button>
 
                 <Link to={addResPageUrl}>Add Resource</Link>
