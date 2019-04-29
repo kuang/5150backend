@@ -19,6 +19,7 @@ class Individual_project_page extends React.Component {
     constructor(props) {
         super(props);
         this.addDueDateNotification = this.addDueDateNotification.bind(this);
+        this.displayComment = this.displayComment.bind(this);
         this.notificationDOMRef = React.createRef();
         this.updatedRows = new Set();
         this.statusOptions = [
@@ -455,7 +456,7 @@ class Individual_project_page extends React.Component {
             container: "top-right",
             animationIn: ["animated", "fadeIn"],
             animationOut: ["animated", "fadeOut"],
-            dismiss: { duration: 5000 },
+            dismiss: { duration: 0 },
             dismissable: { click: true }
         });
     }
