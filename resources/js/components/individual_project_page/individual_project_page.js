@@ -444,7 +444,7 @@ class Individual_project_page extends React.Component {
         this.setState({[e.target.id] : e.target.value});
     }
 
-    /*** Handle PUT Request upon form being submitted
+    /*** Handle PUT Request(s) upon form being submitted
      *
      * @param event
      */
@@ -458,6 +458,50 @@ class Individual_project_page extends React.Component {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({"ProjectID":projectID, "ProjectName" : this.state.updatedProjectName})
+            });
+        }
+
+        if (this.state.updatedProjectTechnology != "") {
+            await fetch('../api/updateProjectTechnology', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"ProjectID":projectID, "Technology" : this.state.updatedProjectTechnology})
+            });
+        }
+
+        if (this.state.updatedProjectMaxHours != "") {
+            await fetch('../api/updateProjectMaxHours', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"ProjectID":projectID, "EstMaxHours" : this.state.updatedProjectMaxHours})
+            });
+        }
+
+        if (this.state.updatedProjectStartDate != "") {
+            await fetch('../api/updateProjectStartDate', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"ProjectID":projectID, "StartDate" : this.state.updatedProjectStartDate})
+            });
+        }
+
+        if (this.state.updatedProjectStartDate != "") {
+            await fetch('../api/updateProjectDueDate', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"ProjectID":projectID, "DueDate" : this.state.updatedProjectDueDate})
             });
         }
     }
