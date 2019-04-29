@@ -733,3 +733,7 @@ Route::put("/updateComment", function(Request $request) {
     DB::table('schedules')->where([['ScheduleID' ,"=", $schedule_id], ['Dates', "=", $data["Dates"]]])->update(["Comment" => $data["Comment"]]);
     return "Successfully Updated Comment";
 });
+
+Route::put("/updateProjectName", function(Request $request) {
+
+});
