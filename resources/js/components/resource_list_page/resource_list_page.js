@@ -41,12 +41,12 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
-		console.log(data);
+
 		let columnDefs = [
-			{ headerName: 'NetID', field: 'netid' },
-			{ headerName: 'Name', field: 'name' },
-			{ headerName: 'Max Hour Per Week', field: 'maxHourPerWeek' },
-			{ headerName: 'Details', field: 'detailLink', cellRenderer: function(params) {
+			{ headerName: 'NetID', field: 'netid', filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
+			{ headerName: 'Name', field: 'name',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
+			{ headerName: 'Max Hour Per Week', field: 'maxHourPerWeek',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'  },
+			{ headerName: 'Details', field: 'detailLink',filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left',  cellRenderer: function(params) {
 				console.log(params.value);
       	// return '<a href="https://www.google.com" target="_blank">'+ params.value+'</a>'
 				return "<a href='/individual_resource/" + params.value +"'>Details</a>"
@@ -65,7 +65,7 @@ class Resource_list_page extends React.Component {
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
-			console.log(id);
+			// console.log(id);
 
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
