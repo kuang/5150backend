@@ -446,11 +446,12 @@ class Individual_project_page extends React.Component {
     }
 
     displayComment(event) {
+        console.log(event);
         this.notificationDOMRef.current.addNotification({
-            title: "Warning",
+            title: "Comment",
             message: "Project Will Be Overdue",
             type: "warning",
-            insert: "top",
+            insert: "top-right",
             container: "top-right",
             animationIn: ["animated", "fadeIn"],
             animationOut: ["animated", "fadeOut"],
