@@ -19,7 +19,6 @@ class Individual_project_page extends React.Component {
     constructor(props) {
         super(props);
         this.addDueDateNotification = this.addDueDateNotification.bind(this);
-        this.displayComment = this.displayComment.bind(this);
         this.notificationDOMRef = React.createRef();
         this.updatedRows = new Set();
         this.statusOptions = [
@@ -447,6 +446,7 @@ class Individual_project_page extends React.Component {
     }
 
     displayComment(event) {
+        let projectID = this.props.match.params.projectID;
         console.log(event);
         this.notificationDOMRef.current.addNotification({
             title: "Comment",
@@ -626,7 +626,7 @@ class Individual_project_page extends React.Component {
 
                 <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openCommentViewModal.bind(this)}
                 >
-                    Comments
+                    Edit Comment
                 </button>
 
                 <Link to={addResPageUrl}>Add Resource</Link>
