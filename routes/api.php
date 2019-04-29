@@ -685,15 +685,6 @@ Route::get("/displayMostRecentRowData/{projectID}", function($projectID) {
     return response($mostRecentData, 200);
 });
 
-/***
- * {ProjectID : projectID (integer), Status: status (string)}
- */
-Route::put("/updateProjectStatus", function(Request $request) {
-    $data = $request->all();
-    DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(
-        ["Status" => $data["Status"]]);
-    return "Successfully Updated Project Status";
-});
 /** Route that clears all records from all tables */
 // Route::get('/clear', function() {
 //     DB::table('schedules')->delete();
@@ -795,4 +786,14 @@ Route::put("/updateProjectDueDate", function(Request $request) {
     $data = $request->all();
     DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
     return "Successfully Updated Project Due Date";
+});
+
+/***
+ * {ProjectID : projectID (integer), Status: status (string)}
+ */
+Route::put("/updateProjectStatus", function(Request $request) {
+    $data = $request->all();
+    DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(
+        ["Status" => $data["Status"]]);
+    return "Successfully Updated Project Status";
 });
