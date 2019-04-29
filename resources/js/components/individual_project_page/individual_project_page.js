@@ -445,20 +445,28 @@ class Individual_project_page extends React.Component {
         });
     }
 
-    displayComment(event) {
+    async displayComment(event) {
         let projectID = this.props.match.params.projectID;
+        let netID = event.data.netid;
+        let date = event.colDef.headerName;
+        let name = event.data.name;
         console.log(event);
-        this.notificationDOMRef.current.addNotification({
-            title: "Comment",
-            message: "Project Will Be Overdue",
-            type: "warning",
-            insert: "top-right",
-            container: "top-right",
-            animationIn: ["animated", "fadeIn"],
-            animationOut: ["animated", "fadeOut"],
-            dismiss: { duration: 0 },
-            dismissable: { click: true }
-        });
+        let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
+        let commentData = await response.json();
+        let comment = commentData[0]["Comment"];
+        if (comment != "") {
+            this.notificationDOMRef.current.addNotification({
+                title: name + " For The Week Of " + date,
+                message: comment,
+                type: "warning",
+                insert: "top-right",
+                container: "top-right",
+                animationIn: ["animated", "fadeIn"],
+                animationOut: ["animated", "fadeOut"],
+                dismiss: { duration: 0 },
+                dismissable: { click: true }
+            });
+        }
     }
 
     closeFormModal() {
