@@ -734,6 +734,65 @@ Route::put("/updateComment", function(Request $request) {
     return "Successfully Updated Comment";
 });
 
+/***
+ * {
+ * ProjectID: projectID
+ * ProjectName: projectName
+ * }
+ */
 Route::put("/updateProjectName", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["ProjectName" => $data["ProjectName"]]);
+    return "Successfully Updated Project Name";
+});
 
+/***
+ * {
+ * ProjectID: projectID
+ * Technology: technology
+ * }
+ */
+Route::put("/updateProjectTechnology", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["Technology" => $data["Technology"]]);
+    return "Successfully Updated Project Technology";
+});
+
+/***
+ * {
+ * ProjectID: projectID
+ * EstMaxHours: max hours
+ * }
+ *
+ */
+Route::put("/updateProjectMaxHours", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["EstMaxHours" => $data["EstMaxHours"]]);
+    return "Successfully Updated Project Max Hours";
+});
+
+/***
+ * {
+ * ProjectID: projectID
+ * StartDate: start date
+ * }
+ *
+ */
+Route::put("/updateProjectStartDate", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["StartDate" => $data["StartDate"]]);
+    return "Successfully Updated Project Start Date";
+});
+
+/***
+ * {
+ * ProjectID: projectID
+ * DueDate: due date
+ * }
+ *
+ */
+Route::put("/updateProjectDueDate", function(Request $request) {
+    $data = $request->all();
+    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
+    return "Successfully Updated Project Due Date";
 });

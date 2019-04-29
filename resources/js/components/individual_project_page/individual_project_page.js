@@ -449,8 +449,17 @@ class Individual_project_page extends React.Component {
      * @param event
      */
     async handleFormSubmit(event) {
-        console.log("hello");
-        console.log(event);
+        let projectID = this.props.match.params.projectID;
+        if (this.state.updatedProjectName != "") {
+            await fetch('../api/updateProjectName', {
+                method: "PUT",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"ProjectID":projectID, "ProjectName" : this.state.updatedProjectName})
+            });
+        }
     }
     /***
      * Makes POST Request to save data
