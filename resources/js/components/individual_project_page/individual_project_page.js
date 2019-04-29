@@ -526,6 +526,10 @@ class Individual_project_page extends React.Component {
      *
      * @returns {*}
      */
+
+    handleCommentFormSubmit() {
+
+    }
     render() {
         let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
         return (
@@ -541,7 +545,32 @@ class Individual_project_page extends React.Component {
                 </Modal>
 
                 <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
-                    <h3 style={{ marginTop: '15px' }}>Comment View</h3>
+                    <form onSubmit={this.handleCommentFormSubmit.bind(this)}>
+                        <br></br>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Name:
+
+                        </label>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            NetID:
+
+                        </label>
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Week:
+                        </label>
+
+
+                        <br></br>
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Comment:
+                        </label>
+
+                        <input type="submit" value="Submit" />
+
+                    </form>
                 </Modal>
 
                 <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
@@ -555,27 +584,27 @@ class Individual_project_page extends React.Component {
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
-                            <input id  = "updatedProjectName" style = {{float: 'right'}} type="text" value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id  = "updatedProjectName" style = {{float: 'right'}} type="text" required value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Technology:
-                            <input id = "updatedProjectTechnology" style = {{float: 'right'}} type="text" value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id = "updatedProjectTechnology" style = {{float: 'right'}} type="text" required value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             MaxHours:
-                            <input id = "updatedProjectMaxHours" style = {{float: 'right'}} type="number" min="0" value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id = "updatedProjectMaxHours" style = {{float: 'right'}} type="number" min="0" required value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             StartDate:
-                            <input id = "updatedProjectStartDate" style = {{float: 'right'}} type="date" value={this.state.updatedProjectStartDate}
+                            <input id = "updatedProjectStartDate" style = {{float: 'right'}} type="date" required value={this.state.updatedProjectStartDate}
                                    onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             DueDate:
-                            <input id = "updatedProjectDueDate" style = {{float: 'right'}} type="date" value={this.state.updatedProjectDueDate}
+                            <input id = "updatedProjectDueDate" style = {{float: 'right'}} type="date" required value={this.state.updatedProjectDueDate}
                                    onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
