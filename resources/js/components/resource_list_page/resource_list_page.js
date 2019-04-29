@@ -41,7 +41,6 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
-
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
@@ -127,7 +126,7 @@ class Resource_list_page extends React.Component {
 		// 	.then(function (newData) {
 		// 		this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
 		// 	}.bind(this));
-		
+
 		fetch('../api/displayResourceHours')
 			.then(result => result.json())
 			.then(data => this.processData(data))
