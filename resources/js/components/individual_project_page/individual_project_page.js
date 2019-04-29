@@ -151,25 +151,36 @@ class Individual_project_page extends React.Component {
         let actualResponse = await response.json();
         let currentStatus = actualResponse[0]["Status"];
         this.dueDate = actualResponse[0]["DueDate"];
-
+        let theSelectedOption = {}
         if (currentStatus == "Ongoing") {
-            this.setState({selectedOption: { label: "Ongoing", value: 1 }});
-            return;
+            theSelectedOption= { label: "Ongoing", value: 1 };
         }
 
-        if (currentStatus == "Inactive") {
-            this.setState({selectedOption: { label: "Inactive", value: 2 }});
-            return;
-        }
-        if (currentStatus == "Done") {
-            this.setState({selectedOption: { label: "Done", value: 3 }});
-            return;
+        else if (currentStatus == "Inactive") {
+            theSelectedOption={ label: "Inactive", value: 2 };
         }
 
-        if (currentStatus == "On Hold") {
-            this.setState({selectedOption: { label: "On Hold", value: 4 }});
-            return;
+        else if (currentStatus == "Done") {
+            theSelectedOption = { label: "Done", value: 3 };
         }
+
+        else if (currentStatus == "On Hold") {
+           theSelectedOption = { label: "On Hold", value: 4 };
+        }
+
+        let projectName = actualResponse[0]["ProjectName"];
+        let technology = actualResponse[0]["Technology"];
+        let maxHours = actualResponse[0]["EstMaxHours"];
+        let startDate = actualResponse[0]["StartDate"];
+        let dueDate = actualResponse[0]["DueDate"];
+        this.setState({
+            updatedProjectName: projectName,
+            updatedProjectTechnology: technology,
+            updatedProjectMaxHours: maxHours,
+            updatedProjectStartDate: startDate,
+            updatedProjectDueDate: dueDate,
+            selectedOption: theSelectedOption
+        });
     }
 
     /***
@@ -440,7 +451,6 @@ class Individual_project_page extends React.Component {
     }
 
     handleFormInputChange(e) {
-        console.log("change recorded")
         this.setState({[e.target.id] : e.target.value});
     }
 
@@ -449,75 +459,26 @@ class Individual_project_page extends React.Component {
      * @param event
      */
     async handleFormSubmit(event) {
-
         let projectID = this.props.match.params.projectID;
+        let newData = {
+            "ProjectID" : projectID,
+            "DueDate" : this.state.updatedProjectDueDate,
+            "StartDate" : this.state.updatedProjectStartDate,
+            "Technology" : this.state.updatedProjectTechnology,
+            "Status" : this.state.selectedOption["label"],
+            "ProjectName" : this.state.updatedProjectName,
+            "EstMaxHours" : this.state.updatedProjectMaxHours
+        };
 
-        if (this.state.updatedProjectName != "") {
-            var response = await fetch('../api/updateProjectName', {
-                method: "PUT",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({"ProjectID": projectID, "ProjectName": this.state.updatedProjectName})
-            });
-        }
-        if (this.state.updatedProjectTechnology != "") {
-            await fetch('../api/updateProjectTechnology', {
-                method: "PUT",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    "ProjectID": projectID,
-                    "Technology": this.state.updatedProjectTechnology
-                })
-            });
-        }
+        let response = await fetch('../api/updateIndividualProjectInfo', {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        });
 
-        if (this.state.updatedProjectMaxHours != "") {
-            await fetch('../api/updateProjectMaxHours', {
-                method: "PUT",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({"ProjectID": projectID, "EstMaxHours": this.state.updatedProjectMaxHours})
-            });
-        }
-        if (this.state.updatedProjectStartDate != "") {
-            await fetch('../api/updateProjectStartDate', {
-                method: "PUT",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({"ProjectID":projectID, "StartDate" : this.state.updatedProjectStartDate})
-            });
-        }
-
-        if (this.state.updatedProjectStartDate != "") {
-            await fetch('../api/updateProjectDueDate', {
-                method: "PUT",
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({"ProjectID":projectID, "DueDate" : this.state.updatedProjectDueDate})
-            });
-        }
-        // if (this.state.selectedOption["label"] != "") {
-        //     await fetch('../api/updateProjectStatus', {
-        //         method: "PUT",
-        //         headers: {
-        //             'Accept': 'application/json',
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
-        //     });
-        //     console.log(statusUpdateSuccessful);
-        // }
     }
 
     /***
@@ -576,16 +537,16 @@ class Individual_project_page extends React.Component {
                                    onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
-                        {/*<label style={{ marginRight: '15px', width: '100%' }}>*/}
-                        {/*    Project Status*/}
-                        {/*    <br></br>*/}
-                        {/*    <br></br>*/}
-                        {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
-                        {/*    </Select>*/}
-                        {/*</label>*/}
+                        <label style={{ marginRight: '15px', width: '100%' }}>
+                            Project Status
+                            <br></br>
+                            <br></br>
+                            <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
+                            </Select>
+                        </label>
 
-                        {/*<br></br>*/}
-                        {/*<br></br>*/}
+                        <br></br>
+                        <br></br>
                         <input type="submit" value="Submit" />
 
                     </form>

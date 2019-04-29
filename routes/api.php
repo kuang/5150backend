@@ -797,3 +797,24 @@ Route::put("/updateProjectStatus", function(Request $request) {
         ["Status" => $data["Status"]]);
     return "Successfully Updated Project Status";
 });
+
+/***
+ * {
+ * ProjectID: projectID
+ * DueDate: due date
+ * EstMaxHours: max hours
+ * ProjectName: projectName
+ * StartDate: start date
+ * Technology: technology
+ * Status: status
+ * }
+ *
+ */
+Route::put("/updateIndividualProjectInfo", function(Request $request) {
+    $data = $request->all();
+    DB::table('projects')->where('ProjectID', "=", $data["ProjectID"])->update(
+        ["Status" => $data["Status"], "DueDate" => $data["DueDate"],
+            "StartDate" => $data["StartDate"], "EstMaxHours" => $data["EstMaxHours"],
+            "Technology" => $data["Technology"], "ProjectName" => $data["ProjectName"]]);
+    return "Successfully Updated Data";
+});
