@@ -32,7 +32,7 @@ class Individual_project_page extends React.Component {
         this.latestDate = undefined;
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
-            selectedOption : null,
+            selectedOption : "",
             openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
@@ -189,14 +189,14 @@ class Individual_project_page extends React.Component {
         //     body: JSON.stringify({ "projectID": projectID, "data": data })
         // });
 
-        let statusUpdateSuccessful = await fetch('../api/updateProjectStatus', {
-            method: "PUT",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
-        });
+        // let statusUpdateSuccessful = await fetch('../api/updateProjectStatus', {
+        //     method: "PUT",
+        //     headers: {
+        //         'Accept': 'application/json',
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
+        // });
 
         let updatedRows = this.updatedRows;
 
@@ -440,7 +440,7 @@ class Individual_project_page extends React.Component {
     }
 
     handleFormInputChange(e) {
-        console.log(this);
+        console.log("change recorded")
         this.setState({[e.target.id] : e.target.value});
     }
 
@@ -449,18 +449,19 @@ class Individual_project_page extends React.Component {
      * @param event
      */
     async handleFormSubmit(event) {
+
         let projectID = this.props.match.params.projectID;
+
         if (this.state.updatedProjectName != "") {
-            await fetch('../api/updateProjectName', {
+            var response = await fetch('../api/updateProjectName', {
                 method: "PUT",
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({"ProjectID":projectID, "ProjectName" : this.state.updatedProjectName})
+                body: JSON.stringify({"ProjectID": projectID, "ProjectName": this.state.updatedProjectName})
             });
         }
-
         if (this.state.updatedProjectTechnology != "") {
             await fetch('../api/updateProjectTechnology', {
                 method: "PUT",
@@ -468,7 +469,10 @@ class Individual_project_page extends React.Component {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({"ProjectID":projectID, "Technology" : this.state.updatedProjectTechnology})
+                body: JSON.stringify({
+                    "ProjectID": projectID,
+                    "Technology": this.state.updatedProjectTechnology
+                })
             });
         }
 
@@ -479,10 +483,9 @@ class Individual_project_page extends React.Component {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({"ProjectID":projectID, "EstMaxHours" : this.state.updatedProjectMaxHours})
+                body: JSON.stringify({"ProjectID": projectID, "EstMaxHours": this.state.updatedProjectMaxHours})
             });
         }
-
         if (this.state.updatedProjectStartDate != "") {
             await fetch('../api/updateProjectStartDate', {
                 method: "PUT",
@@ -504,7 +507,19 @@ class Individual_project_page extends React.Component {
                 body: JSON.stringify({"ProjectID":projectID, "DueDate" : this.state.updatedProjectDueDate})
             });
         }
+        // if (this.state.selectedOption["label"] != "") {
+        //     await fetch('../api/updateProjectStatus', {
+        //         method: "PUT",
+        //         headers: {
+        //             'Accept': 'application/json',
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
+        //     });
+        //     console.log(statusUpdateSuccessful);
+        // }
     }
+
     /***
      * Makes POST Request to save data
      */
@@ -561,6 +576,16 @@ class Individual_project_page extends React.Component {
                                    onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
+                        {/*<label style={{ marginRight: '15px', width: '100%' }}>*/}
+                        {/*    Project Status*/}
+                        {/*    <br></br>*/}
+                        {/*    <br></br>*/}
+                        {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
+                        {/*    </Select>*/}
+                        {/*</label>*/}
+
+                        {/*<br></br>*/}
+                        {/*<br></br>*/}
                         <input type="submit" value="Submit" />
 
                     </form>
@@ -587,10 +612,10 @@ class Individual_project_page extends React.Component {
 
                 <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
 
-                <div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>
-                    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
-                    </Select>
-                </div>
+                {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
+                {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
+                {/*    </Select>*/}
+                {/*</div>*/}
 
                 <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.addOldWeek.bind(this)}
                 >
