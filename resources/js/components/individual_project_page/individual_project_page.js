@@ -48,7 +48,8 @@ class Individual_project_page extends React.Component {
             updatedProjectTechnology: "",
             updatedProjectDueDate: "",
             updatedProjectStartDate: "",
-            updatedProjectMaxHours: ""
+            updatedProjectMaxHours: "",
+            openCommentView: false
         }
     }
 
@@ -445,7 +446,17 @@ class Individual_project_page extends React.Component {
     }
 
     displayComment(event) {
-        console.log(event);
+        this.notificationDOMRef.current.addNotification({
+            title: "Warning",
+            message: "Project Will Be Overdue",
+            type: "warning",
+            insert: "top",
+            container: "top-right",
+            animationIn: ["animated", "fadeIn"],
+            animationOut: ["animated", "fadeOut"],
+            dismiss: { duration: 5000 },
+            dismissable: { click: true }
+        });
     }
 
     closeFormModal() {
@@ -486,6 +497,18 @@ class Individual_project_page extends React.Component {
     openProjectForm() {
         this.setState({openProjectFormModal : true});
     }
+
+    viewComments() {
+
+    }
+
+    closeCommentViewModal() {
+        this.setState({openCommentView : false});
+    }
+
+    openCommentViewModal() {
+        this.setState({openCommentView : true});
+    }
     /***
      * Makes POST Request to save data
      */
@@ -505,6 +528,10 @@ class Individual_project_page extends React.Component {
             >
                 <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
                     <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
+                </Modal>
+
+                <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
+                    <h3 style={{ marginTop: '15px' }}>Comment View</h3>
                 </Modal>
 
                 <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
@@ -562,7 +589,7 @@ class Individual_project_page extends React.Component {
                     columnDefs={this.state.columnDefs}
                     rowData={this.state.rowData}
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
-                    onCellClicked={this.displayComment.bind(this)}
+                    onCellDoubleClicked={this.displayComment.bind(this)}
                     enableCellChangeFlash={true}
                 >
                 </AgGridReact>
@@ -593,6 +620,11 @@ class Individual_project_page extends React.Component {
                 <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openProjectForm.bind(this)}
                 >
                     Edit Project
+                </button>
+
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openCommentViewModal.bind(this)}
+                >
+                    Comments
                 </button>
 
                 <Link to={addResPageUrl}>Add Resource</Link>
