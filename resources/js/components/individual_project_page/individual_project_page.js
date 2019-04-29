@@ -302,8 +302,8 @@ class Individual_project_page extends React.Component {
      */
     submitSave() {
         confirmAlert({
-            title: 'Confirm To Save',
-            message: 'Are you sure to do this?',
+            title: 'Save Confirmation',
+            message: 'Are you sure you want to save?',
             buttons: [
                 {
                     label: 'Yes',
