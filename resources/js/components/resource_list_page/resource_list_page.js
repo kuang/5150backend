@@ -41,13 +41,13 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
-		// console.log(data);
+		console.log(data);
 		let columnDefs = [
 			{ headerName: 'NetID', field: 'netid' },
 			{ headerName: 'Name', field: 'name' },
 			{ headerName: 'Max Hour Per Week', field: 'maxHourPerWeek' },
 			{ headerName: 'Details', field: 'detailLink', cellRenderer: function(params) {
-				// console.log(params.value);
+				console.log(params.value);
       	// return '<a href="https://www.google.com" target="_blank">'+ params.value+'</a>'
 				return "<a href='/individual_resource/" + params.value +"'>Details</a>"
   		}}
@@ -65,6 +65,7 @@ class Resource_list_page extends React.Component {
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
+			console.log(id);
 
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
@@ -165,8 +166,8 @@ class Resource_list_page extends React.Component {
 			<div
 				className="ag-theme-balham"
 				style={{
-					height: '70vh',
-					width: '800px'
+					height: '62vh',
+					width: '100vw'
 				}}
 			>
 				<AgGridReact

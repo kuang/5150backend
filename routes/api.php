@@ -103,7 +103,7 @@ Route::get('/displayResourceHours', function () {
         $table = DB::table('resources_per_projects')
             ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
-            ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources.MaxHoursPerWeek', 'schedules.Dates', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursPerWeek'))
+            ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources.MaxHoursPerWeek', 'schedules.Dates', 'resources.ResourceID', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursPerWeek'))
             ->where('schedules.Dates', '>=', $curr_week)
             ->groupBy('resources.NetID', 'schedules.Dates')
             ->get();
