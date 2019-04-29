@@ -274,6 +274,7 @@ class Individual_project_page extends React.Component {
             event.api.refreshCells();
             return;
         }
+        
         this.updatedRows.add({ "rowIndex": rowIndex, "colIndex": editedColumn });
     }
 
