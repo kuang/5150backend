@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import Header from './Header.js'
 import Individual_resource_page from './individual_resource_page/individual_resource_page.js'
 import Individual_project_page from './individual_project_page/individual_project_page.js'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, NavLink } from "react-router-dom";
 import Projects_list_page from './projects_list_page/projects_list_page.js'
 import Resource_list_page from './resource_list_page/resource_list_page.js'
 import add_res_to_project from './add_resource_to_project_page/add_res_to_project.js';
-import Login from './Login.js'
+import Login from './Login.js';
+import './navStyle.css';
+import logo from "./logo.jpg";
 
 class App extends Component {
   render() {
@@ -15,6 +17,15 @@ class App extends Component {
       <Router>
         <div>
           <nav>
+            <div className="navi">
+              <img src={logo}/>
+              <NavLink className="tag" to="/projects_list" activeStyle={{color:'green'}}><span>Project List</span></NavLink>
+              <NavLink className="tag" to="/resource/" activeStyle={{color:'green'}}><span>Resource List</span></NavLink>
+              {/* b31b1b */}
+              <Login/>
+            </div>
+
+
             <ul>
               <li>
                 <Link to="/">Home</Link>
