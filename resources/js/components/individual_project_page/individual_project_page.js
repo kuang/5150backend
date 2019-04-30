@@ -489,7 +489,7 @@ class Individual_project_page extends React.Component {
                 title: name + " For The Week Of " + date,
                 message: comment,
                 type: "warning",
-                insert: "top-right",
+                insert: "top",
                 container: "top-right",
                 animationIn: ["animated", "fadeIn"],
                 animationOut: ["animated", "fadeOut"],
@@ -579,10 +579,6 @@ class Individual_project_page extends React.Component {
             selectedOption: theSelectedOption,
             openProjectFormModal: true
         });
-    }
-
-    viewComments() {
-
     }
 
     closeCommentViewModal() {
