@@ -193,6 +193,9 @@ class Individual_project_page extends React.Component {
             updatedProjectDueDate: dueDate,
             selectedOption: theSelectedOption
         });
+        let names = await fetch(`../api/getNames/${projectID}`);
+        let json = await names.json();
+        console.log(json);
     }
 
     /***
@@ -523,8 +526,43 @@ class Individual_project_page extends React.Component {
 
     }
 
-    openProjectForm() {
-        this.setState({openProjectFormModal : true});
+    async openProjectForm() {
+        let projectID = this.props.match.params.projectID;
+        let response = await fetch(`../api/displayProjectInfo/${projectID}`);
+        let actualResponse = await response.json();
+        let currentStatus = actualResponse[0]["Status"];
+        this.dueDate = actualResponse[0]["DueDate"];
+        let theSelectedOption = {};
+        if (currentStatus == "Ongoing") {
+            theSelectedOption= { label: "Ongoing", value: 1 };
+        }
+
+        else if (currentStatus == "Inactive") {
+            theSelectedOption={ label: "Inactive", value: 2 };
+        }
+
+        else if (currentStatus == "Done") {
+            theSelectedOption = { label: "Done", value: 3 };
+        }
+
+        else if (currentStatus == "On Hold") {
+            theSelectedOption = { label: "On Hold", value: 4 };
+        }
+
+        let projectName = actualResponse[0]["ProjectName"];
+        let technology = actualResponse[0]["Technology"];
+        let maxHours = actualResponse[0]["EstMaxHours"];
+        let startDate = actualResponse[0]["StartDate"];
+        let dueDate = actualResponse[0]["DueDate"];
+        this.setState({
+            updatedProjectName: projectName,
+            updatedProjectTechnology: technology,
+            updatedProjectMaxHours: maxHours,
+            updatedProjectStartDate: startDate,
+            updatedProjectDueDate: dueDate,
+            selectedOption: theSelectedOption,
+            openProjectFormModal: true
+        });
     }
 
     viewComments() {
@@ -536,7 +574,10 @@ class Individual_project_page extends React.Component {
     }
 
     openCommentViewModal() {
-        this.setState({openCommentView : true});
+        this.setState({updatedCommentUser : "",
+            updatedCommentNetID: "",
+            updatedCommentWeek: "",
+            updatedCommentData: "", openCommentView : true});
     }
     /***
      * Makes POST Request to save data
@@ -605,7 +646,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Week:
                             <br></br>
-                            <Select value = {this.state.updatedCommentWeek} onChange = {this.handleCommentFormWeekUpdate.bind(this)} options = {this.statusOptions}>
+                            <Select value = {this.state.updatedCommentWeek} onChange = {this.handleCommentFormWeekUpdate.bind(this)} options = {this.resourceDateOptions}>
                             </Select>
                         </label>
 
