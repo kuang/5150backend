@@ -22,6 +22,7 @@ class Individual_project_page extends React.Component {
         this.addDueDateNotification = this.addDueDateNotification.bind(this);
         this.notificationDOMRef = React.createRef();
         this.updatedRows = new Set();
+        this.nameToNetID = new Map();
         this.statusOptions = [
             { label: "Ongoing", value: 1 },
             { label: "Inactive", value: 1 },
@@ -126,7 +127,8 @@ class Individual_project_page extends React.Component {
         let dates = columnDefs.slice(3);
 
         for (let i = 0; i < dates.length; i++) {
-            this.resourceDateOptions.push({label : dates[i]["headerName"], value: 1});
+            let name = dates[i]["headerName"];
+            this.resourceDateOptions.push({label : name, value: 1});
         }
 
         let dateComparator = function (a, b) {
@@ -198,7 +200,17 @@ class Individual_project_page extends React.Component {
         let names = await fetch(`../api/getNames/${projectID}`);
         let names_json = await names.json();
         for (let i = 0; i < names_json.length; i++) {
-            this.resourceNameOptions.push({label : names_json[i]["FirstName"] + " " + names_json[i]["LastName"], value: 1});
+            let name = names_json[i]["FirstName"] + " " + names_json[i]["LastName"];
+            let netid = names_json[i]["NetID"];
+            this.resourceNameOptions.push({label : name, value: 1});
+
+            if (this.nameToNetID.has(name)) {
+                let old_arr = this.nameToNetID.get(name);
+                old_arr.push(netid);
+                this.nameToNetID.set(name, old_arr);
+            } else {
+                this.nameToNetID.set(name, [netid]);
+            }
         }
     }
 
