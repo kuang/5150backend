@@ -32,6 +32,8 @@ class Individual_project_page extends React.Component {
         this.currentDate = moment();
         this.latestDate = undefined;
         this.resourceDateOptions = [];
+        this.resourceNameOptions = [];
+        this.resourceNetIDOptions = [];
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : "",
@@ -194,8 +196,10 @@ class Individual_project_page extends React.Component {
             selectedOption: theSelectedOption
         });
         let names = await fetch(`../api/getNames/${projectID}`);
-        let json = await names.json();
-        console.log(json);
+        let names_json = await names.json();
+        for (let i = 0; i < names_json.length; i++) {
+            this.resourceNameOptions.push({label : names_json[i]["FirstName"] + " " + names_json[i]["LastName"], value: 1});
+        }
     }
 
     /***
@@ -630,7 +634,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
                             <br></br>
-                            <Select value = {this.state.updatedCommentUser} onChange = {this.handleCommentFormUserUpdate.bind(this)} options = {this.statusOptions}>
+                            <Select value = {this.state.updatedCommentUser} onChange = {this.handleCommentFormUserUpdate.bind(this)} options = {this.resourceNameOptions}>
                             </Select>
 
                         </label>
@@ -638,7 +642,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             NetID:
                             <br></br>
-                            <Select value = {this.state.updatedCommentNetID} onChange = {this.handleCommentFormNetIDUpdate.bind(this)} options = {this.statusOptions}>
+                            <Select value = {this.state.updatedCommentNetID} onChange = {this.handleCommentFormNetIDUpdate.bind(this)} options = {this.resourceNetIDOptions}>
                             </Select>
 
                         </label>
