@@ -31,9 +31,10 @@ body {
     text-decoration: none;
 }
 
-Login {
+.loginButton {
+    /* padding: 6px; */
     margin: 5px;
-    margin-left: 250px;
+    margin-left: 390px;
     display: inline-block;
 }
 

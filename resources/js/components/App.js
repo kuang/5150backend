@@ -18,11 +18,13 @@ class App extends Component {
         <div>
           <nav>
             <div className="navi">
-              <img src={logo}/>
-              <NavLink className="tag" to="/projects_list" activeStyle={{color:'green'}}><span>Project List</span></NavLink>
-              <NavLink className="tag" to="/resource/" activeStyle={{color:'green'}}><span>Resource List</span></NavLink>
+              <img src={logo} />
+              <NavLink className="tag" to="/projects_list" activeStyle={{ color: 'green' }}><span>Project List</span></NavLink>
+              <NavLink className="tag" to="/resource/" activeStyle={{ color: 'green' }}><span>Resource List</span></NavLink>
               {/* b31b1b */}
-              <Login/>
+              <div className="loginButton">
+                <Login/>
+              </div>
             </div>
 
 
@@ -71,9 +73,9 @@ class App extends Component {
             component={Individual_project_page}
           />
           <Route path="/projects_list/" component={Projects_list_page} />
-          <Route path="/add_res_to_project/:projectID" component = {add_res_to_project} />
+          <Route path="/add_res_to_project/:projectID" component={add_res_to_project} />
         </div>
-      </Router>
+      </Router >
     );
   }
 }
