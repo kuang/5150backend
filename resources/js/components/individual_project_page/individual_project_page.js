@@ -49,7 +49,11 @@ class Individual_project_page extends React.Component {
             updatedProjectDueDate: "",
             updatedProjectStartDate: "",
             updatedProjectMaxHours: "",
-            openCommentView: false
+            openCommentView: false,
+            updatedCommentUser : "",
+            updatedCommentNetID: "",
+            updatedCommentWeek: "",
+            updatedCommentData: ""
         }
     }
 
@@ -477,6 +481,14 @@ class Individual_project_page extends React.Component {
         this.setState({[e.target.id] : e.target.value});
     }
 
+    /***
+     * Code also will issue get request to get the comment for the respective net id and name
+     * @param e
+     */
+    handleCommentFormInputChange(e) {
+        this.setState({[e.target.id] : e.target.value});
+        console.log(this);
+    }
     /*** Handle PUT Request(s) upon form being submitted
      *
      * @param event
@@ -550,22 +562,25 @@ class Individual_project_page extends React.Component {
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
+                            <input id  = "updatedCommentUser" style = {{float: 'right'}} type="text" required value={this.state.updatedCommentUser} onChange={this.handleCommentFormInputChange.bind(this)} />
 
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             NetID:
+                            <input id  = "updatedCommentNetID" style = {{float: 'right'}} type="text" required value={this.state.updatedCommentNetID} onChange={this.handleCommentFormInputChange.bind(this)} />
 
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Week:
+                            <input id  = "updatedCommentWeek" style = {{float: 'right'}} type="date" required value={this.state.updatedCommentWeek} onChange={this.handleCommentFormInputChange.bind(this)} />
                         </label>
-
 
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Comment:
+                            <input id  = "updatedCommentData" style = {{float: 'right'}} type="date" required value={this.state.updatedCommentData} onChange={this.handleCommentFormInputChange.bind(this)} />
                         </label>
 
                         <input type="submit" value="Submit" />

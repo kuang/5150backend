@@ -34,6 +34,7 @@
         "react-dropdown": "^1.6.4",
         "react-google-login": "^5.0.4",
         "react-list": "^0.8.11",
+        "react-native": "^0.59.5",
         "react-native-alert-async": "^1.0.3",
         "react-notifications-component": "^1.1.1",
         "react-popup": "^0.10.0",

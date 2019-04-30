@@ -31,13 +31,9 @@ body {
     text-decoration: none;
 }
 
-#login-button {
+Login {
     margin: 5px;
     margin-left: 250px;
-    display: inline-block;
-}
-
-#logout-button{
     display: inline-block;
 }
 
