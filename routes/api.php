@@ -174,6 +174,19 @@ Route::get('/getComment/{projectID}/{netID}/{date}', function ($projectID, $netI
     }
 });
 
+/** Route that returns names and netids of resources working on a particular project */
+Route::get('/getNames/{projectID}', function ($projectID) {
+    $table = DB::table('resources_per_projects')
+        ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+        ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+        ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'schedules.Dates')
+        ->where('resources_per_projects.ProjectID', '=', $projectID)
+        ->orderBy('resources.FirstName')
+        ->orderBy('resources.LastName')
+        ->get();
+    return $table;
+});
+
 
 /** Route that adds a new project to the projects table via POST Request
 {
