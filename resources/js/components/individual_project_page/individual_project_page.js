@@ -603,11 +603,34 @@ class Individual_project_page extends React.Component {
      * @returns {*}
      */
 
-    handleCommentFormSubmit() {
+    async handleCommentFormSubmit() {
+        let projectID = this.props.match.params.projectID;
+        let newData = {
+            "ProjectID" : projectID,
+            "NetID" : this.state.updatedCommentNetID["label"],
+            "Dates" : this.state.updatedCommentWeek["label"],
+            "Comment" : this.state.updatedCommentData,
+        };
 
+        let response = await fetch('../api/updateComment', {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        });
+        console.log(response);
     }
 
     handleCommentFormUserUpdate(selection) {
+        let name = selection["label"];
+        let netids = this.nameToNetID.get(name);
+        this.resourceNetIDOptions = [];
+        for (let i  = 0; i < netids.length; i++) {
+            this.resourceNetIDOptions.push({label : netids[i], value: 1});
+        }
+        console.log("hello");
         this.setState({updatedCommentUser:selection});
         console.log(this);
     }
