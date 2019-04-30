@@ -603,7 +603,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Comment:
                             <br></br>
-                            <TextareaAutosize>
+                            <TextareaAutosize style = {{width:"100%"}} maxRows={6}>
 
                             </TextareaAutosize>
 
