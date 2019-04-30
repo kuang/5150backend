@@ -29,6 +29,7 @@
         "ag-grid-react": "^20.2.0",
         "moment": "^2.24.0",
         "react-alert": "^5.4.0",
+        "react-autosize-textarea": "^7.0.0",
         "react-confirm-alert": "^2.4.1",
         "react-dom-factories": "^1.0.2",
         "react-dropdown": "^1.6.4",

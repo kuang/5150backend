@@ -8,6 +8,7 @@ import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Select from 'react-select';
 import ReactNotification from "react-notifications-component";
+import TextareaAutosize from "react-autosize-textarea";
 
 let moment = require('moment');
 class Individual_project_page extends React.Component {
@@ -580,7 +581,11 @@ class Individual_project_page extends React.Component {
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Comment:
-                            <input id  = "updatedCommentData" style = {{float: 'right'}} type="date" required value={this.state.updatedCommentData} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <TextareaAutosize>
+
+                            </TextareaAutosize>
+
                         </label>
 
                         <input type="submit" value="Submit" />
