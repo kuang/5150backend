@@ -31,6 +31,7 @@ class Individual_project_page extends React.Component {
         this.dueDate = undefined; // dueDate of the project
         this.currentDate = moment();
         this.latestDate = undefined;
+        this.resourceDateOptions = [];
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : "",
@@ -121,6 +122,11 @@ class Individual_project_page extends React.Component {
 
         rowData.push(currentJSON);
         let dates = columnDefs.slice(3);
+
+        for (let i = 0; i < dates.length; i++) {
+            this.resourceDateOptions.push({label : dates[i]["headerName"], value: 1});
+        }
+
         let dateComparator = function (a, b) {
             if (a.field < b.field) {
                 return -1;
