@@ -543,6 +543,21 @@ class Individual_project_page extends React.Component {
     handleCommentFormSubmit() {
 
     }
+
+    handleCommentFormUserUpdate(selection) {
+        this.setState({updatedCommentUser:selection});
+        console.log(this);
+    }
+
+    handleCommentFormNetIDUpdate(selection) {
+        this.setState({updatedCommentNetID:selection});
+        console.log(this);
+    }
+
+    handleCommentFormWeekUpdate(selection) {
+        this.setState({updatedCommentWeek:selection});
+        console.log(this);
+    }
     render() {
         let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
         return (
@@ -563,19 +578,25 @@ class Individual_project_page extends React.Component {
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
-                            <input id  = "updatedCommentUser" style = {{float: 'right'}} type="text" required value={this.state.updatedCommentUser} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <Select value = {this.state.updatedCommentUser} onChange = {this.handleCommentFormUserUpdate.bind(this)} options = {this.statusOptions}>
+                            </Select>
 
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             NetID:
-                            <input id  = "updatedCommentNetID" style = {{float: 'right'}} type="text" required value={this.state.updatedCommentNetID} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <Select value = {this.state.updatedCommentNetID} onChange = {this.handleCommentFormNetIDUpdate.bind(this)} options = {this.statusOptions}>
+                            </Select>
 
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Week:
-                            <input id  = "updatedCommentWeek" style = {{float: 'right'}} type="date" required value={this.state.updatedCommentWeek} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <Select value = {this.state.updatedCommentWeek} onChange = {this.handleCommentFormWeekUpdate.bind(this)} options = {this.statusOptions}>
+                            </Select>
                         </label>
 
                         <br></br>
