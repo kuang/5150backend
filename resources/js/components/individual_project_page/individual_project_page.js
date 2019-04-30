@@ -54,7 +54,7 @@ class Individual_project_page extends React.Component {
             updatedCommentUser : "",
             updatedCommentNetID: "",
             updatedCommentWeek: "",
-            updatedCommentData: "lmao"
+            updatedCommentData: ""
         }
     }
 
