@@ -54,7 +54,7 @@ class Individual_project_page extends React.Component {
             updatedCommentUser : "",
             updatedCommentNetID: "",
             updatedCommentWeek: "",
-            updatedCommentData: ""
+            updatedCommentData: "lmao"
         }
     }
 
@@ -558,6 +558,10 @@ class Individual_project_page extends React.Component {
         this.setState({updatedCommentWeek:selection});
         console.log(this);
     }
+
+    handleCommentFormDataUpdate(event) {
+        this.setState({updatedCommentData :  event.target.value});
+    }
     render() {
         let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
         return (
@@ -603,7 +607,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Comment:
                             <br></br>
-                            <TextareaAutosize style = {{width:"100%"}} maxRows={6}>
+                            <TextareaAutosize value = {this.state.updatedCommentData} style = {{width:"100%"}} maxRows={6} onChange = {this.handleCommentFormDataUpdate.bind(this)}>
 
                             </TextareaAutosize>
 
