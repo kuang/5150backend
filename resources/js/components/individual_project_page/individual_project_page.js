@@ -627,21 +627,41 @@ class Individual_project_page extends React.Component {
             this.resourceNetIDOptions.push({label : netids[i], value: 1});
         }
         console.log("hello");
-        this.setState({updatedCommentUser:selection});
+        this.setState({updatedCommentUser:selection, updatedCommentNetID: "", updatedCommentData: ""});
         console.log(this);
     }
 
-    handleCommentFormNetIDUpdate(selection) {
-        this.setState({updatedCommentNetID:selection});
+    async handleCommentFormNetIDUpdate(selection) {
+        let date = this.state.updatedCommentWeek["label"];
+        let comment = "";
+        if (!date == false) {
+            let projectID = this.props.match.params.projectID;
+            let netID = selection["label"];
+            let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
+            let comment_json = await response.json();
+            comment = comment_json[0]["Comment"];
+        }
+        this.setState({updatedCommentData: comment, updatedCommentNetID:selection});
         console.log(this);
     }
 
-    handleCommentFormWeekUpdate(selection) {
-        this.setState({updatedCommentWeek:selection});
+    async handleCommentFormWeekUpdate(selection) {
+        let netID = this.state.updatedCommentNetID["label"];
+        let name = this.state.updatedCommentUser["label"];
+        let comment = "";
+        if (!netID == false && !name == false) {
+            let projectID = this.props.match.params.projectID;
+            let date = selection["label"];
+            let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
+            let comment_json = await response.json();
+            comment = comment_json[0]["Comment"];
+        }
+        this.setState({updatedCommentData: comment, updatedCommentWeek:selection});
         console.log(this);
     }
 
     handleCommentFormDataUpdate(event) {
+        console.log("commentFormDataUpdate");
         this.setState({updatedCommentData :  event.target.value});
     }
     render() {
