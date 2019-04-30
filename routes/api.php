@@ -179,7 +179,7 @@ Route::get('/getNames/{projectID}', function ($projectID) {
     $table = DB::table('resources_per_projects')
         ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
         ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
-        ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'schedules.Dates')
+        ->select('resources.NetID', 'resources.FirstName', 'resources.LastName')->distinct()
         ->where('resources_per_projects.ProjectID', '=', $projectID)
         ->orderBy('resources.FirstName')
         ->orderBy('resources.LastName')
