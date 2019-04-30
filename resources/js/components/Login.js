@@ -9,7 +9,7 @@ class Login extends React.Component {
     super(props);
     this.state = {
       direct: false,
-      user: "",
+      user: null,
       login: false
     };
     this.loginSuccess = this.loginSuccess.bind(this);
@@ -30,28 +30,34 @@ class Login extends React.Component {
   }
 
   logoutResponse(response) {
+    this.setState({
+      user: null,
+      login: false
+    });
     console.log("You are logged out");
   }
 
   render() {
     return (
       <div>
-        <div id='login-button'>
-          <GoogleLogin
-            clientId="795086897508-p73emkkcd287sf6e4nm8jgb45susbcg1.apps.googleusercontent.com"
-            buttonText="Login With Google"
-            onSuccess={this.loginSuccess}
-            onFailure={this.loginError}
-            cookiePolicy={'single_host_origin'}
-          />
-        </div>
-        <div id='logout-button'>
-          <GoogleLogout
-            buttonText="Logout"
-            onLogoutSuccess={this.logoutResponse}
-          >
-          </GoogleLogout>
-        </div>
+        { !this.state.login
+          ? <div id='login-button'>
+              <GoogleLogin
+                clientId="795086897508-p73emkkcd287sf6e4nm8jgb45susbcg1.apps.googleusercontent.com"
+                buttonText="Login With Google"
+                onSuccess={this.loginSuccess}
+                onFailure={this.loginError}
+                cookiePolicy={'single_host_origin'}
+              />
+            </div>
+          : <div id='logout-button'>
+              <GoogleLogout
+                buttonText="Logout"
+                onLogoutSuccess={this.logoutResponse}
+              >
+              </GoogleLogout>
+            </div>
+        }
       </div>
     );
   }
