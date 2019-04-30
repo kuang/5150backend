@@ -43,14 +43,13 @@ Route::get('/displayProjectInfo/{projectID}', function ($projectID) {
 });
 
 /** Route that returns all info on a given project (including hours) */
-Route::get('/displayAllProjectInfo/{projectID}', function ($projectID) {
+Route::get('/displayAllProjectInfo', function () {
     try {
         $table = DB::table('projects')
             ->join('resources_per_projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
             ->select('projects.ProjectName', 'projects.StartDate', 'projects.DueDate', 'projects.Status',
                 'projects.Technology', 'projects.EstMaxHours', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursAssigned'))
-            ->where('projects.ProjectID', '=', $projectID)
             ->groupBy('projects.ProjectID')
             ->get();
         return $table;
