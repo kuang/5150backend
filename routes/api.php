@@ -42,6 +42,24 @@ Route::get('/displayProjectInfo/{projectID}', function ($projectID) {
     return DB::table("projects")->where('ProjectID', '=', $projectID)->get();
 });
 
+/** Route that returns all info on a given project (including hours) */
+Route::get('/displayAllProjectInfo/{projectID}', function ($projectID) {
+    try {
+        $table = DB::table('projects')
+            ->join('resources_per_projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->select('projects.ProjectName', 'projects.StartDate', 'projects.DueDate', 'projects.Status',
+                'projects.Technology', 'projects.EstMaxHours', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursAssigned'))
+            ->where('projects.ProjectID', '=', $projectID)
+            ->groupBy('projects.ProjectID')
+            ->get();
+        return $table;
+    } catch (Exception $e){
+        echo $e->getMessage();
+        return response('This information could not be displayed. Please try again.', 403);
+    }
+});
+
 /** Route that returns all general info on a given resource */
 Route::get('/displayResourceInfo/{resourceID}', function ($resourceID) {
     return DB::table("resources")->where('resourceID', '=', $resourceID)->get();
@@ -95,7 +113,7 @@ Route::get('/displayResourcesAvailable/{projectID}', function ($projectID) {
         ->get();
 });
 
-/** Route that returns all resources and their hours for up to last 5 weeks */
+/** Route that returns all resources and their hours including and after current week */
 Route::get('/displayResourceHours', function () {
     try {
         $monday = DB::select(DB::raw('select DATE(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) ) as Monday'));
@@ -106,6 +124,25 @@ Route::get('/displayResourceHours', function () {
             ->select('resources.NetID', 'resources.FirstName', 'resources.LastName', 'resources.MaxHoursPerWeek', 'schedules.Dates', 'resources.ResourceID', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursPerWeek'))
             ->where('schedules.Dates', '>=', $curr_week)
             ->groupBy('resources.NetID', 'schedules.Dates')
+            ->get();
+        return $table;
+    } catch (Exception $e){
+        echo $e->getMessage();
+        return response('This information could not be displayed. Please try again.', 403);
+    }
+});
+
+/** Route that returns hours per project for a specific resource including and after current week */
+Route::get('/displayIndividualResourceHours/{resourceID}', function ($resourceID) {
+    try {
+        $monday = DB::select(DB::raw('select DATE(DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) ) as Monday'));
+        $curr_week = $monday[0]->Monday;
+        $table = DB::table('resources_per_projects')
+            ->join('projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
+            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->select('projects.ProjectName', 'schedules.Dates', 'schedules.HoursPerWeek')
+            ->where([['schedules.Dates', '>=', $curr_week], ['resources_per_projects.ResourceID', '=', $resourceID]])
+//            ->groupBy('resources.NetID', 'schedules.Dates')
             ->get();
         return $table;
     } catch (Exception $e){
