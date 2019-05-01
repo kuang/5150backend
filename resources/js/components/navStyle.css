@@ -1,14 +1,15 @@
 body {
     background-color: lightyellow;
     margin: 0%;
+    padding: 0%;
 }
 
 .navi {
     display: flex;
     background-color: #b31b1b;
     font-weight: bold;
-    padding-right: 7%;
-    padding-right: 7%;
+    /* padding-right: 7%;
+    padding-right: 7%; */
 }
 
 .navi img {

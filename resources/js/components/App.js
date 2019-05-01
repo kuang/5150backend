@@ -75,7 +75,7 @@ class App extends Component {
           <Route path="/projects_list/" component={Projects_list_page} />
           <Route path="/add_res_to_project/:projectID" component={add_res_to_project} />
         </div>
-      </Router >
+      </Router>
     );
   }
 }

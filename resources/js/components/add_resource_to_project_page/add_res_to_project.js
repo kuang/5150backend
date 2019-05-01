@@ -60,11 +60,11 @@ class twoList extends React.Component {
 
     async fetchResources(projectID) {
 
-        fetch(`../api/displayResourcesPerProject/${projectID}`)
+        await fetch(`../api/displayResourcesPerProject/${projectID}`)
             .then(result => result.json())
             .then(data => this.processData(data, 0));
 
-        fetch(`../api/displayAllResources`)
+        await fetch(`../api/displayAllResources`)
             .then(result => result.json())
             .then(data => this.processData(data, 1));
     }
