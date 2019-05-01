@@ -11,15 +11,77 @@ class Projects_list_page extends React.Component {
         super(props);
         this.state = {
             columnDefs: [
-                { headerName: 'Project', field: 'projectName', sortable: true },
-                { headerName: 'Most Recent Updates', field: 'updates' },
-                { headerName: 'Start Date', field: 'startDate' },
-                { headerName: 'Due Date', field: 'dueDate' },
-                { headerName: 'Status', field: 'status' },
-                { headerName: 'Technology', field: 'tech' },
-                { headerName: 'Assigned Resources', field: 'resources' },
-                { headerName: 'Assigned Hours This Week', field: 'hoursWeek' },
-                { headerName: 'Total Assigned Hours', field: 'hoursTotal' }
+                { 
+                    headerName: 'Project', 
+                    field: 'projectName', 
+                    sortable: true, 
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true,
+                    pinned: "left"
+                }, {
+                    headerName: 'Details',
+                    field: 'details',
+                    width: 100,
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true,
+                    pinned: 'left',
+                    cellRenderer: function (params) {
+                        return "<a href='/individual_project/" + params.value + "'>Details</a>"
+                    }
+                },
+                // { headerName: 'Most Recent Updates', field: 'updates'},
+                {
+                    headerName: 'Start Date', 
+                    field: 'startDate', 
+                    sortable: true, 
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                },{ 
+                    headerName: 'Due Date', 
+                    field: 'dueDate', 
+                    sortable: true, 
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true 
+                },{ 
+                    headerName: 'Status', 
+                    field: 'status', 
+                    sortable: true, 
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                }, {
+                    headerName: 'Technology', 
+                    field: 'tech', 
+                    sortable: true, 
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                },
+                // { 
+                //     headerName: 'Assigned Resources', 
+                //     field: 'resources', 
+                //     sortable: true, 
+                //     filter: "agTextColumnFilter",
+                //     suppressMovable: true
+                // },
+                // { 
+                //     headerName: 'Hours This Week', 
+                //     field: 'hoursWeek', 
+                //     sortable: true, 
+                //     filter: "agTextColumnFilter",
+                //     suppressMovable: true
+                // },
+                { 
+                    headerName: 'Initial Estimated Hours',
+                    field: 'estMaxHours',
+                    sortable: true,
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                }, { 
+                    headerName: 'Total Hours',
+                    field: 'hoursTotal',
+                    sortable: true,
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                }
             ],
             rowData: [],
 
@@ -29,8 +91,8 @@ class Projects_list_page extends React.Component {
             newTechnology: "",
             newEstMaxHours: "",
             newStatus: "Ongoing",
-            newStartDate: "",      //string of format YYYY-MM-DD
-            newDueDate: "",        //string of format YYYY-MM-DD
+            newStartDate: "",      
+            newDueDate: "",        
         };
         // handlers for adding new prject modal
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -44,109 +106,108 @@ class Projects_list_page extends React.Component {
     /** Returns a concatenated string of a list of the first names of the resources
      *  associated with a particular project with [projectID]
      */
-    async getResourceNames(projectID) {
-        // need to access ResourcesPerProject table,
-        // then find all ResourceID's that matches with the ProjectID,
-        // then access Resources table and use the list of ResourceID's to find their names
-        return fetch(`../api/displayResourcesPerProject/${projectID}`)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (myJSON) {
-                if (myJSON === undefined || myJSON.length == 0) {
-                    return "N/A";
-                } else {
-                    var names = myJSON.map(function (a) { return a.FirstName; });
-                    names = names.join(", ");
-                    return names
-                    }
-            });
-    }
+    // async getResourceNames(projectID) {
+    //     // need to access ResourcesPerProject table,
+    //     // then find all ResourceID's that matches with the ProjectID,
+    //     // then access Resources table and use the list of ResourceID's to find their names
+    //     return fetch(`../api/displayResourcesPerProject/${projectID}`)
+    //         .then(function (response) {
+    //             return response.json();
+    //         })
+    //         .then(function (myJSON) {
+    //             if (myJSON === undefined || myJSON.length == 0) {
+    //                 return "N/A";
+    //             } else {
+    //                 var names = myJSON.map(function (a) { return a.FirstName; });
+    //                 names = names.join(", ");
+    //                 return names
+    //                 }
+    //         });
+    // }
 
     /** Returns the hours per week assgined to this project [projectID] */
-    async getHoursWeek(projectID) {
-        // get an array of [ScheduleID] that are matched with [projectID];
-        // check the current Date;
-        // for all Schedules with [Dates] in same week as the current Date, 
-        // sum their values of [HoursPerWeek]
+    // async getHoursWeek(projectID) {
+    //     // get an array of [ScheduleID] that are matched with [projectID];
+    //     // check the current Date;
+    //     // for all Schedules with [Dates] in same week as the current Date, 
+    //     // sum their values of [HoursPerWeek]
         
-        // projectID = 25
-        const todayDate = new Date();
-        const scheduleIDArr = 
-            await fetch(`../api/displayResourcesPerProject/`)
-            .then(function(response) {
-                return response.json()
-            })
-            .then(function(myJSON) {
-                if (myJSON === undefined || myJSON.length == 0) {
-                    return [];
-                } else {
-                    var result = myJSON.filter(function(obj) {
-                        return obj.ProjectID === projectID;
-                    })
-                    console.log(result);
-                    var scheduleIDs = result.map(function (a) { return a.ScheduleID; });
-                    console.log(scheduleIDs);
-                    return scheduleIDs;
-                }
-            });
+    //     // projectID = 25
+    //     const todayDate = new Date();
+    //     const scheduleIDArr = 
+    //         await fetch(`../api/displayResourcesPerProject/`)
+    //         .then(function(response) {
+    //             return response.json()
+    //         })
+    //         .then(function(myJSON) {
+    //             if (myJSON === undefined || myJSON.length == 0) {
+    //                 return [];
+    //             } else {
+    //                 var result = myJSON.filter(function(obj) {
+    //                     return obj.ProjectID === projectID;
+    //                 })
+    //                 console.log(result);
+    //                 var scheduleIDs = result.map(function (a) { return a.ScheduleID; });
+    //                 console.log(scheduleIDs);
+    //                 return scheduleIDs;
+    //             }
+    //         });
         
-        if (scheduleIDArr.length == 0) {
-            return 0; // no schedule <=> zero hour assigned
-        } 
-        // scheduleIDArr = [15, 23, 24, 25, 26]
-        var validSchedules = 
-            await fetch(`../api/displaySchedules/`)
-            .then(function (response) {
-                return response.json()
-            })
-            .then(function (myJSON) {
-                if (myJSON === undefined || myJSON.length === 0) {
-                    return [];
-                } else {
-                    // get all schedules in scheduleIDArr
-                    var validschedules = myJSON.filter(function (obj) {
-                        return !(scheduleIDArr.indexOf(obj.ScheduleID) === -1);
-                    });
-                    console.log(validschedules);
-                    return validschedules;
-                }
-            });
+    //     if (scheduleIDArr.length == 0) {
+    //         return 0; // no schedule <=> zero hour assigned
+    //     } 
+    //     var validSchedules = 
+    //         await fetch(`../api/displaySchedules/`)
+    //         .then(function (response) {
+    //             return response.json()
+    //         })
+    //         .then(function (myJSON) {
+    //             if (myJSON === undefined || myJSON.length === 0) {
+    //                 return [];
+    //             } else {
+    //                 // get all schedules in scheduleIDArr
+    //                 var validschedules = myJSON.filter(function (obj) {
+    //                     return !(scheduleIDArr.indexOf(obj.ScheduleID) === -1);
+    //                 });
+    //                 console.log(validschedules);
+    //                 return validschedules;
+    //             }
+    //         });
 
         
-        if (validSchedules.length === 0) {
-            return 0;
-        }
+    //     if (validSchedules.length === 0) {
+    //         return 0;
+    //     }
 
-        /** Compares two dates and return true if they are in same week and false otherwise
-        *  [anyDate] can be any Date object, but [weekDate] must be a Monday
-        */
-        let isInSameWeek = function(anyDate, weekDate) {
-            var lowerbound = new Date(weekDate + "EST");
-            var upperbound = new Date(lowerbound.getTime());
-            upperbound.setDate(upperbound.getDate() + 7);
-            if (lowerbound <= anyDate && anyDate < upperbound) {
-                return true;
-            } else {
-                return false;
-            }
-        };
-        // filter again with respect to date
-        validSchedules = validSchedules.filter(function (obj) {
-            return isInSameWeek(todayDate, obj.Dates);
-        })
-        console.log(validSchedules);
+    //     /** Compares two dates and return true if they are in same week and false otherwise
+    //     *  [anyDate] can be any Date object, but [weekDate] must be a Monday
+    //     */
+    //     let isInSameWeek = function(anyDate, weekDate) {
+    //         var lowerbound = new Date(weekDate + "EST");
+    //         var upperbound = new Date(lowerbound.getTime());
+    //         upperbound.setDate(upperbound.getDate() + 7);
+    //         if (lowerbound <= anyDate && anyDate < upperbound) {
+    //             return true;
+    //         } else {
+    //             return false;
+    //         }
+    //     };
+    //     // filter again with respect to date
+    //     validSchedules = validSchedules.filter(function (obj) {
+    //         return isInSameWeek(todayDate, obj.Dates);
+    //     })
+    //     console.log(validSchedules);
         
-        var hoursArr = validSchedules.map(function (a) { return a.HoursPerWeek; });
-        console.log(hoursArr);
+    //     var hoursArr = validSchedules.map(function (a) { return a.HoursPerWeek; });
+    //     console.log(hoursArr);
 
-        if (hoursArr.length === 0) {
-            return 0;
-        } else {
-            var totalHours = hoursArr.reduce((acc, a) => acc + a);
-            return totalHours;
-        }
-    }
+    //     if (hoursArr.length === 0) {
+    //         return 0;
+    //     } else {
+    //         var totalHours = hoursArr.reduce((acc, a) => acc + a);
+    //         return totalHours;
+    //     }
+    // }
 
     async processData(data) {
         var rowData = [];
@@ -159,20 +220,23 @@ class Projects_list_page extends React.Component {
             let currTech = currJSON.Technology;
             let currStartDate = currJSON.StartDate;
             let currDueDate = currJSON.DueDate;
-            let currHoursTotal= currJSON.EstMaxHours;
-            let currResources = await this.getResourceNames(currProjectID);
-            let currHoursWeek = await this.getHoursWeek(currProjectID);
-            let currUpdates = "";
+            let currEstMaxHours = currJSON.EstMaxHours;
+            let currHoursTotal = currJSON.TotalHoursAssigned;
+            //let currResources = await this.getResourceNames(currProjectID);
+            //let currHoursWeek = await this.getHoursWeek(currProjectID);
+            //let currUpdates = "";
 
             rowJSON = {
                 projectName : currProjectName,
-                updates: currUpdates,
+                details: currProjectID,
+                //updates: currUpdates,
                 startDate: currStartDate,
                 dueDate: currDueDate,
                 status : currStatus,
                 tech : currTech,
-                resources: currResources,
-                hoursWeek : currHoursWeek,
+                //resources: currResources,
+                //hoursWeek : currHoursWeek,
+                estMaxHours: currEstMaxHours,
                 hoursTotal: currHoursTotal
             };
 
@@ -240,7 +304,7 @@ class Projects_list_page extends React.Component {
     /* Methods for the adding project modal */
 
     componentDidMount() {
-        fetch(`../api/displayAllProjects`)
+        fetch(`../api/displayAllProjectInfo`)
             .then(result => result.json())
             .then(data => this.processData(data))
             .then(function (newData) {
@@ -276,11 +340,11 @@ class Projects_list_page extends React.Component {
                         <label style={{ marginRight: '15px' }}>Estimated Maximum Hours for This Project:</label>
                         <input style={{ float: 'right' }} type="number" required value={this.state.newEstMaxHours} onChange={this.handleSetHours} />
                         <br></br>
-                        <label style={{ marginRight: '15px' }}>Start Date (YYYY-MM-DD):</label>
-                        <input style={{ float: 'right' }} type="text" required value={this.state.newStartDate} onChange={this.handleSetStartDate} />
+                        <label style={{ marginRight: '15px' }}>Start Date:</label>
+                        <input style={{ float: 'right' }} type="date" required value={this.state.newStartDate} onChange={this.handleSetStartDate} />
                         <br></br>
-                        <label style={{ marginRight: '15px' }}>Due Date (YYYY-MM-DD):</label>
-                        <input style={{ float: 'right' }} type="text" required value={this.state.newDueDate} onChange={this.handleSetDueDate} />
+                        <label style={{ marginRight: '15px' }}>Due Date:</label>
+                        <input style={{ float: 'right' }} type="date" required value={this.state.newDueDate} onChange={this.handleSetDueDate} />
                         <br></br>
                         <input type="submit" value="Submit" />
                     </form>
