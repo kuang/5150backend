@@ -41,6 +41,7 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
+		console.log(data);
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
