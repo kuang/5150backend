@@ -3,11 +3,14 @@ import { Link } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/dist/styles/ag-theme-blue.css';
+import 'ag-grid-community/dist/styles/ag-theme-fresh.css';
 import Modal from 'react-responsive-modal';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Select from 'react-select';
 import ReactNotification from "react-notifications-component";
+import TextareaAutosize from "react-autosize-textarea";
 
 let moment = require('moment');
 class Individual_project_page extends React.Component {
@@ -21,6 +24,8 @@ class Individual_project_page extends React.Component {
         this.addDueDateNotification = this.addDueDateNotification.bind(this);
         this.notificationDOMRef = React.createRef();
         this.updatedRows = new Set();
+        this.nameToNetID = new Map();
+        this.projectName = "";
         this.statusOptions = [
             { label: "Ongoing", value: 1 },
             { label: "Inactive", value: 1 },
@@ -30,6 +35,9 @@ class Individual_project_page extends React.Component {
         this.dueDate = undefined; // dueDate of the project
         this.currentDate = moment();
         this.latestDate = undefined;
+        this.resourceDateOptions = [];
+        this.resourceNameOptions = [];
+        this.resourceNetIDOptions = [];
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption : "",
@@ -120,6 +128,12 @@ class Individual_project_page extends React.Component {
 
         rowData.push(currentJSON);
         let dates = columnDefs.slice(3);
+
+        for (let i = 0; i < dates.length; i++) {
+            let name = dates[i]["headerName"];
+            this.resourceDateOptions.push({label : name, value: 1});
+        }
+
         let dateComparator = function (a, b) {
             if (a.field < b.field) {
                 return -1;
@@ -186,6 +200,21 @@ class Individual_project_page extends React.Component {
             updatedProjectDueDate: dueDate,
             selectedOption: theSelectedOption
         });
+        let names = await fetch(`../api/getNames/${projectID}`);
+        let names_json = await names.json();
+        for (let i = 0; i < names_json.length; i++) {
+            let name = names_json[i]["FirstName"] + " " + names_json[i]["LastName"];
+            let netid = names_json[i]["NetID"];
+            this.resourceNameOptions.push({label : name, value: 1});
+
+            if (this.nameToNetID.has(name)) {
+                let old_arr = this.nameToNetID.get(name);
+                old_arr.push(netid);
+                this.nameToNetID.set(name, old_arr);
+            } else {
+                this.nameToNetID.set(name, [netid]);
+            }
+        }
     }
 
     /***
@@ -463,7 +492,7 @@ class Individual_project_page extends React.Component {
                 title: name + " For The Week Of " + date,
                 message: comment,
                 type: "warning",
-                insert: "top-right",
+                insert: "top",
                 container: "top-right",
                 animationIn: ["animated", "fadeIn"],
                 animationOut: ["animated", "fadeOut"],
@@ -516,12 +545,43 @@ class Individual_project_page extends React.Component {
 
     }
 
-    openProjectForm() {
-        this.setState({openProjectFormModal : true});
-    }
+    async openProjectForm() {
+        let projectID = this.props.match.params.projectID;
+        let response = await fetch(`../api/displayProjectInfo/${projectID}`);
+        let actualResponse = await response.json();
+        let currentStatus = actualResponse[0]["Status"];
+        this.dueDate = actualResponse[0]["DueDate"];
+        let theSelectedOption = {};
+        if (currentStatus == "Ongoing") {
+            theSelectedOption= { label: "Ongoing", value: 1 };
+        }
 
-    viewComments() {
+        else if (currentStatus == "Inactive") {
+            theSelectedOption={ label: "Inactive", value: 2 };
+        }
 
+        else if (currentStatus == "Done") {
+            theSelectedOption = { label: "Done", value: 3 };
+        }
+
+        else if (currentStatus == "On Hold") {
+            theSelectedOption = { label: "On Hold", value: 4 };
+        }
+
+        let projectName = actualResponse[0]["ProjectName"];
+        let technology = actualResponse[0]["Technology"];
+        let maxHours = actualResponse[0]["EstMaxHours"];
+        let startDate = actualResponse[0]["StartDate"];
+        let dueDate = actualResponse[0]["DueDate"];
+        this.setState({
+            updatedProjectName: projectName,
+            updatedProjectTechnology: technology,
+            updatedProjectMaxHours: maxHours,
+            updatedProjectStartDate: startDate,
+            updatedProjectDueDate: dueDate,
+            selectedOption: theSelectedOption,
+            openProjectFormModal: true
+        });
     }
 
     closeCommentViewModal() {
@@ -529,7 +589,10 @@ class Individual_project_page extends React.Component {
     }
 
     openCommentViewModal() {
-        this.setState({openCommentView : true});
+        this.setState({updatedCommentUser : "",
+            updatedCommentNetID: "",
+            updatedCommentWeek: "",
+            updatedCommentData: "", openCommentView : true});
     }
     /***
      * Makes POST Request to save data
@@ -539,11 +602,81 @@ class Individual_project_page extends React.Component {
      * @returns {*}
      */
 
-    handleCommentFormSubmit() {
+    async handleCommentFormSubmit() {
+        let projectID = this.props.match.params.projectID;
+        let newData = {
+            "ProjectID" : projectID,
+            "NetID" : this.state.updatedCommentNetID["label"],
+            "Dates" : this.state.updatedCommentWeek["label"],
+            "Comment" : this.state.updatedCommentData,
+        };
 
+        let response = await fetch('../api/updateComment', {
+            method: "PUT",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newData)
+        });
+        console.log(response);
+    }
+
+    handleCommentFormUserUpdate(selection) {
+        let name = selection["label"];
+        let netids = this.nameToNetID.get(name);
+        this.resourceNetIDOptions = [];
+        for (let i  = 0; i < netids.length; i++) {
+            this.resourceNetIDOptions.push({label : netids[i], value: 1});
+        }
+        console.log("hello");
+        this.setState({updatedCommentUser:selection, updatedCommentNetID: "", updatedCommentData: ""});
+        console.log(this);
+    }
+
+    async handleCommentFormNetIDUpdate(selection) {
+        let date = this.state.updatedCommentWeek["label"];
+        let comment = "";
+        if (!date == false) {
+            let projectID = this.props.match.params.projectID;
+            let netID = selection["label"];
+            let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
+            let comment_json = await response.json();
+            comment = comment_json[0]["Comment"];
+        }
+        this.setState({updatedCommentData: comment, updatedCommentNetID:selection});
+        console.log(this);
+    }
+
+    async handleCommentFormWeekUpdate(selection) {
+        let netID = this.state.updatedCommentNetID["label"];
+        let name = this.state.updatedCommentUser["label"];
+        let comment = "";
+        if (!netID == false && !name == false) {
+            let projectID = this.props.match.params.projectID;
+            let date = selection["label"];
+            let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
+            let comment_json = await response.json();
+            comment = comment_json[0]["Comment"];
+        }
+        this.setState({updatedCommentData: comment, updatedCommentWeek:selection});
+        console.log(this);
+    }
+
+    handleCommentFormDataUpdate(event) {
+        console.log("commentFormDataUpdate");
+        this.setState({updatedCommentData :  event.target.value});
+    }
+
+    resizeColumns(event) {
+        event.api.sizeColumnsToFit();
     }
     render() {
         let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
+        let projectID  = this.props.match.params.projectID;
+        fetch(`../api/displayProjectNameById/${this.props.match.params.projectID}`)
+            .then(response => response.json())
+            .then(realResponse => this.projectName = realResponse[0]["ProjectName"])
         return (
             <div
                 className="ag-theme-balham"
@@ -562,25 +695,35 @@ class Individual_project_page extends React.Component {
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
-                            <input id  = "updatedCommentUser" style = {{float: 'right'}} type="text" required value={this.state.updatedCommentUser} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <Select value = {this.state.updatedCommentUser} onChange = {this.handleCommentFormUserUpdate.bind(this)} options = {this.resourceNameOptions}>
+                            </Select>
 
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             NetID:
-                            <input id  = "updatedCommentNetID" style = {{float: 'right'}} type="text" required value={this.state.updatedCommentNetID} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <Select value = {this.state.updatedCommentNetID} onChange = {this.handleCommentFormNetIDUpdate.bind(this)} options = {this.resourceNetIDOptions}>
+                            </Select>
 
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Week:
-                            <input id  = "updatedCommentWeek" style = {{float: 'right'}} type="date" required value={this.state.updatedCommentWeek} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <Select value = {this.state.updatedCommentWeek} onChange = {this.handleCommentFormWeekUpdate.bind(this)} options = {this.resourceDateOptions}>
+                            </Select>
                         </label>
 
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Comment:
-                            <input id  = "updatedCommentData" style = {{float: 'right'}} type="date" required value={this.state.updatedCommentData} onChange={this.handleCommentFormInputChange.bind(this)} />
+                            <br></br>
+                            <TextareaAutosize value = {this.state.updatedCommentData} style = {{width:"100%"}} maxRows={6} onChange = {this.handleCommentFormDataUpdate.bind(this)}>
+
+                            </TextareaAutosize>
+
                         </label>
 
                         <input type="submit" value="Submit" />
@@ -645,6 +788,7 @@ class Individual_project_page extends React.Component {
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
                     onCellDoubleClicked={this.displayComment.bind(this)}
                     enableCellChangeFlash={true}
+                    onGridReady = {this.resizeColumns.bind(this)}
                 >
                 </AgGridReact>
 
