@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Modal from 'react-responsive-modal';
+import { LoginContext } from '../App';
 
 class Projects_list_page extends React.Component {
 
@@ -11,10 +12,10 @@ class Projects_list_page extends React.Component {
         super(props);
         this.state = {
             columnDefs: [
-                { 
-                    headerName: 'Project', 
-                    field: 'projectName', 
-                    sortable: true, 
+                {
+                    headerName: 'Project',
+                    field: 'projectName',
+                    sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true,
                     pinned: "left"
@@ -31,27 +32,27 @@ class Projects_list_page extends React.Component {
                 },
                 // { headerName: 'Most Recent Updates', field: 'updates'},
                 {
-                    headerName: 'Start Date', 
-                    field: 'startDate', 
-                    sortable: true, 
-                    filter: "agTextColumnFilter",
-                    suppressMovable: true
-                },{ 
-                    headerName: 'Due Date', 
-                    field: 'dueDate', 
-                    sortable: true, 
-                    filter: "agTextColumnFilter",
-                    suppressMovable: true 
-                },{ 
-                    headerName: 'Status', 
-                    field: 'status', 
-                    sortable: true, 
+                    headerName: 'Start Date',
+                    field: 'startDate',
+                    sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 }, {
-                    headerName: 'Technology', 
-                    field: 'tech', 
-                    sortable: true, 
+                    headerName: 'Due Date',
+                    field: 'dueDate',
+                    sortable: true,
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                }, {
+                    headerName: 'Status',
+                    field: 'status',
+                    sortable: true,
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                }, {
+                    headerName: 'Technology',
+                    field: 'tech',
+                    sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 },
@@ -69,13 +70,13 @@ class Projects_list_page extends React.Component {
                 //     filter: "agTextColumnFilter",
                 //     suppressMovable: true
                 // },
-                { 
+                {
                     headerName: 'Initial Estimated Hours',
                     field: 'estMaxHours',
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
-                }, { 
+                }, {
                     headerName: 'Total Hours',
                     field: 'hoursTotal',
                     sortable: true,
@@ -91,16 +92,16 @@ class Projects_list_page extends React.Component {
             newTechnology: "",
             newEstMaxHours: "",
             newStatus: "Ongoing",
-            newStartDate: "",      
-            newDueDate: "",        
+            newStartDate: "",
+            newDueDate: "",
         };
         // handlers for adding new prject modal
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSetProjName = this.handleSetProjName.bind(this); 
-        this.handleSetTech = this.handleSetTech.bind(this); 
-        this.handleSetHours = this.handleSetHours.bind(this); 
-        this.handleSetStartDate = this.handleSetStartDate.bind(this); 
-        this.handleSetDueDate = this.handleSetDueDate.bind(this); 
+        this.handleSetProjName = this.handleSetProjName.bind(this);
+        this.handleSetTech = this.handleSetTech.bind(this);
+        this.handleSetHours = this.handleSetHours.bind(this);
+        this.handleSetStartDate = this.handleSetStartDate.bind(this);
+        this.handleSetDueDate = this.handleSetDueDate.bind(this);
     }
 
     /** Returns a concatenated string of a list of the first names of the resources
@@ -131,7 +132,7 @@ class Projects_list_page extends React.Component {
     //     // check the current Date;
     //     // for all Schedules with [Dates] in same week as the current Date, 
     //     // sum their values of [HoursPerWeek]
-        
+
     //     // projectID = 25
     //     const todayDate = new Date();
     //     const scheduleIDArr = 
@@ -152,7 +153,7 @@ class Projects_list_page extends React.Component {
     //                 return scheduleIDs;
     //             }
     //         });
-        
+
     //     if (scheduleIDArr.length == 0) {
     //         return 0; // no schedule <=> zero hour assigned
     //     } 
@@ -174,7 +175,7 @@ class Projects_list_page extends React.Component {
     //             }
     //         });
 
-        
+
     //     if (validSchedules.length === 0) {
     //         return 0;
     //     }
@@ -197,7 +198,7 @@ class Projects_list_page extends React.Component {
     //         return isInSameWeek(todayDate, obj.Dates);
     //     })
     //     console.log(validSchedules);
-        
+
     //     var hoursArr = validSchedules.map(function (a) { return a.HoursPerWeek; });
     //     console.log(hoursArr);
 
@@ -227,13 +228,13 @@ class Projects_list_page extends React.Component {
             //let currUpdates = "";
 
             rowJSON = {
-                projectName : currProjectName,
+                projectName: currProjectName,
                 details: currProjectID,
                 //updates: currUpdates,
                 startDate: currStartDate,
                 dueDate: currDueDate,
-                status : currStatus,
-                tech : currTech,
+                status: currStatus,
+                tech: currTech,
                 //resources: currResources,
                 //hoursWeek : currHoursWeek,
                 estMaxHours: currEstMaxHours,
@@ -255,7 +256,7 @@ class Projects_list_page extends React.Component {
 
     handleSetProjName(event) {
         this.setState({
-            newProjectName : event.target.value
+            newProjectName: event.target.value
         });
     }
 
@@ -273,7 +274,7 @@ class Projects_list_page extends React.Component {
 
     handleSetStartDate(event) {
         this.setState({
-            newStartDate : event.target.value
+            newStartDate: event.target.value
         });
     }
 
@@ -282,11 +283,11 @@ class Projects_list_page extends React.Component {
             newDueDate: event.target.value
         });
     }
-    
+
     async handleSubmit(event) {
         let newProjData = {
-            "ProjectName" : this.state.newProjectName,
-            "Technology" : this.state.newTechnology,
+            "ProjectName": this.state.newProjectName,
+            "Technology": this.state.newTechnology,
             "EstMaxHours": this.state.newEstMaxHours,
             "Status": this.state.newStatus,
             "StartDate": this.state.newStartDate,
@@ -310,6 +311,17 @@ class Projects_list_page extends React.Component {
             .then(function (newData) {
                 this.setState({ rowData: newData })
             }.bind(this))
+    }
+
+    buttonGenerater(value) {
+        console.log("logged----list");
+        console.log(value);
+        if (value === "logged") {
+            return (<button
+                style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                onClick={this.togglePopup.bind(this)}
+            >Add Project</button>)
+        }
     }
 
     render() {
@@ -349,11 +361,13 @@ class Projects_list_page extends React.Component {
                         <input type="submit" value="Submit" />
                     </form>
                 </Modal>
-
-                <button
+                <LoginContext.Consumer>
+                    {({value, toggleValue}) => (this.buttonGenerater(value))}
+                </LoginContext.Consumer>
+                {/* <button
                     style={{ height: '30px', width: '100px', marginRight: '10px' }}
                     onClick={this.togglePopup.bind(this)}
-                >Add Project</button>
+                >Add Project</button> */}
             </div>
         );
     }
