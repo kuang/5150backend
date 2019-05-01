@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
-
+import { LoginContext } from '../App';
 
 class twoList extends React.Component {
     constructor(props) {
@@ -69,10 +69,10 @@ class twoList extends React.Component {
             .then(data => this.processData(data, 1));
     }
 
-    async getProjectName(projectID){
+    async getProjectName(projectID) {
         fetch(`../api/displayProjectNameById/${projectID}`)
             .then(result => result.json())
-            .then(data => this.setState({projectName:data[0].ProjectName}));
+            .then(data => this.setState({ projectName: data[0].ProjectName }));
     }
 
 
@@ -221,11 +221,29 @@ class twoList extends React.Component {
         this.fetchResources(this.projectID);
     }
 
+    dealLog(value, flag) {
+        var toreturn = [];
+
+        if (value === "logged") {
+            if (flag == 0) {
+                // console.log("ggggg");
+                toreturn.push(<button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>);
+                toreturn.push(<button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>);
+            }else{
+                toreturn.push(<button onClick={this.handleRemove}>Remove Resources</button>);
+            }
+        }
+        
+        return toreturn;
+    }
+
     render() {
         var leftList = this.generateListElements(this.state.avaliableList, this.state.toadd, this.clickHandler);
         var rightList = this.generateListElements(this.state.currentList, this.state.toremove, this.clickHandler);
+        console.log("----------------------");
+        console.log(this.context);
         return (
-            <div style={{height:'550px'}}>
+            <div style={{ height: '550px' }}>
                 <h1>Project: {this.state.projectName}</h1>
                 <div className="leftContainer">
                     <p>Avaliable resources to add to project</p>
@@ -233,8 +251,13 @@ class twoList extends React.Component {
                     <ul className="myUL">
                         {leftList}
                     </ul>
-                    <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
-                    <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>
+                    <LoginContext.Consumer>
+                        {({ value, toggleValue }) =>
+                            (this.dealLog(value, 0))
+                        }
+                        {/* <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
+                        <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button> */}
+                    </LoginContext.Consumer>
                 </div>
                 <div className="rightContainer">
                     <p>Current resources in this project</p>
@@ -242,11 +265,19 @@ class twoList extends React.Component {
                     <ul className="myUL">
                         {rightList}
                     </ul>
-                    <button onClick={this.handleRemove}>Remove Resources</button>
+                    <LoginContext.Consumer>
+                        {({ value, toggleValue }) =>
+                            (this.dealLog(value, 1))
+                        }
+                        {/* <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
+                        <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button> */}
+                    </LoginContext.Consumer>
+                    {/* <button onClick={this.handleRemove}>Remove Resources</button> */}
                 </div>
             </div>
         );
     }
 }
+
 
 export default twoList

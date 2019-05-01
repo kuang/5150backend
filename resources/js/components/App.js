@@ -10,8 +10,24 @@ import add_res_to_project from './add_resource_to_project_page/add_res_to_projec
 import Login from './Login.js';
 import './navStyle.css';
 import logo from "./logo.jpg";
+export const LoginContext = React.createContext();
+//try context for login featrue
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.toggleValue = (logInfo) => {
+      this.setState({value: logInfo});
+    }
+
+    this.state = {
+      value: "unlogged",
+      toggleValue: this.toggleValue,
+    }
+  }
+
   render() {
     return (
       <Router>
@@ -22,9 +38,14 @@ class App extends Component {
               <NavLink className="tag" to="/projects_list" activeStyle={{ color: 'green' }}><span>Project List</span></NavLink>
               <NavLink className="tag" to="/resource/" activeStyle={{ color: 'green' }}><span>Resource List</span></NavLink>
               {/* b31b1b */}
-              <div className="loginButton">
-                <Login/>
-              </div>
+              {/* <LoginContext.Provider value="asdf">
+                <LoginContext.Consumer>{(context)=><p>{context}</p>}</LoginContext.Consumer>
+              </LoginContext.Provider> */}
+              <LoginContext.Provider value={this.state}>
+                <div className="loginButton">
+                  <Login />
+                </div>
+              </LoginContext.Provider>
             </div>
 
 
@@ -58,22 +79,23 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-
-          <Route path="/" exact component={Index} />
-          <Route path="/login" component={Login} />
-          <Route path="/about/" component={About} />
-          <Route path="/users/" component={Users} />
-          <Route path="/resource/" component={Resource_list_page} />
-          <Route
-            path="/individual_resource/:resourceID"
-            component={Individual_resource_page}
-          />
-          <Route
-            path="/individual_project/:projectID"
-            component={Individual_project_page}
-          />
-          <Route path="/projects_list/" component={Projects_list_page} />
-          <Route path="/add_res_to_project/:projectID" component={add_res_to_project} />
+          <LoginContext.Provider value={this.state}>
+            <Route path="/" exact component={Index} />
+            <Route path="/login" component={Login} />
+            <Route path="/about/" component={About} />
+            <Route path="/users/" component={Users} />
+            <Route path="/resource/" component={Resource_list_page} />
+            <Route
+              path="/individual_resource/:resourceID"
+              component={Individual_resource_page}
+            />
+            <Route
+              path="/individual_project/:projectID"
+              component={Individual_project_page}
+            />
+            <Route path="/projects_list/" component={Projects_list_page} />
+            <Route path="/add_res_to_project/:projectID" component={add_res_to_project} />
+          </LoginContext.Provider>
         </div>
       </Router>
     );
@@ -91,6 +113,7 @@ function About() {
 function Users() {
   return <h2>Users</h2>;
 }
+
 
 export default App;
 
