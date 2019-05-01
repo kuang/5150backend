@@ -48,7 +48,7 @@ Route::get('/displayAllProjectInfo', function () {
         $table = DB::table('projects')
             ->join('resources_per_projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
-            ->select('projects.ProjectName', 'projects.StartDate', 'projects.DueDate', 'projects.Status',
+            ->select('projects.ProjectID', 'projects.ProjectName', 'projects.StartDate', 'projects.DueDate', 'projects.Status',
                 'projects.Technology', 'projects.EstMaxHours', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursAssigned'))
             ->groupBy('projects.ProjectID')
             ->get();
