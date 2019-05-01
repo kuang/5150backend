@@ -227,21 +227,22 @@ class Individual_resource_page extends Component {
                     <h1>Resource name: {this.state.firstName} {this.state.lastName}</h1>
                     <button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>
                 </div>
-                {/* <div style={{ overflow: 'auto', maxHeight: 200, width: '50%', float: 'right' }}> */}	<div
-                    className="ag-theme-balham"
-                    style={{
-                        height: '62vh',
-                        width: '100vw'
-                    }}
-                >
-                    <AgGridReact
-                        columnDefs={this.state.columnDefs}
-                        rowData={this.state.rowData}
-                    // onCellClicked={this.cellClicked.bind(this)}
-                    ></AgGridReact>
-                </div>
+                <div style={{ overflow: 'auto', width: '100%' }}>
+                    <div
+                        className="ag-theme-balham"
+                        style={{
+                            height: '62vh',
+                            width: '100vw'
+                        }}
+                    >
+                        <AgGridReact
+                            columnDefs={this.state.columnDefs}
+                            rowData={this.state.rowData}
+                        // onCellClicked={this.cellClicked.bind(this)}
+                        ></AgGridReact>
+                    </div>
 
-                {/* </div > */}
+                </div >
             </div >
         );
     }

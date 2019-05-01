@@ -57,7 +57,7 @@ class Resource_list_page extends React.Component {
 			suppressMovable: true,
 			pinned: 'left'
 		}, {
-			headerName: 'Max Hour Per Week',
+			headerName: 'Max Hours Per Week',
 			width: 160,
 			field: 'maxHourPerWeek',
 			filter: "agTextColumnFilter",
@@ -211,7 +211,7 @@ class Resource_list_page extends React.Component {
 						<label style={{ marginRight: '15px' }}>netID:</label>
 						<input style={{ float: 'right' }} type="text" required value={this.state.netID} onChange={this.handleNetIDChange} />
 						<br></br>
-						<label style={{ marginRight: '15px' }}>Max hours per Week:</label>
+						<label style={{ marginRight: '15px' }}>Max Hours per Week:</label>
 						<input style={{ float: 'right' }} type="number" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
 						<br></br>
 						<input type="submit" value="Submit" />
