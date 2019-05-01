@@ -11,6 +11,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Select from 'react-select';
 import ReactNotification from "react-notifications-component";
 import TextareaAutosize from "react-autosize-textarea";
+import { LoginContext } from '../App';
 
 let moment = require('moment');
 class Individual_project_page extends React.Component {
@@ -40,7 +41,7 @@ class Individual_project_page extends React.Component {
         this.resourceNetIDOptions = [];
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
-            selectedOption : "",
+            selectedOption: "",
             openTypeWarning: false,
             openNoScheduleWarning: false,
             columnDefs: [{
@@ -58,7 +59,7 @@ class Individual_project_page extends React.Component {
             updatedProjectStartDate: "",
             updatedProjectMaxHours: "",
             openCommentView: false,
-            updatedCommentUser : "",
+            updatedCommentUser: "",
             updatedCommentNetID: "",
             updatedCommentWeek: "",
             updatedCommentData: ""
@@ -76,8 +77,8 @@ class Individual_project_page extends React.Component {
         console.log(data);
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
-            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide:true},
-            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left'},
+            { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide: true },
+            { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
         ];
         let rowData = [];
         let columnNames = new Set();
@@ -131,7 +132,7 @@ class Individual_project_page extends React.Component {
 
         for (let i = 0; i < dates.length; i++) {
             let name = dates[i]["headerName"];
-            this.resourceDateOptions.push({label : name, value: 1});
+            this.resourceDateOptions.push({ label: name, value: 1 });
         }
 
         let dateComparator = function (a, b) {
@@ -144,7 +145,7 @@ class Individual_project_page extends React.Component {
             return 0;
         };
         dates.sort(dateComparator);
-        this.latestDate = dates[dates.length-1].field;
+        this.latestDate = dates[dates.length - 1].field;
         columnDefs = columnDefs.slice(0, 3).concat(dates);
         return { "rowData": rowData, "columnDefs": columnDefs };
     }
@@ -172,11 +173,11 @@ class Individual_project_page extends React.Component {
         this.dueDate = actualResponse[0]["DueDate"];
         let theSelectedOption = {};
         if (currentStatus == "Ongoing") {
-            theSelectedOption= { label: "Ongoing", value: 1 };
+            theSelectedOption = { label: "Ongoing", value: 1 };
         }
 
         else if (currentStatus == "Inactive") {
-            theSelectedOption={ label: "Inactive", value: 2 };
+            theSelectedOption = { label: "Inactive", value: 2 };
         }
 
         else if (currentStatus == "Done") {
@@ -184,7 +185,7 @@ class Individual_project_page extends React.Component {
         }
 
         else if (currentStatus == "On Hold") {
-           theSelectedOption = { label: "On Hold", value: 4 };
+            theSelectedOption = { label: "On Hold", value: 4 };
         }
 
         let projectName = actualResponse[0]["ProjectName"];
@@ -205,7 +206,7 @@ class Individual_project_page extends React.Component {
         for (let i = 0; i < names_json.length; i++) {
             let name = names_json[i]["FirstName"] + " " + names_json[i]["LastName"];
             let netid = names_json[i]["NetID"];
-            this.resourceNameOptions.push({label : name, value: 1});
+            this.resourceNameOptions.push({ label: name, value: 1 });
 
             if (this.nameToNetID.has(name)) {
                 let old_arr = this.nameToNetID.get(name);
@@ -308,7 +309,7 @@ class Individual_project_page extends React.Component {
             event.api.refreshCells();
             return;
         }
-        
+
         this.updatedRows.add({ "rowIndex": rowIndex, "colIndex": editedColumn });
     }
 
@@ -374,10 +375,10 @@ class Individual_project_page extends React.Component {
             .then(function (newStuff) {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this));
-        
+
         if (moment(this.latestDate).isAfter(this.dueDate)) {
             this.addDueDateNotification();
-            let updatedData = {"ProjectID" : projectID, "DueDate" : this.latestDate};
+            let updatedData = { "ProjectID": projectID, "DueDate": this.latestDate };
             await fetch('../api/updateProjectDueDate', {
                 method: "PUT",
                 headers: {
@@ -448,7 +449,7 @@ class Individual_project_page extends React.Component {
     }
 
     handleChange(selection) {
-        this.setState({selectedOption: selection});
+        this.setState({ selectedOption: selection });
     }
 
     async addOldWeek() {
@@ -503,11 +504,11 @@ class Individual_project_page extends React.Component {
     }
 
     closeFormModal() {
-        this.setState({openProjectFormModal :false});
+        this.setState({ openProjectFormModal: false });
     }
 
     handleFormInputChange(e) {
-        this.setState({[e.target.id] : e.target.value});
+        this.setState({ [e.target.id]: e.target.value });
     }
 
     /***
@@ -515,7 +516,7 @@ class Individual_project_page extends React.Component {
      * @param e
      */
     handleCommentFormInputChange(e) {
-        this.setState({[e.target.id] : e.target.value});
+        this.setState({ [e.target.id]: e.target.value });
         console.log(this);
     }
     /*** Handle PUT Request(s) upon form being submitted
@@ -525,13 +526,13 @@ class Individual_project_page extends React.Component {
     async handleFormSubmit(event) {
         let projectID = this.props.match.params.projectID;
         let newData = {
-            "ProjectID" : projectID,
-            "DueDate" : this.state.updatedProjectDueDate,
-            "StartDate" : this.state.updatedProjectStartDate,
-            "Technology" : this.state.updatedProjectTechnology,
-            "Status" : this.state.selectedOption["label"],
-            "ProjectName" : this.state.updatedProjectName,
-            "EstMaxHours" : this.state.updatedProjectMaxHours
+            "ProjectID": projectID,
+            "DueDate": this.state.updatedProjectDueDate,
+            "StartDate": this.state.updatedProjectStartDate,
+            "Technology": this.state.updatedProjectTechnology,
+            "Status": this.state.selectedOption["label"],
+            "ProjectName": this.state.updatedProjectName,
+            "EstMaxHours": this.state.updatedProjectMaxHours
         };
 
         let response = await fetch('../api/updateIndividualProjectInfo', {
@@ -553,11 +554,11 @@ class Individual_project_page extends React.Component {
         this.dueDate = actualResponse[0]["DueDate"];
         let theSelectedOption = {};
         if (currentStatus == "Ongoing") {
-            theSelectedOption= { label: "Ongoing", value: 1 };
+            theSelectedOption = { label: "Ongoing", value: 1 };
         }
 
         else if (currentStatus == "Inactive") {
-            theSelectedOption={ label: "Inactive", value: 2 };
+            theSelectedOption = { label: "Inactive", value: 2 };
         }
 
         else if (currentStatus == "Done") {
@@ -585,14 +586,16 @@ class Individual_project_page extends React.Component {
     }
 
     closeCommentViewModal() {
-        this.setState({openCommentView : false});
+        this.setState({ openCommentView: false });
     }
 
     openCommentViewModal() {
-        this.setState({updatedCommentUser : "",
+        this.setState({
+            updatedCommentUser: "",
             updatedCommentNetID: "",
             updatedCommentWeek: "",
-            updatedCommentData: "", openCommentView : true});
+            updatedCommentData: "", openCommentView: true
+        });
     }
     /***
      * Makes POST Request to save data
@@ -605,10 +608,10 @@ class Individual_project_page extends React.Component {
     async handleCommentFormSubmit() {
         let projectID = this.props.match.params.projectID;
         let newData = {
-            "ProjectID" : projectID,
-            "NetID" : this.state.updatedCommentNetID["label"],
-            "Dates" : this.state.updatedCommentWeek["label"],
-            "Comment" : this.state.updatedCommentData,
+            "ProjectID": projectID,
+            "NetID": this.state.updatedCommentNetID["label"],
+            "Dates": this.state.updatedCommentWeek["label"],
+            "Comment": this.state.updatedCommentData,
         };
 
         let response = await fetch('../api/updateComment', {
@@ -626,11 +629,11 @@ class Individual_project_page extends React.Component {
         let name = selection["label"];
         let netids = this.nameToNetID.get(name);
         this.resourceNetIDOptions = [];
-        for (let i  = 0; i < netids.length; i++) {
-            this.resourceNetIDOptions.push({label : netids[i], value: 1});
+        for (let i = 0; i < netids.length; i++) {
+            this.resourceNetIDOptions.push({ label: netids[i], value: 1 });
         }
         console.log("hello");
-        this.setState({updatedCommentUser:selection, updatedCommentNetID: "", updatedCommentData: ""});
+        this.setState({ updatedCommentUser: selection, updatedCommentNetID: "", updatedCommentData: "" });
         console.log(this);
     }
 
@@ -644,7 +647,7 @@ class Individual_project_page extends React.Component {
             let comment_json = await response.json();
             comment = comment_json[0]["Comment"];
         }
-        this.setState({updatedCommentData: comment, updatedCommentNetID:selection});
+        this.setState({ updatedCommentData: comment, updatedCommentNetID: selection });
         console.log(this);
     }
 
@@ -659,21 +662,66 @@ class Individual_project_page extends React.Component {
             let comment_json = await response.json();
             comment = comment_json[0]["Comment"];
         }
-        this.setState({updatedCommentData: comment, updatedCommentWeek:selection});
+        this.setState({ updatedCommentData: comment, updatedCommentWeek: selection });
         console.log(this);
     }
 
     handleCommentFormDataUpdate(event) {
         console.log("commentFormDataUpdate");
-        this.setState({updatedCommentData :  event.target.value});
+        this.setState({ updatedCommentData: event.target.value });
     }
 
     resizeColumns(event) {
         event.api.sizeColumnsToFit();
     }
+
+    buttonGen(value) {
+        if (value === "logged") {
+            let addResPageUrl = '/add_res_to_project/' + this.props.match.params.projectID;
+            return (
+                <div>
+                    <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
+                        onClick={
+                            this.submitSave.bind(this)
+                        }
+                    >
+                        Save
+                </button>
+                    <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>+ Week</button>
+
+                    <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
+
+                    {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
+                    {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
+                    {/*    </Select>*/}
+                    {/*</div>*/}
+
+                    <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.addOldWeek.bind(this)}
+                    >
+                        See Old Week
+                </button>
+
+                    {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
+
+                    <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openProjectForm.bind(this)}
+                    >
+                        Edit Project
+                </button>
+
+                    <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openCommentViewModal.bind(this)}
+                    >
+                        Edit Comment
+                </button>
+
+                    <Link to={addResPageUrl}>Add Resource</Link>
+                </div>
+            );
+        }
+    }
+
     render() {
-        let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
-        let projectID  = this.props.match.params.projectID;
+        let addResPageUrl = '/add_res_to_project/' + this.props.match.params.projectID;
+        let projectID = this.props.match.params.projectID;
         fetch(`../api/displayProjectNameById/${this.props.match.params.projectID}`)
             .then(response => response.json())
             .then(realResponse => this.projectName = realResponse[0]["ProjectName"])
@@ -696,7 +744,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
                             <br></br>
-                            <Select value = {this.state.updatedCommentUser} onChange = {this.handleCommentFormUserUpdate.bind(this)} options = {this.resourceNameOptions}>
+                            <Select value={this.state.updatedCommentUser} onChange={this.handleCommentFormUserUpdate.bind(this)} options={this.resourceNameOptions}>
                             </Select>
 
                         </label>
@@ -704,7 +752,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             NetID:
                             <br></br>
-                            <Select value = {this.state.updatedCommentNetID} onChange = {this.handleCommentFormNetIDUpdate.bind(this)} options = {this.resourceNetIDOptions}>
+                            <Select value={this.state.updatedCommentNetID} onChange={this.handleCommentFormNetIDUpdate.bind(this)} options={this.resourceNetIDOptions}>
                             </Select>
 
                         </label>
@@ -712,7 +760,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Week:
                             <br></br>
-                            <Select value = {this.state.updatedCommentWeek} onChange = {this.handleCommentFormWeekUpdate.bind(this)} options = {this.resourceDateOptions}>
+                            <Select value={this.state.updatedCommentWeek} onChange={this.handleCommentFormWeekUpdate.bind(this)} options={this.resourceDateOptions}>
                             </Select>
                         </label>
 
@@ -720,7 +768,7 @@ class Individual_project_page extends React.Component {
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Comment:
                             <br></br>
-                            <TextareaAutosize value = {this.state.updatedCommentData} style = {{width:"100%"}} maxRows={6} onChange = {this.handleCommentFormDataUpdate.bind(this)}>
+                            <TextareaAutosize value={this.state.updatedCommentData} style={{ width: "100%" }} maxRows={6} onChange={this.handleCommentFormDataUpdate.bind(this)}>
 
                             </TextareaAutosize>
 
@@ -735,42 +783,42 @@ class Individual_project_page extends React.Component {
                     <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
                 </Modal>
 
-                <Modal open ={this.state.openProjectFormModal} onClose= {this.closeFormModal.bind(this)}
+                <Modal open={this.state.openProjectFormModal} onClose={this.closeFormModal.bind(this)}
                 >
                     <form onSubmit={this.handleFormSubmit.bind(this)}>
                         <br></br>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Name:
-                            <input id  = "updatedProjectName" style = {{float: 'right'}} type="text" required value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id="updatedProjectName" style={{ float: 'right' }} type="text" required value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Technology:
-                            <input id = "updatedProjectTechnology" style = {{float: 'right'}} type="text" required value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id="updatedProjectTechnology" style={{ float: 'right' }} type="text" required value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             MaxHours:
-                            <input id = "updatedProjectMaxHours" style = {{float: 'right'}} type="number" min="0" required value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
+                            <input id="updatedProjectMaxHours" style={{ float: 'right' }} type="number" min="0" required value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             StartDate:
-                            <input id = "updatedProjectStartDate" style = {{float: 'right'}} type="date" required value={this.state.updatedProjectStartDate}
-                                   onChange={this.handleFormInputChange.bind(this)} />
+                            <input id="updatedProjectStartDate" style={{ float: 'right' }} type="date" required value={this.state.updatedProjectStartDate}
+                                onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             DueDate:
-                            <input id = "updatedProjectDueDate" style = {{float: 'right'}} type="date" required value={this.state.updatedProjectDueDate}
-                                   onChange={this.handleFormInputChange.bind(this)} />
+                            <input id="updatedProjectDueDate" style={{ float: 'right' }} type="date" required value={this.state.updatedProjectDueDate}
+                                onChange={this.handleFormInputChange.bind(this)} />
                         </label>
                         <br></br>
                         <label style={{ marginRight: '15px', width: '100%' }}>
                             Project Status
                             <br></br>
                             <br></br>
-                            <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>
+                            <Select value={this.state.selectedOption} onChange={this.handleChange.bind(this)} options={this.statusOptions}>
                             </Select>
                         </label>
 
@@ -788,11 +836,15 @@ class Individual_project_page extends React.Component {
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
                     onCellDoubleClicked={this.displayComment.bind(this)}
                     enableCellChangeFlash={true}
-                    onGridReady = {this.resizeColumns.bind(this)}
+                    onGridReady={this.resizeColumns.bind(this)}
                 >
                 </AgGridReact>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
+                <LoginContext.Consumer>
+                    {({ value, toggleValue }) => (this.buttonGen(value))}
+                </LoginContext.Consumer>
+
+                {/* <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
                     onClick={
                         this.submitSave.bind(this)
                     }
@@ -801,31 +853,31 @@ class Individual_project_page extends React.Component {
                 </button>
                 <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>+ Week</button>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button> */}
 
                 {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
                 {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
                 {/*    </Select>*/}
                 {/*</div>*/}
 
-                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.addOldWeek.bind(this)}
+                {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.addOldWeek.bind(this)}
                 >
                     See Old Week
-                </button>
+                </button> */}
 
                 {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
 
-                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openProjectForm.bind(this)}
+                {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openProjectForm.bind(this)}
                 >
                     Edit Project
                 </button>
 
-                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px'}} onClick = {this.openCommentViewModal.bind(this)}
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openCommentViewModal.bind(this)}
                 >
                     Edit Comment
                 </button>
 
-                <Link to={addResPageUrl}>Add Resource</Link>
+                <Link to={addResPageUrl}>Add Resource</Link> */}
             </div>
         );
     }
