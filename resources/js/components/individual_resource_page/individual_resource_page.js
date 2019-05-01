@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import ReactList from 'react-list';
 import { Link } from 'react-router-dom'
 import Modal from 'react-responsive-modal';
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
 class Individual_resource_page extends Component {
 
@@ -15,26 +18,103 @@ class Individual_resource_page extends Component {
             hours: 0,
             projects: "",
             openEdit: false,
-
+            columnDefs: [{
+                headerName: "Name", field: "name"
+            }],
+            // state variables needed for resource form
+            rowData: [],
         };
-        this.renderItem = this.renderItem.bind(this);
+        // this.renderItem = this.renderItem.bind(this);
+    }
+    async processData(data) {
+        let columnDefs = [{
+            headerName: 'Project',
+            field: 'project',
+            width: 100,
+            filter: "agTextColumnFilter",
+            suppressMovable: true,
+            pinned: 'left'
+        }
+            // , {
+            //     headerName: 'Details',
+            //     field: 'detailLink',
+            //     width: 100,
+            //     filter: "agTextColumnFilter",
+            //     suppressMovable: true,
+            //     pinned: 'left',
+            //     cellRenderer: function (params) {
+            //         return "<a href='/individual_project/" + params.value + "'>Details</a>"
+            //     }
+            // }
+        ]
+
+        let rowData = [];
+        let currJSON = {};
+        let colNames = new Set();
+        let prevProjectName = null;
+
+        for (let i = 0; i < data.length; i++) {
+            let curr = data[i];
+            let currHeader = curr.Dates;
+            let currProjectName = curr.ProjectName;
+            let numHours = curr.HoursPerWeek;
+
+            // new row
+            if (currProjectName != prevProjectName) {
+                if (prevProjectName != null) {
+                    rowData.push(currJSON);
+                }
+                prevProjectName = currProjectName;
+                currJSON = {
+                    project: currProjectName,
+                    // detailLink: id
+                };
+            }
+            let currHours = curr.HoursPerWeek;
+            if (!colNames.has(currHeader)) {
+                colNames.add(currHeader);
+                let newColDef = {
+                    headerName: currHeader,
+                    field: currHeader,
+                    sortable: true,
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true
+                };
+                columnDefs.push(newColDef);
+            }
+            currJSON[currHeader] = currHours;
+        }
+        rowData.push(currJSON);
+        console.log("rowData");
+        console.log(rowData);
+        console.log("columnDefs");
+        console.log(columnDefs);
+        return { "rowData": rowData, "columnDefs": columnDefs };
     }
 
     componentDidMount() {
-        fetch('/api/displayProjectsPerResource/' + this.props.match.params.resourceID)
-            .then(res => res.json())
-            .then(
-                (result) => {
-                    // let string_result = JSON.stringify({ result })
-                    // console.log(result);
-                    this.setState({ projects: result });
-                },
-                // Note: it's important to handle errors here
-                // instead of a catch() block so that we don't swallow
-                // exceptions from actual bugs in components.
-                (error) => {
-                    return <h2>failed</h2>;
-                });
+
+        fetch('../api/displayIndividualResourceHours/' + this.props.match.params.resourceID)
+            .then(result => result.json())
+            .then(data => this.processData(data))
+            .then(function (newData) {
+                this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
+            }.bind(this));
+        // .then(res => res.json())
+        // .then(
+        //     (result) => {
+        //         console.log(result);
+        //         // this.setState({ projects: result });
+        //     },
+        //     // Note: it's important to handle errors here
+        //     // instead of a catch() block so that we don't swallow
+        //     // exceptions from actual bugs in components.
+        //     (error) => {
+        //         return <h2>failed</h2>;
+        //     });
+
+
+
 
         fetch('/api/displayResourceInfo/' + this.props.match.params.resourceID)
             .then(res => res.json())
@@ -95,19 +175,19 @@ class Individual_resource_page extends Component {
 
 
     // renders each individual row of the projects list.
-    renderItem(index, key) {
-        if (this.state.projects.length != 0) {
-            return (
-                <div key={key} style={{ borderStyle: 'solid' }}>
-                    <div>{this.state.projects[index].ProjectName}</div>
-                    <div>Start Date: {this.state.projects[index].StartDate}</div>
-                </div >
-            );
-        }
-        else {
-            return <div></div>;
-        }
-    }
+    // renderItem(index, key) {
+    //     if (this.state.projects.length != 0) {
+    //         return (
+    //             <div key={key} style={{ borderStyle: 'solid' }}>
+    //                 <div>{this.state.projects[index].ProjectName}</div>
+    //                 <div>Start Date: {this.state.projects[index].StartDate}</div>
+    //             </div >
+    //         );
+    //     }
+    //     else {
+    //         return <div></div>;
+    //     }
+    // }
 
     render() {
         return (
@@ -147,12 +227,21 @@ class Individual_resource_page extends Component {
                     <h1>Resource name: {this.state.firstName} {this.state.lastName}</h1>
                     <button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>
                 </div>
-                <div style={{ overflow: 'auto', maxHeight: 200, width: '50%', float: 'right' }}>
-                    <ReactList
-                        itemRenderer={this.renderItem}
-                        length={this.state.projects.length}
-                        type='uniform'
-                    />
+                <div style={{ overflow: 'auto', width: '100%' }}>
+                    <div
+                        className="ag-theme-balham"
+                        style={{
+                            height: '62vh',
+                            width: '100vw'
+                        }}
+                    >
+                        <AgGridReact
+                            columnDefs={this.state.columnDefs}
+                            rowData={this.state.rowData}
+                        // onCellClicked={this.cellClicked.bind(this)}
+                        ></AgGridReact>
+                    </div>
+
                 </div >
             </div >
         );

@@ -41,39 +41,39 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
+		console.log(data);
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
-			width:100,
+			width: 100,
 			filter: "agTextColumnFilter",
 			suppressMovable: true,
 			pinned: 'left'
-		},{
+		}, {
 			headerName: 'Name',
 			field: 'name',
-			width:160,
+			width: 160,
 			filter: "agTextColumnFilter",
 			suppressMovable: true,
 			pinned: 'left'
-		},{
-			headerName: 'Max Hour Per Week',
+		}, {
+			headerName: 'Max Hours Per Week',
 			width: 160,
 			field: 'maxHourPerWeek',
 			filter: "agTextColumnFilter",
 			suppressMovable: true,
 			pinned: 'left'
-		},{
+		}, {
 			headerName: 'Details',
 			field: 'detailLink',
-			width:100,
+			width: 100,
 			filter: "agTextColumnFilter",
 			suppressMovable: true,
 			pinned: 'left',
-			cellRenderer: function(params) {
-				// console.log(params.value);
-      	// return '<a href="https://www.google.com" target="_blank">'+ params.value+'</a>'
-				return "<a href='/individual_resource/" + params.value +"'>Details</a>"
-  		}}
+			cellRenderer: function (params) {
+				return "<a href='/individual_resource/" + params.value + "'>Details</a>"
+			}
+		}
 		]
 
 		let rowData = [];
@@ -196,23 +196,23 @@ class Resource_list_page extends React.Component {
 				<AgGridReact
 					columnDefs={this.state.columnDefs}
 					rowData={this.state.rowData}
-					// onCellClicked={this.cellClicked.bind(this)}
+				// onCellClicked={this.cellClicked.bind(this)}
 				></AgGridReact>
 
 				<Modal open={this.state.showPopup} onClose={this.togglePopup.bind(this)} center closeIconSize={14}>
 					<h4 style={{ marginTop: '15px' }}>Add a New Resource</h4>
 					<form onSubmit={this.handleSubmit}>
-						<label style={{marginRight: '15px'}}>First Name:</label>
-						<input style={{float: 'right'}} type="text" required value={this.state.firstName} onChange={this.handleFirstNameChange} />
+						<label style={{ marginRight: '15px' }}>First Name:</label>
+						<input style={{ float: 'right' }} type="text" required value={this.state.firstName} onChange={this.handleFirstNameChange} />
 						<br></br>
-						<label style={{marginRight: '15px'}}>Last Name:</label>
-						<input style={{float: 'right'}} type="text" required value={this.state.lastName} onChange={this.handleLastNameChange} />
+						<label style={{ marginRight: '15px' }}>Last Name:</label>
+						<input style={{ float: 'right' }} type="text" required value={this.state.lastName} onChange={this.handleLastNameChange} />
 						<br></br>
-						<label style={{marginRight: '15px'}}>netID:</label>
-						<input style={{float: 'right'}} type="text" required value={this.state.netID} onChange={this.handleNetIDChange} />
+						<label style={{ marginRight: '15px' }}>netID:</label>
+						<input style={{ float: 'right' }} type="text" required value={this.state.netID} onChange={this.handleNetIDChange} />
 						<br></br>
-						<label style={{marginRight: '15px'}}>Max hours per Week:</label>
-						<input style={{float: 'right'}} type="number" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
+						<label style={{ marginRight: '15px' }}>Max Hours per Week:</label>
+						<input style={{ float: 'right' }} type="number" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
 						<br></br>
 						<input type="submit" value="Submit" />
 					</form>

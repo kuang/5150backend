@@ -8,7 +8,7 @@ class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      direct: false,
+      permision: "read",
       user: null,
       login: false
     };

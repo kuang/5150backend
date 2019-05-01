@@ -174,6 +174,19 @@ Route::get('/getComment/{projectID}/{netID}/{date}', function ($projectID, $netI
     }
 });
 
+/** Route that returns names and netids of resources working on a particular project */
+Route::get('/getNames/{projectID}', function ($projectID) {
+    $table = DB::table('resources_per_projects')
+        ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+        ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+        ->select('resources.NetID', 'resources.FirstName', 'resources.LastName')->distinct()
+        ->where('resources_per_projects.ProjectID', '=', $projectID)
+        ->orderBy('resources.FirstName')
+        ->orderBy('resources.LastName')
+        ->get();
+    return $table;
+});
+
 
 /** Route that adds a new project to the projects table via POST Request
 {
@@ -591,7 +604,7 @@ Route::put('/updateSchedule', function(Request $request) {
                 return response('This resource already has hours for this week on this project', 403);
             }
         }
-        return response('This entry could not be added. Please try again.', 403);
+        return response('This entry could not be updated. Please try again.', 403);
     }
 });
 
@@ -651,7 +664,7 @@ Route::delete("/deleteResource", function(Request $request) {
 
         DB::table('resources_per_projects')->where("ResourceID", "=", $resource_id)->delete();
         DB::table('resources')->where("ResourceID" ,"=", $resource_id)->delete();
-        return "Successfully Deleted Resource";
+        return "Successfully Deleted Existing Resource";
 
     } catch (Exception $e){
         return response('This resource could not be deleted. Please try again.', 403);
@@ -687,7 +700,7 @@ Route::delete("/deleteResourcePerProject", function(Request $request) {
         }
 
         DB::table('resources_per_projects')->where([["ResourceID", "=", $resource_id], ["ProjectID", "=", $project_id]])->delete();
-        return "Successfully Deleted Resource From Project";
+        return "Successfully Deleted Existing ResourcePerProject";
 
     } catch (Exception $e){
         return response('This resource could not be removed from this project. Please try again.', 403);
@@ -720,7 +733,7 @@ Route::delete("/deleteSchedule", function(Request $request) {
 
         DB::table('schedules')->where([["ScheduleID", "=", $schedule_id], ["Dates", "=", $data["Dates"]]])->delete();
 
-        return "Successfully Deleted Schedule";
+        return "Successfully Deleted Existing Schedule";
 
     } catch (Exception $e){
         return response('This entry could not be deleted. Please try again.', 403);
@@ -755,9 +768,14 @@ Route::get("/displayMostRecentRowData/{projectID}", function($projectID) {
 // });
 
 Route::put("/updateProjectDueDate", function(Request $request) {
-    $data = $request->all();
-    DB::table('projects')->where('ProjectID' ,"=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
-    return "Successfully Updated Project Due Date";
+    try {
+        $data = $request->all();
+        DB::table('projects')->where('ProjectID' ,"=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
+        return response("Successfully Updated Project Due Date", 403);
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
+
 });
 
 /***
@@ -769,20 +787,25 @@ Route::put("/updateProjectDueDate", function(Request $request) {
  * }
  */
 Route::put("/updateComment", function(Request $request) {
-    $data = $request->all();
+    try {
+        $data = $request->all();
 
-    $project_id = $data["ProjectID"];
+        $project_id = $data["ProjectID"];
 
-    $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
-    $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
-    $resource_id = $resource_id_json["ResourceID"];
+        $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
+        $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
+        $resource_id = $resource_id_json["ResourceID"];
 
-    $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
-    $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
-    $schedule_id = $schedule_id_json["ScheduleID"];
+        $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
+        $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
+        $schedule_id = $schedule_id_json["ScheduleID"];
 
-    DB::table('schedules')->where([['ScheduleID' ,"=", $schedule_id], ['Dates', "=", $data["Dates"]]])->update(["Comment" => $data["Comment"]]);
-    return "Successfully Updated Comment";
+        DB::table('schedules')->where([['ScheduleID' ,"=", $schedule_id], ['Dates', "=", $data["Dates"]]])->update(["Comment" => $data["Comment"]]);
+        return response("Successfully Updated Comment", 403);
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
+
 });
 
 /***
@@ -792,9 +815,14 @@ Route::put("/updateComment", function(Request $request) {
  * }
  */
 Route::put("/updateProjectName", function(Request $request) {
-    $data = $request->all();
-    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["ProjectName" => $data["ProjectName"]]);
-    return "Successfully Updated Project Name";
+    try {
+        $data = $request->all();
+        DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["ProjectName" => $data["ProjectName"]]);
+        return "Successfully Updated Project Name";
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
+
 });
 
 /***
@@ -804,9 +832,13 @@ Route::put("/updateProjectName", function(Request $request) {
  * }
  */
 Route::put("/updateProjectTechnology", function(Request $request) {
-    $data = $request->all();
-    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["Technology" => $data["Technology"]]);
-    return "Successfully Updated Project Technology";
+    try {
+        $data = $request->all();
+        DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["Technology" => $data["Technology"]]);
+        return "Successfully Updated Project Technology";
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
 });
 
 /***
@@ -817,9 +849,13 @@ Route::put("/updateProjectTechnology", function(Request $request) {
  *
  */
 Route::put("/updateProjectMaxHours", function(Request $request) {
-    $data = $request->all();
-    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["EstMaxHours" => $data["EstMaxHours"]]);
-    return "Successfully Updated Project Max Hours";
+    try {
+        $data = $request->all();
+        DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["EstMaxHours" => $data["EstMaxHours"]]);
+        return "Successfully Updated Project Max Hours";
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
 });
 
 /***
@@ -830,9 +866,13 @@ Route::put("/updateProjectMaxHours", function(Request $request) {
  *
  */
 Route::put("/updateProjectStartDate", function(Request $request) {
-    $data = $request->all();
-    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["StartDate" => $data["StartDate"]]);
-    return "Successfully Updated Project Start Date";
+    try {
+        $data = $request->all();
+        DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["StartDate" => $data["StartDate"]]);
+        return "Successfully Updated Project Start Date";
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
 });
 
 /***
@@ -843,19 +883,28 @@ Route::put("/updateProjectStartDate", function(Request $request) {
  *
  */
 Route::put("/updateProjectDueDate", function(Request $request) {
-    $data = $request->all();
-    DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
-    return "Successfully Updated Project Due Date";
+    try {
+        $data = $request->all();
+        DB::table("projects")->where('ProjectID', "=", $data["ProjectID"])->update(["DueDate" => $data["DueDate"]]);
+        return "Successfully Updated Project Due Date";
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
+
 });
 
 /***
  * {ProjectID : projectID (integer), Status: status (string)}
  */
 Route::put("/updateProjectStatus", function(Request $request) {
-    $data = $request->all();
-    DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(
-        ["Status" => $data["Status"]]);
-    return "Successfully Updated Project Status";
+    try {
+        $data = $request->all();
+        DB::table('projects')->where('ProjectID', $data["ProjectID"])->update(
+            ["Status" => $data["Status"]]);
+        return "Successfully Updated Project Status";
+    } catch (Exception $e){
+        return response('This field could not be updated. Please try again.', 403);
+    }
 });
 
 /***
@@ -871,11 +920,16 @@ Route::put("/updateProjectStatus", function(Request $request) {
  *
  */
 Route::put("/updateIndividualProjectInfo", function(Request $request) {
-    $data = $request->all();
-    DB::table('projects')->where('ProjectID', "=", $data["ProjectID"])->update(
-        ["Status" => $data["Status"], "DueDate" => $data["DueDate"],
-            "StartDate" => $data["StartDate"], "EstMaxHours" => $data["EstMaxHours"],
-            "Technology" => $data["Technology"], "ProjectName" => $data["ProjectName"]]);
-    return "Successfully Updated Data";
+    try {
+        $data = $request->all();
+        DB::table('projects')->where('ProjectID', "=", $data["ProjectID"])->update(
+            ["Status" => $data["Status"], "DueDate" => $data["DueDate"],
+                "StartDate" => $data["StartDate"], "EstMaxHours" => $data["EstMaxHours"],
+                "Technology" => $data["Technology"], "ProjectName" => $data["ProjectName"]]);
+        return "Successfully Updated Data";
+    } catch (Exception $e){
+        return response('This entry could not be updated. Please try again.', 403);
+    }
+
 });
 
