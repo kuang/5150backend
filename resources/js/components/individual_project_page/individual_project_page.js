@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import 'ag-grid-community/dist/styles/ag-theme-blue.css';
+import 'ag-grid-community/dist/styles/ag-theme-fresh.css';
 import Modal from 'react-responsive-modal';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
@@ -23,6 +25,7 @@ class Individual_project_page extends React.Component {
         this.notificationDOMRef = React.createRef();
         this.updatedRows = new Set();
         this.nameToNetID = new Map();
+        this.projectName = "";
         this.statusOptions = [
             { label: "Ongoing", value: 1 },
             { label: "Inactive", value: 1 },
@@ -664,8 +667,16 @@ class Individual_project_page extends React.Component {
         console.log("commentFormDataUpdate");
         this.setState({updatedCommentData :  event.target.value});
     }
+
+    resizeColumns(event) {
+        event.api.sizeColumnsToFit();
+    }
     render() {
         let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
+        let projectID  = this.props.match.params.projectID;
+        fetch(`../api/displayProjectNameById/${this.props.match.params.projectID}`)
+            .then(response => response.json())
+            .then(realResponse => this.projectName = realResponse[0]["ProjectName"])
         return (
             <div
                 className="ag-theme-balham"
@@ -777,6 +788,7 @@ class Individual_project_page extends React.Component {
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
                     onCellDoubleClicked={this.displayComment.bind(this)}
                     enableCellChangeFlash={true}
+                    onGridReady = {this.resizeColumns.bind(this)}
                 >
                 </AgGridReact>
 
