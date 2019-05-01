@@ -664,6 +664,10 @@ class Individual_project_page extends React.Component {
         console.log("commentFormDataUpdate");
         this.setState({updatedCommentData :  event.target.value});
     }
+
+    resizeColumns(event) {
+        event.api.sizeColumnsToFit();
+    }
     render() {
         let addResPageUrl = '/add_res_to_project/'+this.props.match.params.projectID;
         return (
@@ -777,6 +781,7 @@ class Individual_project_page extends React.Component {
                     onCellValueChanged={this.addUpdatedRow.bind(this)}
                     onCellDoubleClicked={this.displayComment.bind(this)}
                     enableCellChangeFlash={true}
+                    onGridReady = {this.resizeColumns.bind(this)}
                 >
                 </AgGridReact>
 
