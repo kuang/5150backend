@@ -289,7 +289,7 @@ Route::post('/addResourcePerProject', function(Request $request) {
             ->get();
 //        echo($dates);
         foreach($dates as $d){
-            DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0]);
+            DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0, 'Comment' => ""]);
         }
 
         return ("Successfully Added New ResourcePerProject");
