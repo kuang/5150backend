@@ -81,6 +81,9 @@ class Individual_project_page extends React.Component {
             { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
         ];
         let rowData = [];
+        if (data.length == 0) {
+            return;
+        }
         let columnNames = new Set();
         let prevNetID = null;
         let currentJSON = {};
@@ -145,7 +148,9 @@ class Individual_project_page extends React.Component {
             return 0;
         };
         dates.sort(dateComparator);
-        this.latestDate = dates[dates.length - 1].field;
+        if (dates.length != 0) {
+            this.latestDate = dates[dates.length - 1].field;
+        }
         columnDefs = columnDefs.slice(0, 3).concat(dates);
         return { "rowData": rowData, "columnDefs": columnDefs };
     }
@@ -487,6 +492,9 @@ class Individual_project_page extends React.Component {
         console.log(event);
         let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
         let commentData = await response.json();
+        if (commentData.length == 0) {
+            return;
+        }
         let comment = commentData[0]["Comment"];
         if (comment != "") {
             this.notificationDOMRef.current.addNotification({
