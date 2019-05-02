@@ -675,7 +675,8 @@ class Individual_project_page extends React.Component {
         event.api.sizeColumnsToFit();
     }
 
-    buttonGen(value) {
+    buttonGen() {
+        var value = window.sessionStorage.getItem("value");
         if (value === "logged") {
             let addResPageUrl = '/add_res_to_project/' + this.props.match.params.projectID;
             return (
@@ -840,9 +841,7 @@ class Individual_project_page extends React.Component {
                 >
                 </AgGridReact>
 
-                <LoginContext.Consumer>
-                    {({ value, toggleValue }) => (this.buttonGen(value))}
-                </LoginContext.Consumer>
+                {(this.buttonGen())}
 
                 {/* <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
                     onClick={

@@ -221,19 +221,19 @@ class twoList extends React.Component {
         this.fetchResources(this.projectID);
     }
 
-    dealLog(value, flag) {
+    dealLog(flag) {
         var toreturn = [];
-
+        let value = window.sessionStorage.getItem("value");
         if (value === "logged") {
             if (flag == 0) {
                 // console.log("ggggg");
                 toreturn.push(<button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>);
                 toreturn.push(<button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>);
-            }else{
+            } else {
                 toreturn.push(<button onClick={this.handleRemove}>Remove Resources</button>);
             }
         }
-        
+
         return toreturn;
     }
 
@@ -251,13 +251,11 @@ class twoList extends React.Component {
                     <ul className="myUL">
                         {leftList}
                     </ul>
-                    <LoginContext.Consumer>
-                        {({ value, toggleValue }) =>
-                            (this.dealLog(value, 0))
-                        }
+                    <div>
+                        {(this.dealLog(0))}
                         {/* <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
                         <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button> */}
-                    </LoginContext.Consumer>
+                    </div>
                 </div>
                 <div className="rightContainer">
                     <p>Current resources in this project</p>
@@ -265,13 +263,7 @@ class twoList extends React.Component {
                     <ul className="myUL">
                         {rightList}
                     </ul>
-                    <LoginContext.Consumer>
-                        {({ value, toggleValue }) =>
-                            (this.dealLog(value, 1))
-                        }
-                        {/* <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
-                        <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button> */}
-                    </LoginContext.Consumer>
+                    {(this.dealLog(1))}
                     {/* <button onClick={this.handleRemove}>Remove Resources</button> */}
                 </div>
             </div>

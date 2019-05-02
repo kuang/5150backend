@@ -8,6 +8,7 @@ body {
     display: flex;
     background-color: #b31b1b;
     font-weight: bold;
+    width: 150%;
     /* padding-right: 7%;
     padding-right: 7%; */
 }
@@ -35,7 +36,7 @@ body {
 .loginButton {
     /* padding: 6px; */
     margin: 5px;
-    margin-left: 390px;
+    margin-left: 900px;
     display: inline-block;
 }
 
