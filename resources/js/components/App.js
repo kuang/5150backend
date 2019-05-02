@@ -53,7 +53,7 @@ class App extends Component {
             </div>
 
 
-            <ul>
+            {/* <ul>
               <li>
                 <Link to="/">Home</Link>
               </li>
@@ -81,7 +81,7 @@ class App extends Component {
               <li>
                 <Link to="/add_res_to_project/1">add_resource_to_project</Link>
               </li>
-            </ul>
+            </ul> */}
           </nav>
           <Route path="/" exact component={Index} />
           <Route path="/login" component={Login} />

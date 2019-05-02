@@ -2,16 +2,17 @@ body {
     background-color: lightyellow;
     margin: 0%;
     padding: 0%;
-    width: 1500px;
+    width: 100%;
 }
 
 .navi {
     display: flex;
     background-color: #b31b1b;
     font-weight: bold;
-    width: 1480px;
+    width: 100%;
     /* padding-right: 7%;
     padding-right: 7%; */
+    margin-bottom: 30px;
 }
 
 .navi img {
@@ -37,7 +38,10 @@ body {
 .loginButton {
     /* padding: 6px; */
     margin: 5px;
-    margin-left: 950px;
     display: inline-block;
+}
+
+button{
+    margin: 10px;
 }
 

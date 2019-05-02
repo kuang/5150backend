@@ -7,6 +7,7 @@ body {
     width: 470px;
     height: 380px;
     margin-top: 5px;
+    margin-left: 50px;
     float: left;
 }
 
@@ -15,7 +16,8 @@ body {
     height: 380px;
     margin-top: 5px;
     margin-left: 10px;
-    float: right;
+    margin-right:15%;
+    display: inline-block;
 }
 
 .myUL {

@@ -11,7 +11,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import Select from 'react-select';
 import ReactNotification from "react-notifications-component";
 import TextareaAutosize from "react-autosize-textarea";
-import { LoginContext } from '../App';
+import './style.css';
 
 let moment = require('moment');
 class Individual_project_page extends React.Component {
@@ -734,7 +734,7 @@ class Individual_project_page extends React.Component {
                     width: '100vw'
                 }}
             >
-                <p>{this.projectName}</p>
+                <p className="title">Project Name: {this.projectName}</p>
                 <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
                     <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
                 </Modal>

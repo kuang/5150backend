@@ -242,9 +242,10 @@ class twoList extends React.Component {
         var rightList = this.generateListElements(this.state.currentList, this.state.toremove, this.clickHandler);
         console.log("----------------------");
         console.log(this.context);
+        let backPageUrl = '/individual_project/' + this.props.match.params.projectID;
         return (
             <div style={{ height: '550px' }}>
-                <h1>Project: {this.state.projectName}</h1>
+                <h1>Project Name: {this.state.projectName}</h1>
                 <div className="leftContainer">
                     <p>Avaliable resources to add to project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 0)} placeholder="Search for names..." />
@@ -265,7 +266,9 @@ class twoList extends React.Component {
                     </ul>
                     {(this.dealLog(1))}
                     {/* <button onClick={this.handleRemove}>Remove Resources</button> */}
+                    <Link to={backPageUrl}><button>Back to project</button></Link>
                 </div>
+
             </div>
         );
     }
