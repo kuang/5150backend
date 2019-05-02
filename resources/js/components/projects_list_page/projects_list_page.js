@@ -277,24 +277,24 @@ class Projects_list_page extends React.Component {
         this.setState({selectedOption: this.projOptions[0] });
     }
 
-    buttonGenerater() {
-        let value = window.sessionStorage.getItem("value");
-        if (value === "logged") {
-            return (
-            <div>
-            <button
-                style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                onClick={this.togglePopupAdd.bind(this)}
-            >Add Project</button>
+    // buttonGenerater() {
+    //     let value = window.sessionStorage.getItem("value");
+    //     if (value === "logged") {
+    //         return (
+    //         <div>
+    //         <button
+    //             style={{ height: '30px', width: '100px', marginRight: '10px' }}
+    //             onClick={this.togglePopupAdd.bind(this)}
+    //         >Add Project</button>
 
-            <button
-                style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                onClick={this.togglePopupDelete.bind(this)}
-            >Delete Project</button>
-            </div>
-            )
-        }
-    }
+    //         <button
+    //             style={{ height: '30px', width: '100px', marginRight: '10px' }}
+    //             onClick={this.togglePopupDelete.bind(this)}
+    //         >Delete Project</button>
+    //         </div>
+    //         )
+    //     }
+    // }
 
     render() {
         return (
@@ -350,13 +350,18 @@ class Projects_list_page extends React.Component {
                     </form>
                 </Modal>
 
-                <LoginContext.Consumer>
+                {/* <LoginContext.Consumer>
                     {({value, toggleValue}) => (this.buttonGenerater(value))}
-                </LoginContext.Consumer>
-                {/* <button
+                </LoginContext.Consumer> */}
+                <button
                     style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                    onClick={this.togglePopup.bind(this)}
-                >Add Project</button> */}
+                    onClick={this.togglePopupAdd.bind(this)}
+                >Add Project</button>
+
+                <button
+                    style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                    onClick={this.togglePopupDelete.bind(this)}
+                >Delete Project</button>
             </div>
         );
     }
