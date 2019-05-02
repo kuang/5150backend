@@ -4,6 +4,7 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Modal from 'react-responsive-modal';
+import Select from 'react-select';
 import { LoginContext } from '../App';
 
 class Projects_list_page extends React.Component {
@@ -13,6 +14,13 @@ class Projects_list_page extends React.Component {
         this.state = {
             columnDefs: [
                 {
+                    headerName: 'ID',
+                    field: 'projectID',
+                    sortable: true,
+                    filter: "agTextColumnFilter",
+                    suppressMovable: true,
+                    pinned: "left"
+                }, {
                     headerName: 'Project',
                     field: 'projectName',
                     sortable: true,
@@ -87,128 +95,31 @@ class Projects_list_page extends React.Component {
             rowData: [],
 
             // Modal for adding new project modal
-            showPopup: false,
+            showPopupAdd: false,
+            showPopupDelete: false,
             newProjectName: "",
             newTechnology: "",
             newEstMaxHours: "",
             newStatus: "Ongoing",
             newStartDate: "",
             newDueDate: "",
+
+            // modal for deleting project modal
+            selectedOption: "",
         };
-        // handlers for adding new prject modal
+        
+        //adding new project modal
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSetProjName = this.handleSetProjName.bind(this);
         this.handleSetTech = this.handleSetTech.bind(this);
         this.handleSetHours = this.handleSetHours.bind(this);
         this.handleSetStartDate = this.handleSetStartDate.bind(this);
         this.handleSetDueDate = this.handleSetDueDate.bind(this);
+
+        //deleting project modal
+        this.projOptions = [];
+        //this.getProjOptions = this.getProjOptions.bind(this);
     }
-
-    /** Returns a concatenated string of a list of the first names of the resources
-     *  associated with a particular project with [projectID]
-     */
-    // async getResourceNames(projectID) {
-    //     // need to access ResourcesPerProject table,
-    //     // then find all ResourceID's that matches with the ProjectID,
-    //     // then access Resources table and use the list of ResourceID's to find their names
-    //     return fetch(`../api/displayResourcesPerProject/${projectID}`)
-    //         .then(function (response) {
-    //             return response.json();
-    //         })
-    //         .then(function (myJSON) {
-    //             if (myJSON === undefined || myJSON.length == 0) {
-    //                 return "N/A";
-    //             } else {
-    //                 var names = myJSON.map(function (a) { return a.FirstName; });
-    //                 names = names.join(", ");
-    //                 return names
-    //                 }
-    //         });
-    // }
-
-    /** Returns the hours per week assgined to this project [projectID] */
-    // async getHoursWeek(projectID) {
-    //     // get an array of [ScheduleID] that are matched with [projectID];
-    //     // check the current Date;
-    //     // for all Schedules with [Dates] in same week as the current Date, 
-    //     // sum their values of [HoursPerWeek]
-
-    //     // projectID = 25
-    //     const todayDate = new Date();
-    //     const scheduleIDArr = 
-    //         await fetch(`../api/displayResourcesPerProject/`)
-    //         .then(function(response) {
-    //             return response.json()
-    //         })
-    //         .then(function(myJSON) {
-    //             if (myJSON === undefined || myJSON.length == 0) {
-    //                 return [];
-    //             } else {
-    //                 var result = myJSON.filter(function(obj) {
-    //                     return obj.ProjectID === projectID;
-    //                 })
-    //                 console.log(result);
-    //                 var scheduleIDs = result.map(function (a) { return a.ScheduleID; });
-    //                 console.log(scheduleIDs);
-    //                 return scheduleIDs;
-    //             }
-    //         });
-
-    //     if (scheduleIDArr.length == 0) {
-    //         return 0; // no schedule <=> zero hour assigned
-    //     } 
-    //     var validSchedules = 
-    //         await fetch(`../api/displaySchedules/`)
-    //         .then(function (response) {
-    //             return response.json()
-    //         })
-    //         .then(function (myJSON) {
-    //             if (myJSON === undefined || myJSON.length === 0) {
-    //                 return [];
-    //             } else {
-    //                 // get all schedules in scheduleIDArr
-    //                 var validschedules = myJSON.filter(function (obj) {
-    //                     return !(scheduleIDArr.indexOf(obj.ScheduleID) === -1);
-    //                 });
-    //                 console.log(validschedules);
-    //                 return validschedules;
-    //             }
-    //         });
-
-
-    //     if (validSchedules.length === 0) {
-    //         return 0;
-    //     }
-
-    //     /** Compares two dates and return true if they are in same week and false otherwise
-    //     *  [anyDate] can be any Date object, but [weekDate] must be a Monday
-    //     */
-    //     let isInSameWeek = function(anyDate, weekDate) {
-    //         var lowerbound = new Date(weekDate + "EST");
-    //         var upperbound = new Date(lowerbound.getTime());
-    //         upperbound.setDate(upperbound.getDate() + 7);
-    //         if (lowerbound <= anyDate && anyDate < upperbound) {
-    //             return true;
-    //         } else {
-    //             return false;
-    //         }
-    //     };
-    //     // filter again with respect to date
-    //     validSchedules = validSchedules.filter(function (obj) {
-    //         return isInSameWeek(todayDate, obj.Dates);
-    //     })
-    //     console.log(validSchedules);
-
-    //     var hoursArr = validSchedules.map(function (a) { return a.HoursPerWeek; });
-    //     console.log(hoursArr);
-
-    //     if (hoursArr.length === 0) {
-    //         return 0;
-    //     } else {
-    //         var totalHours = hoursArr.reduce((acc, a) => acc + a);
-    //         return totalHours;
-    //     }
-    // }
 
     async processData(data) {
         var rowData = [];
@@ -228,6 +139,7 @@ class Projects_list_page extends React.Component {
             //let currUpdates = "";
 
             rowJSON = {
+                projectID: currProjectID,
                 projectName: currProjectName,
                 details: currProjectID,
                 //updates: currUpdates,
@@ -248,9 +160,9 @@ class Projects_list_page extends React.Component {
     }
 
     /* Methods for the adding project modal */
-    togglePopup() {
+    togglePopupAdd() {
         this.setState({
-            showPopup: !(this.state.showPopup)
+            showPopupAdd: !(this.state.showPopupAdd)
         });
     }
 
@@ -302,26 +214,87 @@ class Projects_list_page extends React.Component {
             body: JSON.stringify(newProjData),
         });
     }
-    /* Methods for the adding project modal */
 
-    componentDidMount() {
+    /* methods for deleting project modal */
+    togglePopupDelete() {
+        this.setState({
+            showPopupDelete: !(this.state.showPopupDelete)
+        });
+    }
+
+    handleSelect(selection) {
+        console.log(this);
+        this.setState({ selectedOption: selection });
+    }
+
+    /** Takes in an array of project names, returns an array of labels */
+    // getProjOptions(arr) {
+    //     var result = [];
+    //     for (let i = 0; i < arr.length; i++) {
+    //         let newLabel = {label: arr[i], value: 1};
+    //         result.push(newLabel);
+    //     }
+    //     return result;
+    // }
+
+    async handleDelete(event) {
+        let ProjData = {
+            "ProjectName": this.state.selectedOption.label
+        };
+        let response = await fetch(`../api/deleteProject`, {
+            method: "DELETE",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ProjData),
+        });
+    }
+
+    async componentDidMount() {
         fetch(`../api/displayAllProjectInfo`)
             .then(result => result.json())
             .then(data => this.processData(data))
             .then(function (newData) {
-                this.setState({ rowData: newData })
-            }.bind(this))
+                this.setState({ rowData: newData});
+            }.bind(this));
+
+        let names = await fetch(`../api/displayAllProjects`)
+            .then(result => result.json())
+            .then(function(data){
+                return data.map(a => a.ProjectName);
+            });
+        
+            // .then(function (newData) {
+            //     console.log(newData);
+            //     return this.getProjOptions(newData);
+            // }.bind(this));
+
+        console.log(names);
+        for (let i = 0; i < names.length; i++) {
+            this.projOptions.push({ label: (names[i]), value: 1});
+        }
+        console.log(this.projOptions);
     }
 
-    buttonGenerater() {
-        let value = window.sessionStorage.getItem("value");
-        if (value === "logged") {
-            return (<button
-                style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                onClick={this.togglePopup.bind(this)}
-            >Add Project</button>)
-        }
-    }
+    // buttonGenerater() {
+    //     let value = window.sessionStorage.getItem("value");
+    //     if (value === "logged") {
+    //         return (
+    //         <div>
+    //         <button
+    //             style={{ height: '30px', width: '100px', marginRight: '10px' }}
+    //             onClick={this.togglePopupAdd.bind(this)}
+    //         >Add Project</button>
+
+    //         <button
+    //             style={{ height: '30px', width: '100px', marginRight: '10px' }}
+    //             onClick={this.togglePopupDelete.bind(this)}
+    //         >Delete Project</button>
+    //         </div>
+    //         )
+    //     }
+    // }
 
     render() {
         return (
@@ -339,7 +312,7 @@ class Projects_list_page extends React.Component {
                 >
                 </AgGridReact>
 
-                <Modal open={this.state.showPopup} onClose={this.togglePopup.bind(this)} center closeIconSize={14}>
+                <Modal open={this.state.showPopupAdd} onClose={this.togglePopupAdd.bind(this)} center closeIconSize={14}>
                     <h4 style={{ marginTop: '15px' }}>Adding a New Project</h4>
                     <form onSubmit={this.handleSubmit}>
                         <label style={{ marginRight: '15px' }}>Project Name:</label>
@@ -359,12 +332,36 @@ class Projects_list_page extends React.Component {
                         <br></br>
                         <input type="submit" value="Submit" />
                     </form>
+                </Modal >
+
+                <Modal open={this.state.showPopupDelete} onClose={this.togglePopupDelete.bind(this)} center closeIconSize={14}>
+                    <h4 style={{ marginTop: '15px' }}>Deleting a Project</h4>
+                    <form onSubmit={this.handleDelete}>
+                        <br></br>
+                        <label style={{ marginRight: '15px' }}>
+                            Project Name:
+                            <br></br>
+                            <Select value={this.state.selectedOption} onChange={this.handleSelect.bind(this)} options={this.projOptions}>
+                            </Select>
+                        </label>
+                        <br></br>
+                        <br></br>
+                        <input type="submit" value="Submit" />
+                    </form>
                 </Modal>
-                {(this.buttonGenerater())}
-                {/* <button
+
+                {/* <LoginContext.Consumer>
+                    {({value, toggleValue}) => (this.buttonGenerater(value))}
+                </LoginContext.Consumer> */}
+                <button
                     style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                    onClick={this.togglePopup.bind(this)}
-                >Add Project</button> */}
+                    onClick={this.togglePopupAdd.bind(this)}
+                >Add Project</button>
+
+                <button
+                    style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                    onClick={this.togglePopupDelete.bind(this)}
+                >Delete Project</button>
             </div>
         );
     }
