@@ -80,10 +80,10 @@ class Individual_project_page extends React.Component {
             { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide: true },
             { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
         ];
-        let rowData = [];
         if (data.length == 0) {
-            return;
+            columnDefs = [];
         }
+        let rowData = [];
         let columnNames = new Set();
         let prevNetID = null;
         let currentJSON = {};
