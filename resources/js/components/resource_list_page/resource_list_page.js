@@ -17,8 +17,8 @@ class Resource_list_page extends React.Component {
 			}],
 			// state variables needed for resource form
 			rowData: [],
-			selectedResource: "",
-			selectedResourceID: "",
+			selectedResource: {},
+			selectedResourceID: '',
 			firstName: '',
 			lastName: '',
 			netID: '',
@@ -32,6 +32,7 @@ class Resource_list_page extends React.Component {
 		this.handleMaxHourChange = this.handleMaxHourChange.bind(this);
 		this.handleAddSubmit = this.handleAddSubmit.bind(this);
 		this.handleNameSelect = this.handleNameSelect.bind(this);
+		this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
 	}
 
 	toggleAddPopup() {
@@ -53,7 +54,7 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
-		console.log(data);
+		// console.log(data);
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
@@ -131,7 +132,7 @@ class Resource_list_page extends React.Component {
 			currJSON[currHeader] = currHours;
 		}
 		rowData.push(currJSON);
-		console.log(resources);
+		// console.log(resources);
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
 
@@ -181,9 +182,10 @@ class Resource_list_page extends React.Component {
 
 	handleNameSelect(event) {
 		this.setState({
-			selectedResource: event
+			selectedResource: event,
+			selectedResourceID: event["value"]
 		});
-		console.log(this);
+		// console.log(this);
 	}
 
 	async handleAddSubmit(event) {
@@ -213,6 +215,17 @@ class Resource_list_page extends React.Component {
 
 	async handleDeleteSubmit(event) {
 		console.log("Deleting a resource");
+		console.log(this.state.selectedResourceID);
+
+		let data = { "NetID": this.state.selectedResourceID };
+		let response = await fetch('../api/deleteResource', {
+			method: "DELETE",
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
 	}
 
 	render() {
