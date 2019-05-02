@@ -84,18 +84,15 @@ class Resource_list_page extends React.Component {
 			cellRenderer: function (params) {
 				return "<a href='/individual_resource/" + params.value + "'>Details</a>"
 			}
-		}];
-		
-		if (data.length == 0) {
-			// make API call for then second route
-			// set the row data with the api data
-		} else {
-			let rowData = [];
-			let currJSON = {};
-			let colNames = new Set();
-			let prevNetId = null;
-			let resources = [];
+		}]
 
+		let rowData = [];
+		let currJSON = {};
+		let colNames = new Set();
+		let prevNetId = null;
+		let resources = [];
+
+		if (data.length != 0) {
 			for (let i = 0; i < data.length; i++) {
 				let curr = data[i];
 				let currID = curr.NetID;
@@ -153,9 +150,30 @@ class Resource_list_page extends React.Component {
 					this.latestDate = dates[dates.length - 1].field;
 			}
 			columnDefs = columnDefs.slice(0, 3).concat(dates);
+		} else {
+			let response = await fetch('../api/displayAllResources');
+			let resourceInfo = await response.json();
 
+			for (let j=0; j<resourceInfo.length; j++) {
+				let curr = resourceInfo[j];
+				let currID = curr.NetID;
+				let currHeader = curr.Dates;
+				let fullName = curr.FirstName + " " + curr.LastName;
+				let maxHour = curr.MaxHoursPerWeek;
+				let id = curr.ResourceID;
+				currJSON = {
+					netid: currID,
+					name: fullName,
+					maxHourPerWeek: maxHour,
+					detailLink: id
+				};
+				rowData.push(currJSON);
+				resources.push(fullName);
+				let tempName = fullName + " (" + currID + ")";
+				this.resourceOptions.push({ label: tempName, value: currID });
+			}
 		}
-		// console.log(resources);
+
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
 
