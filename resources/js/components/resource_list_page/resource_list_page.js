@@ -180,14 +180,10 @@ class Resource_list_page extends React.Component {
 	}
 
 	handleNameSelect(event) {
-		let name = event["label"];
-		let id = event["value"];
 		this.setState({
-			selectedResource: name,
-			selectedResourceID: id
+			selectedResource: event
 		});
 		console.log(this);
-		console.log(id);
 	}
 
 	async handleAddSubmit(event) {
