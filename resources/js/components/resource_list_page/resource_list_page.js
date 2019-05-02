@@ -4,33 +4,46 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import Modal from 'react-responsive-modal';
+import Select from 'react-select';
 
 class Resource_list_page extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			showPopup: false,
+			showAddPopup: false,
+			showDeletePopup: false,
 			columnDefs: [{
 				headerName: "Name", field: "name"
 			}],
 			// state variables needed for resource form
 			rowData: [],
+			selectedResource: {},
+			selectedResourceID: '',
 			firstName: '',
 			lastName: '',
 			netID: '',
 			maxHourPerWeek: 0
 		};
+		this.resourceOptions = [];
 
 		this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
 		this.handleLastNameChange = this.handleLastNameChange.bind(this);
 		this.handleNetIDChange = this.handleNetIDChange.bind(this);
 		this.handleMaxHourChange = this.handleMaxHourChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleAddSubmit = this.handleAddSubmit.bind(this);
+		this.handleNameSelect = this.handleNameSelect.bind(this);
+		this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
 	}
 
-	togglePopup() {
+	toggleAddPopup() {
 		this.setState({
-			showPopup: !this.state.showPopup
+			showAddPopup: !this.state.showAddPopup
+		});
+	}
+
+	toggleDeletePopup() {
+		this.setState({
+			showDeletePopup: !this.state.showDeletePopup
 		});
 	}
 
@@ -41,7 +54,7 @@ class Resource_list_page extends React.Component {
 	// }
 
 	async processData(data) {
-		console.log(data);
+		// console.log(data);
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
@@ -58,7 +71,7 @@ class Resource_list_page extends React.Component {
 			pinned: 'left'
 		}, {
 			headerName: 'Max Hours Per Week',
-			width: 160,
+			width: 170,
 			field: 'maxHourPerWeek',
 			filter: "agTextColumnFilter",
 			suppressMovable: true,
@@ -73,13 +86,13 @@ class Resource_list_page extends React.Component {
 			cellRenderer: function (params) {
 				return "<a href='/individual_resource/" + params.value + "'>Details</a>"
 			}
-		}
-		]
+		}]
 
 		let rowData = [];
 		let currJSON = {};
 		let colNames = new Set();
 		let prevNetId = null;
+		let resources = [];
 
 		for (let i = 0; i < data.length; i++) {
 			let curr = data[i];
@@ -92,6 +105,9 @@ class Resource_list_page extends React.Component {
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
 					rowData.push(currJSON);
+					// resources.push(fullName);
+					// let tempName = fullName + " (" + currID + ")";
+					// this.resourceOptions.push({ label: tempName, value: currID });
 				}
 				prevNetId = currID;
 				currJSON = {
@@ -100,6 +116,9 @@ class Resource_list_page extends React.Component {
 					maxHourPerWeek: maxHour,
 					detailLink: id
 				};
+				resources.push(fullName);
+				let tempName = fullName + " (" + currID + ")";
+				this.resourceOptions.push({ label: tempName, value: currID });
 			}
 			let currHours = curr.TotalHoursPerWeek;
 			if (!colNames.has(currHeader)) {
@@ -116,7 +135,8 @@ class Resource_list_page extends React.Component {
 			currJSON[currHeader] = currHours;
 		}
 		rowData.push(currJSON);
-		return { "rowData": rowData, "columnDefs": columnDefs };
+		// console.log(resources);
+		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
 
 	componentDidMount() {
@@ -131,7 +151,11 @@ class Resource_list_page extends React.Component {
 			.then(result => result.json())
 			.then(data => this.processData(data))
 			.then(function (newData) {
-				this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
+				this.setState({
+					rowData: newData["rowData"],
+					columnDefs: newData["columnDefs"],
+					resourceList: newData["resources"]
+				})
 			}.bind(this));
 	}
 
@@ -159,7 +183,15 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
-	async handleSubmit(event) {
+	handleNameSelect(event) {
+		this.setState({
+			selectedResource: event,
+			selectedResourceID: event["value"]
+		});
+		// console.log(this);
+	}
+
+	async handleAddSubmit(event) {
 		let data = {
 			"NetID": this.state.netID,
 			"FirstName": this.state.firstName,
@@ -184,6 +216,21 @@ class Resource_list_page extends React.Component {
 		// 	}.bind(this));
 	}
 
+	async handleDeleteSubmit(event) {
+		console.log("Deleting a resource");
+		console.log(this.state.selectedResourceID);
+
+		let data = { "NetID": this.state.selectedResourceID };
+		let response = await fetch('../api/deleteResource', {
+			method: "DELETE",
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		});
+	}
+
 	render() {
 		return (
 			<div
@@ -199,9 +246,9 @@ class Resource_list_page extends React.Component {
 				// onCellClicked={this.cellClicked.bind(this)}
 				></AgGridReact>
 
-				<Modal open={this.state.showPopup} onClose={this.togglePopup.bind(this)} center closeIconSize={14}>
+				<Modal open={this.state.showAddPopup} onClose={this.toggleAddPopup.bind(this)} center closeIconSize={14}>
 					<h4 style={{ marginTop: '15px' }}>Add a New Resource</h4>
-					<form onSubmit={this.handleSubmit}>
+					<form onSubmit={this.handleAddSubmit}>
 						<label style={{ marginRight: '15px' }}>First Name:</label>
 						<input style={{ float: 'right' }} type="text" required value={this.state.firstName} onChange={this.handleFirstNameChange} />
 						<br></br>
@@ -218,10 +265,31 @@ class Resource_list_page extends React.Component {
 					</form>
 				</Modal>
 
+				<Modal open={this.state.showDeletePopup} onClose={this.toggleDeletePopup.bind(this)} center closeIconSize={14}>
+					<h4 style={{ marginTop: '15px' }}>Delete a Resource</h4>
+					<form onSubmit={this.handleDeleteSubmit}>
+						<label style={{ marginRight: '15px', width: '100%' }}>
+								Name:
+								<br></br>
+								<Select
+									value={this.state.selectedResource}
+									onChange={this.handleNameSelect.bind(this)}
+									options={this.resourceOptions}>
+								</Select>
+						</label>
+						<br></br>
+						<input type="submit" value="Submit" />
+					</form>
+				</Modal>
+
 				<button
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
-					onClick={this.togglePopup.bind(this)}
+					onClick={this.toggleAddPopup.bind(this)}
 				>Add Resource</button>
+				<button
+					style={{ height: '30px', width: '125px', marginRight: '10px' }}
+					onClick={this.toggleDeletePopup.bind(this)}
+				>Delete Resource</button>
 			</div>
 		);
 	}

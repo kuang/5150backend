@@ -277,9 +277,8 @@ class Projects_list_page extends React.Component {
         this.setState({selectedOption: this.projOptions[0] });
     }
 
-    buttonGenerater(value) {
-        console.log("logged----list");
-        console.log(value);
+    buttonGenerater() {
+        let value = window.sessionStorage.getItem("value");
         if (value === "logged") {
             return (
             <div>
@@ -336,7 +335,7 @@ class Projects_list_page extends React.Component {
                 </Modal >
 
                 <Modal open={this.state.showPopupDelete} onClose={this.togglePopupDelete.bind(this)} center closeIconSize={14}>
-                    <h4 style={{ marginTop: '15px' }}>Deleting a New Project</h4>
+                    <h4 style={{ marginTop: '15px' }}>Deleting a Project</h4>
                     <form onSubmit={this.handleDelete}>
                         <br></br>
                         <label style={{ marginRight: '15px' }}>

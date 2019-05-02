@@ -46,10 +46,12 @@ Route::get('/displayProjectInfo/{projectID}', function ($projectID) {
 Route::get('/displayAllProjectInfo', function () {
     try {
         $table = DB::table('projects')
-            ->join('resources_per_projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
-            ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->leftJoin('resources_per_projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
             ->select('projects.ProjectID', 'projects.ProjectName', 'projects.StartDate', 'projects.DueDate', 'projects.Status',
-                'projects.Technology', 'projects.EstMaxHours', DB::raw('SUM(schedules.HoursPerWeek) TotalHoursAssigned'))
+                'projects.Technology', 'projects.EstMaxHours', 'resources_per_projects.ScheduleID')
+            ->leftJoin('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+            ->select('projects.ProjectID', 'projects.ProjectName', 'projects.StartDate', 'projects.DueDate', 'projects.Status',
+                'projects.Technology', 'projects.EstMaxHours', DB::raw('IFNULL(SUM(schedules.HoursPerWeek), 0) TotalHoursAssigned'))
             ->groupBy('projects.ProjectID')
             ->get();
         return $table;
@@ -287,7 +289,7 @@ Route::post('/addResourcePerProject', function(Request $request) {
             ->get();
 //        echo($dates);
         foreach($dates as $d){
-            DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0]);
+            DB::table('schedules')->insert(['ScheduleID' =>  $schedule_id, 'Dates' => $d->Dates, 'HoursPerWeek' => 0, 'Comment' => ""]);
         }
 
         return ("Successfully Added New ResourcePerProject");
