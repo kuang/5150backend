@@ -714,7 +714,7 @@ class Individual_project_page extends React.Component {
                         Edit Comment
                 </button>
 
-                    <Link to={addResPageUrl}>Add Resource</Link>
+                    <Link to={addResPageUrl}><button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }}>Add Resource</button></Link>
                 </div>
             );
         }
@@ -727,124 +727,127 @@ class Individual_project_page extends React.Component {
             .then(response => response.json())
             .then(realResponse => this.projectName = realResponse[0]["ProjectName"])
         return (
-            <div
-                className="ag-theme-balham"
-                style={{
-                    height: '62vh',
-                    width: '100vw'
-                }}
-            >
-                <p className="title">Project Name: {this.projectName}</p>
-                <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
-                    <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
-                </Modal>
+            <div>
+                <h1>Project Name: {this.projectName}</h1>
 
-                <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
-                    <form onSubmit={this.handleCommentFormSubmit.bind(this)}>
-                        <br></br>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            Name:
-                            <br></br>
-                            <Select value={this.state.updatedCommentUser} onChange={this.handleCommentFormUserUpdate.bind(this)} options={this.resourceNameOptions}>
-                            </Select>
-
-                        </label>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            NetID:
-                            <br></br>
-                            <Select value={this.state.updatedCommentNetID} onChange={this.handleCommentFormNetIDUpdate.bind(this)} options={this.resourceNetIDOptions}>
-                            </Select>
-
-                        </label>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            Week:
-                            <br></br>
-                            <Select value={this.state.updatedCommentWeek} onChange={this.handleCommentFormWeekUpdate.bind(this)} options={this.resourceDateOptions}>
-                            </Select>
-                        </label>
-
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            Comment:
-                            <br></br>
-                            <TextareaAutosize value={this.state.updatedCommentData} style={{ width: "100%" }} maxRows={6} onChange={this.handleCommentFormDataUpdate.bind(this)}>
-
-                            </TextareaAutosize>
-
-                        </label>
-
-                        <input type="submit" value="Submit" />
-
-                    </form>
-                </Modal>
-
-                <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
-                    <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
-                </Modal>
-
-                <Modal open={this.state.openProjectFormModal} onClose={this.closeFormModal.bind(this)}
+                <div
+                    className="ag-theme-balham"
+                    style={{
+                        height: '62vh',
+                        width: '100vw'
+                    }}
                 >
-                    <form onSubmit={this.handleFormSubmit.bind(this)}>
-                        <br></br>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            Name:
+
+                    <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
+                        <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
+                    </Modal>
+
+                    <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
+                        <form onSubmit={this.handleCommentFormSubmit.bind(this)}>
+                            <br></br>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                Name:
+                            <br></br>
+                                <Select value={this.state.updatedCommentUser} onChange={this.handleCommentFormUserUpdate.bind(this)} options={this.resourceNameOptions}>
+                                </Select>
+
+                            </label>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                NetID:
+                            <br></br>
+                                <Select value={this.state.updatedCommentNetID} onChange={this.handleCommentFormNetIDUpdate.bind(this)} options={this.resourceNetIDOptions}>
+                                </Select>
+
+                            </label>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                Week:
+                            <br></br>
+                                <Select value={this.state.updatedCommentWeek} onChange={this.handleCommentFormWeekUpdate.bind(this)} options={this.resourceDateOptions}>
+                                </Select>
+                            </label>
+
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                Comment:
+                            <br></br>
+                                <TextareaAutosize value={this.state.updatedCommentData} style={{ width: "100%" }} maxRows={6} onChange={this.handleCommentFormDataUpdate.bind(this)}>
+
+                                </TextareaAutosize>
+
+                            </label>
+
+                            <input type="submit" value="Submit" />
+
+                        </form>
+                    </Modal>
+
+                    <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
+                        <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
+                    </Modal>
+
+                    <Modal open={this.state.openProjectFormModal} onClose={this.closeFormModal.bind(this)}
+                    >
+                        <form onSubmit={this.handleFormSubmit.bind(this)}>
+                            <br></br>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                Name:
                             <input id="updatedProjectName" style={{ float: 'right' }} type="text" required value={this.state.updatedProjectName} onChange={this.handleFormInputChange.bind(this)} />
-                        </label>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            Technology:
+                            </label>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                Technology:
                             <input id="updatedProjectTechnology" style={{ float: 'right' }} type="text" required value={this.state.updatedProjectTechnology} onChange={this.handleFormInputChange.bind(this)} />
-                        </label>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            MaxHours:
+                            </label>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                MaxHours:
                             <input id="updatedProjectMaxHours" style={{ float: 'right' }} type="number" min="0" required value={this.state.updatedProjectMaxHours} onChange={this.handleFormInputChange.bind(this)} />
-                        </label>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            StartDate:
+                            </label>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                StartDate:
                             <input id="updatedProjectStartDate" style={{ float: 'right' }} type="date" required value={this.state.updatedProjectStartDate}
-                                onChange={this.handleFormInputChange.bind(this)} />
-                        </label>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            DueDate:
+                                    onChange={this.handleFormInputChange.bind(this)} />
+                            </label>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                DueDate:
                             <input id="updatedProjectDueDate" style={{ float: 'right' }} type="date" required value={this.state.updatedProjectDueDate}
-                                onChange={this.handleFormInputChange.bind(this)} />
-                        </label>
-                        <br></br>
-                        <label style={{ marginRight: '15px', width: '100%' }}>
-                            Project Status
+                                    onChange={this.handleFormInputChange.bind(this)} />
+                            </label>
+                            <br></br>
+                            <label style={{ marginRight: '15px', width: '100%' }}>
+                                Project Status
+                            <br></br>
+                                <br></br>
+                                <Select value={this.state.selectedOption} onChange={this.handleChange.bind(this)} options={this.statusOptions}>
+                                </Select>
+                            </label>
+
                             <br></br>
                             <br></br>
-                            <Select value={this.state.selectedOption} onChange={this.handleChange.bind(this)} options={this.statusOptions}>
-                            </Select>
-                        </label>
+                            <input type="submit" value="Submit" />
 
-                        <br></br>
-                        <br></br>
-                        <input type="submit" value="Submit" />
+                        </form>
+                    </Modal>
+                    <ReactNotification ref={this.notificationDOMRef} />
 
-                    </form>
-                </Modal>
-                <ReactNotification ref={this.notificationDOMRef} />
+                    <AgGridReact
+                        columnDefs={this.state.columnDefs}
+                        rowData={this.state.rowData}
+                        onCellValueChanged={this.addUpdatedRow.bind(this)}
+                        onCellDoubleClicked={this.displayComment.bind(this)}
+                        enableCellChangeFlash={true}
+                        onGridReady={this.resizeColumns.bind(this)}
+                    >
+                    </AgGridReact>
 
-                <AgGridReact
-                    columnDefs={this.state.columnDefs}
-                    rowData={this.state.rowData}
-                    onCellValueChanged={this.addUpdatedRow.bind(this)}
-                    onCellDoubleClicked={this.displayComment.bind(this)}
-                    enableCellChangeFlash={true}
-                    onGridReady={this.resizeColumns.bind(this)}
-                >
-                </AgGridReact>
+                    {(this.buttonGen())}
 
-                {(this.buttonGen())}
-
-                {/* <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
+                    {/* <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
                     onClick={
                         this.submitSave.bind(this)
                     }
@@ -855,19 +858,19 @@ class Individual_project_page extends React.Component {
 
                 <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button> */}
 
-                {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
-                {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
-                {/*    </Select>*/}
-                {/*</div>*/}
+                    {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
+                    {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
+                    {/*    </Select>*/}
+                    {/*</div>*/}
 
-                {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.addOldWeek.bind(this)}
+                    {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.addOldWeek.bind(this)}
                 >
                     See Old Week
                 </button> */}
 
-                {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
+                    {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
 
-                {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openProjectForm.bind(this)}
+                    {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openProjectForm.bind(this)}
                 >
                     Edit Project
                 </button>
@@ -878,6 +881,7 @@ class Individual_project_page extends React.Component {
                 </button>
 
                 <Link to={addResPageUrl}>Add Resource</Link> */}
+                </div>
             </div>
         );
     }
