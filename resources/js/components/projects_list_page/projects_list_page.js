@@ -107,7 +107,7 @@ class Projects_list_page extends React.Component {
             // modal for deleting project modal
             selectedOption: "",
         };
-        
+
         //adding new project modal
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleSetProjName = this.handleSetProjName.bind(this);
@@ -256,45 +256,45 @@ class Projects_list_page extends React.Component {
             .then(result => result.json())
             .then(data => this.processData(data))
             .then(function (newData) {
-                this.setState({ rowData: newData});
+                this.setState({ rowData: newData });
             }.bind(this));
 
         let names = await fetch(`../api/displayAllProjects`)
             .then(result => result.json())
-            .then(function(data){
+            .then(function (data) {
                 return data.map(a => a.ProjectName);
             });
-        
-            // .then(function (newData) {
-            //     console.log(newData);
-            //     return this.getProjOptions(newData);
-            // }.bind(this));
+
+        // .then(function (newData) {
+        //     console.log(newData);
+        //     return this.getProjOptions(newData);
+        // }.bind(this));
 
         console.log(names);
         for (let i = 0; i < names.length; i++) {
-            this.projOptions.push({ label: (names[i]), value: 1});
+            this.projOptions.push({ label: (names[i]), value: 1 });
         }
         console.log(this.projOptions);
     }
 
-    // buttonGenerater() {
-    //     let value = window.sessionStorage.getItem("value");
-    //     if (value === "logged") {
-    //         return (
-    //         <div>
-    //         <button
-    //             style={{ height: '30px', width: '100px', marginRight: '10px' }}
-    //             onClick={this.togglePopupAdd.bind(this)}
-    //         >Add Project</button>
+    buttonGenerater() {
+        let value = window.sessionStorage.getItem("value");
+        if (value === "logged") {
+            return (
+                <div>
+                    <button
+                        style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                        onClick={this.togglePopupAdd.bind(this)}
+                    >Add Project</button>
 
-    //         <button
-    //             style={{ height: '30px', width: '100px', marginRight: '10px' }}
-    //             onClick={this.togglePopupDelete.bind(this)}
-    //         >Delete Project</button>
-    //         </div>
-    //         )
-    //     }
-    // }
+                    <button
+                        style={{ height: '30px', width: '100px', marginRight: '10px' }}
+                        onClick={this.togglePopupDelete.bind(this)}
+                    >Delete Project</button>
+                </div>
+            )
+        }
+    }
 
     render() {
         return (
@@ -332,18 +332,19 @@ class Projects_list_page extends React.Component {
                         <br></br>
                         <input type="submit" value="Submit" />
                     </form>
-                </Modal >
+                </Modal>
 
                 <Modal open={this.state.showPopupDelete} onClose={this.togglePopupDelete.bind(this)} center closeIconSize={14}>
-                    <h4 style={{ marginTop: '15px' }}>Deleting a Project</h4>
+                    <h4 style={{ marginTop: '15px', width: '300px' }}>Deleting a Project</h4>
                     <form onSubmit={this.handleDelete}>
                         <br></br>
                         <label style={{ marginRight: '15px' }}>
                             Project Name:
-                            <br></br>
-                            <Select value={this.state.selectedOption} onChange={this.handleSelect.bind(this)} options={this.projOptions}>
-                            </Select>
                         </label>
+                        <br></br>
+                        <Select value={this.state.selectedOption} onChange={this.handleSelect.bind(this)} options={this.projOptions}>
+                        </Select>
+
                         <br></br>
                         <br></br>
                         <input type="submit" value="Submit" />
@@ -353,7 +354,7 @@ class Projects_list_page extends React.Component {
                 {/* <LoginContext.Consumer>
                     {({value, toggleValue}) => (this.buttonGenerater(value))}
                 </LoginContext.Consumer> */}
-                <button
+                {/* <button
                     style={{ height: '30px', width: '100px', marginRight: '10px' }}
                     onClick={this.togglePopupAdd.bind(this)}
                 >Add Project</button>
@@ -361,7 +362,7 @@ class Projects_list_page extends React.Component {
                 <button
                     style={{ height: '30px', width: '100px', marginRight: '10px' }}
                     onClick={this.togglePopupDelete.bind(this)}
-                >Delete Project</button>
+                >Delete Project</button> */}
             </div>
         );
     }
