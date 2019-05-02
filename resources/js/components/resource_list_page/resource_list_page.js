@@ -105,9 +105,9 @@ class Resource_list_page extends React.Component {
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
 					rowData.push(currJSON);
-					resources.push(fullName);
-					let tempName = fullName + " (" + currID + ")";
-					this.resourceOptions.push({ label: tempName, value: currID });
+					// resources.push(fullName);
+					// let tempName = fullName + " (" + currID + ")";
+					// this.resourceOptions.push({ label: tempName, value: currID });
 				}
 				prevNetId = currID;
 				currJSON = {
@@ -116,6 +116,9 @@ class Resource_list_page extends React.Component {
 					maxHourPerWeek: maxHour,
 					detailLink: id
 				};
+				resources.push(fullName);
+				let tempName = fullName + " (" + currID + ")";
+				this.resourceOptions.push({ label: tempName, value: currID });
 			}
 			let currHours = curr.TotalHoursPerWeek;
 			if (!colNames.has(currHeader)) {
