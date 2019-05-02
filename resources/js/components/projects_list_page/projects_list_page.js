@@ -223,6 +223,7 @@ class Projects_list_page extends React.Component {
     }
 
     handleSelect(selection) {
+        console.log(this);
         this.setState({ selectedOption: selection });
     }
 
@@ -274,7 +275,6 @@ class Projects_list_page extends React.Component {
             this.projOptions.push({ label: (names[i]), value: 1});
         }
         console.log(this.projOptions);
-        this.setState({selectedOption: this.projOptions[0] });
     }
 
     // buttonGenerater() {
@@ -341,7 +341,7 @@ class Projects_list_page extends React.Component {
                         <label style={{ marginRight: '15px' }}>
                             Project Name:
                             <br></br>
-                            <Select value={this.state.selectedOption} onChange={this.handleSelect.bind(this)} options={this.ProjOptions}>
+                            <Select value={this.state.selectedOption} onChange={this.handleSelect.bind(this)} options={this.projOptions}>
                             </Select>
                         </label>
                         <br></br>
