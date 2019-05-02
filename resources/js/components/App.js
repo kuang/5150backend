@@ -19,16 +19,22 @@ class App extends Component {
     super(props);
 
     this.toggleValue = (logInfo) => {
-      this.setState({value: logInfo});
+      window.sessionStorage.setItem("value", logInfo);
+      this.setState({ value: logInfo });
     }
 
     this.state = {
       value: "unlogged",
       toggleValue: this.toggleValue,
     }
+    if (window.sessionStorage.getItem("value") == null || window.sessionStorage.getItem("value") == undefined) {
+      window.sessionStorage.setItem("value", "unlogged");
+      window.sessionStorage.setItem("toggleValue", this.toggleValue);
+    }
   }
 
   render() {
+    console.log(window.sessionStorage.getItem("a"));
     return (
       <Router>
         <div>
@@ -41,11 +47,9 @@ class App extends Component {
               {/* <LoginContext.Provider value="asdf">
                 <LoginContext.Consumer>{(context)=><p>{context}</p>}</LoginContext.Consumer>
               </LoginContext.Provider> */}
-              <LoginContext.Provider value={this.state}>
-                <div className="loginButton">
-                  <Login />
-                </div>
-              </LoginContext.Provider>
+              <div className="loginButton">
+                <Login />
+              </div>
             </div>
 
 
@@ -79,23 +83,21 @@ class App extends Component {
               </li>
             </ul>
           </nav>
-          <LoginContext.Provider value={this.state}>
-            <Route path="/" exact component={Index} />
-            <Route path="/login" component={Login} />
-            <Route path="/about/" component={About} />
-            <Route path="/users/" component={Users} />
-            <Route path="/resource/" component={Resource_list_page} />
-            <Route
-              path="/individual_resource/:resourceID"
-              component={Individual_resource_page}
-            />
-            <Route
-              path="/individual_project/:projectID"
-              component={Individual_project_page}
-            />
-            <Route path="/projects_list/" component={Projects_list_page} />
-            <Route path="/add_res_to_project/:projectID" component={add_res_to_project} />
-          </LoginContext.Provider>
+          <Route path="/" exact component={Index} />
+          <Route path="/login" component={Login} />
+          <Route path="/about/" component={About} />
+          <Route path="/users/" component={Users} />
+          <Route path="/resource/" component={Resource_list_page} />
+          <Route
+            path="/individual_resource/:resourceID"
+            component={Individual_resource_page}
+          />
+          <Route
+            path="/individual_project/:projectID"
+            component={Individual_project_page}
+          />
+          <Route path="/projects_list/" component={Projects_list_page} />
+          <Route path="/add_res_to_project/:projectID" component={add_res_to_project} />
         </div>
       </Router>
     );

@@ -8,55 +8,60 @@ import { LoginContext } from './App';
 class Login extends React.Component {
   constructor(props) {
     super(props);
+    let temp = window.sessionStorage.getItem("value");
+    let login;
+    if(temp == "logged"){
+      login = true;
+    }else{
+      login = false;
+    }
+    console.log(login);
     this.state = {
       permision: "read",
       user: null,
-      login: false
+      login: login,
     };
     this.loginSuccess = this.loginSuccess.bind(this);
     this.loginError = this.loginError.bind(this);
     this.logoutResponse = this.logoutResponse.bind(this);
   }
 
-  loginSuccess(response, toggleValue) {
+  loginSuccess(response) {
     console.log(response);
-    this.setState({
-      user: response.profileObj.name,
-      login: true
-    });
-    toggleValue("logged");
+    window.sessionStorage.setItem("value","logged");
+    window.location.reload(false);
   }
 
-  loginError(response, toggleValue) {
-    toggleValue("unlogged");
+  loginError(response) {
+    
+    window.sessionStorage.setItem("value","unlogged");
     console.log(response);
   }
 
-  logoutResponse(response, toggleValue) {
-    this.setState({
-      user: null,
-      login: false
-    });
-    toggleValue("unlogged");
+  logoutResponse(response) {
+    console.log("adfadfadf");
+    window.sessionStorage.setItem("value","unlogged");
     console.log("You are logged out");
+    window.location.reload(false);
   }
 
-  renderButton(toggleValue) {
+  renderButton() {
     var toreturn = (
       !this.state.login
         ? <div id='login-button'>
           <GoogleLogin
             clientId="795086897508-p73emkkcd287sf6e4nm8jgb45susbcg1.apps.googleusercontent.com"
             buttonText="Login With Google"
-            onSuccess={response => this.loginSuccess(response, toggleValue)}
-            onFailure={response => this.loginError(response, toggleValue)}
+            onSuccess={response => this.loginSuccess(response)}
+            onFailure={response => this.loginError(response)}
             cookiePolicy={'single_host_origin'}
           />
         </div>
         : <div id='logout-button'>
           <GoogleLogout
+            clientId="795086897508-p73emkkcd287sf6e4nm8jgb45susbcg1.apps.googleusercontent.com"
             buttonText="Logout"
-            onLogoutSuccess={response => this.logoutResponse(response, toggleValue)}
+            onLogoutSuccess={response => this.logoutResponse(response)}
           >
           </GoogleLogout>
         </div>
@@ -68,11 +73,7 @@ class Login extends React.Component {
   render() {
     return (
       <div>
-        <LoginContext.Consumer>
-          {({ value, toggleValue }) => 
-            (this.renderButton(toggleValue))
-          }
-          {/* {!this.state.login
+        {!this.state.login
             ? <div id='login-button'>
               <GoogleLogin
                 clientId="795086897508-p73emkkcd287sf6e4nm8jgb45susbcg1.apps.googleusercontent.com"
@@ -84,13 +85,13 @@ class Login extends React.Component {
             </div>
             : <div id='logout-button'>
               <GoogleLogout
+                clientId="795086897508-p73emkkcd287sf6e4nm8jgb45susbcg1.apps.googleusercontent.com"
                 buttonText="Logout"
                 onLogoutSuccess={this.logoutResponse}
               >
               </GoogleLogout>
             </div>
-          } */}
-        </LoginContext.Consumer>
+          }
       </div>
     );
   }

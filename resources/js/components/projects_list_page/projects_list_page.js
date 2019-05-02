@@ -313,9 +313,8 @@ class Projects_list_page extends React.Component {
             }.bind(this))
     }
 
-    buttonGenerater(value) {
-        console.log("logged----list");
-        console.log(value);
+    buttonGenerater() {
+        let value = window.sessionStorage.getItem("value");
         if (value === "logged") {
             return (<button
                 style={{ height: '30px', width: '100px', marginRight: '10px' }}
@@ -361,9 +360,7 @@ class Projects_list_page extends React.Component {
                         <input type="submit" value="Submit" />
                     </form>
                 </Modal>
-                <LoginContext.Consumer>
-                    {({value, toggleValue}) => (this.buttonGenerater(value))}
-                </LoginContext.Consumer>
+                {(this.buttonGenerater())}
                 {/* <button
                     style={{ height: '30px', width: '100px', marginRight: '10px' }}
                     onClick={this.togglePopup.bind(this)}

@@ -189,6 +189,12 @@ class Individual_resource_page extends Component {
     //     }
     // }
 
+    buttonGen(){
+        if(window.sessionStorage.getItem("value")=="logged"){
+            return (<button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>);
+        }
+    }
+
     render() {
         return (
             <div>
@@ -225,7 +231,6 @@ class Individual_resource_page extends Component {
 
                 <div style={{ overflow: 'auto', width: '50%', float: 'left' }}>
                     <h1>Resource name: {this.state.firstName} {this.state.lastName}</h1>
-                    <button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>
                 </div>
                 <div style={{ overflow: 'auto', width: '100%' }}>
                     <div
@@ -241,6 +246,7 @@ class Individual_resource_page extends Component {
                         // onCellClicked={this.cellClicked.bind(this)}
                         ></AgGridReact>
                     </div>
+                    {this.buttonGen()}
 
                 </div >
             </div >
