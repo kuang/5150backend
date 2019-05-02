@@ -53,105 +53,108 @@ class Resource_list_page extends React.Component {
 
 	async processData(data) {
 		// console.log(data);
-		let columnDefs = [];
-		if (data.length != 0) {
-			columnDefs = [{
-				headerName: 'NetID',
-				field: 'netid',
-				width: 100,
-				filter: "agTextColumnFilter",
-				suppressMovable: true,
-				pinned: 'left'
-			}, {
-				headerName: 'Name',
-				field: 'name',
-				width: 160,
-				filter: "agTextColumnFilter",
-				suppressMovable: true,
-				pinned: 'left'
-			}, {
-				headerName: 'Max Hours Per Week',
-				width: 170,
-				field: 'maxHourPerWeek',
-				filter: "agTextColumnFilter",
-				suppressMovable: true,
-				pinned: 'left'
-			}, {
-				headerName: 'Details',
-				field: 'detailLink',
-				width: 100,
-				filter: "agTextColumnFilter",
-				suppressMovable: true,
-				pinned: 'left',
-				cellRenderer: function (params) {
-					return "<a href='/individual_resource/" + params.value + "'>Details</a>"
+		let columnDefs = [{
+			headerName: 'NetID',
+			field: 'netid',
+			width: 100,
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left'
+		}, {
+			headerName: 'Name',
+			field: 'name',
+			width: 160,
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left'
+		}, {
+			headerName: 'Max Hours Per Week',
+			width: 170,
+			field: 'maxHourPerWeek',
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left'
+		}, {
+			headerName: 'Details',
+			field: 'detailLink',
+			width: 100,
+			filter: "agTextColumnFilter",
+			suppressMovable: true,
+			pinned: 'left',
+			cellRenderer: function (params) {
+				return "<a href='/individual_resource/" + params.value + "'>Details</a>"
+			}
+		}];
+		
+		if (data.length == 0) {
+			// make API call for then second route
+			// set the row data with the api data
+		} else {
+			let rowData = [];
+			let currJSON = {};
+			let colNames = new Set();
+			let prevNetId = null;
+			let resources = [];
+
+			for (let i = 0; i < data.length; i++) {
+				let curr = data[i];
+				let currID = curr.NetID;
+				let currHeader = curr.Dates;
+				let fullName = curr.FirstName + " " + curr.LastName;
+				let maxHour = curr.MaxHoursPerWeek;
+				let id = curr.ResourceID;
+
+				if (currID != prevNetId) {
+					if (prevNetId != null) {
+						rowData.push(currJSON);
+						// resources.push(fullName);
+						// let tempName = fullName + " (" + currID + ")";
+						// this.resourceOptions.push({ label: tempName, value: currID });
+					}
+					prevNetId = currID;
+					currJSON = {
+						netid: currID,
+						name: fullName,
+						maxHourPerWeek: maxHour,
+						detailLink: id
+					};
+					resources.push(fullName);
+					let tempName = fullName + " (" + currID + ")";
+					this.resourceOptions.push({ label: tempName, value: currID });
 				}
-			}]
-		}
-
-		let rowData = [];
-		let currJSON = {};
-		let colNames = new Set();
-		let prevNetId = null;
-		let resources = [];
-
-		for (let i = 0; i < data.length; i++) {
-			let curr = data[i];
-			let currID = curr.NetID;
-			let currHeader = curr.Dates;
-			let fullName = curr.FirstName + " " + curr.LastName;
-			let maxHour = curr.MaxHoursPerWeek;
-			let id = curr.ResourceID;
-
-			if (currID != prevNetId) {
-				if (prevNetId != null) {
-					rowData.push(currJSON);
-					// resources.push(fullName);
-					// let tempName = fullName + " (" + currID + ")";
-					// this.resourceOptions.push({ label: tempName, value: currID });
+				let currHours = curr.TotalHoursPerWeek;
+				if (!colNames.has(currHeader)) {
+					colNames.add(currHeader);
+					let newColDef = {
+						headerName: currHeader,
+						field: currHeader,
+						sortable: true,
+						filter: "agTextColumnFilter",
+						suppressMovable: true
+					};
+					columnDefs.push(newColDef);
 				}
-				prevNetId = currID;
-				currJSON = {
-					netid: currID,
-					name: fullName,
-					maxHourPerWeek: maxHour,
-					detailLink: id
-				};
-				resources.push(fullName);
-				let tempName = fullName + " (" + currID + ")";
-				this.resourceOptions.push({ label: tempName, value: currID });
+				currJSON[currHeader] = currHours;
 			}
-			let currHours = curr.TotalHoursPerWeek;
-			if (!colNames.has(currHeader)) {
-				colNames.add(currHeader);
-				let newColDef = {
-					headerName: currHeader,
-					field: currHeader,
-					sortable: true,
-					filter: "agTextColumnFilter",
-					suppressMovable: true
-				};
-				columnDefs.push(newColDef);
-			}
-			currJSON[currHeader] = currHours;
-		}
-		rowData.push(currJSON);
+			rowData.push(currJSON);
 
-		let dates = columnDefs.slice(3);
-		let dateComparator = function (a, b) {
-			if (a.field < b.field) {
-				return -1;
+			let dates = columnDefs.slice(3);
+			let dateComparator = function (a, b) {
+				if (a.field < b.field) {
+					return -1;
+				}
+				if (a.field > b.field) {
+					return 1;
+				}
+				return 0;
+			};
+			dates.sort(dateComparator);
+			if (dates.length != 0) {
+					this.latestDate = dates[dates.length - 1].field;
 			}
-			if (a.field > b.field) {
-				return 1;
-			}
-			return 0;
-		};
-		dates.sort(dateComparator);
-		if (dates.length != 0) {
-				this.latestDate = dates[dates.length - 1].field;
+			columnDefs = columnDefs.slice(0, 3).concat(dates);
+
 		}
-		columnDefs = columnDefs.slice(0, 3).concat(dates);
 		// console.log(resources);
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
