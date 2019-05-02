@@ -12,9 +12,7 @@ class Resource_list_page extends React.Component {
 		this.state = {
 			showAddPopup: false,
 			showDeletePopup: false,
-			columnDefs: [{
-				headerName: "Name", field: "name"
-			}],
+			columnDefs: [],
 			// state variables needed for resource form
 			rowData: [],
 			selectedResource: {},
@@ -55,40 +53,41 @@ class Resource_list_page extends React.Component {
 
 	async processData(data) {
 		// console.log(data);
-		let columnDefs = [{
-			headerName: 'NetID',
-			field: 'netid',
-			width: 100,
-			filter: "agTextColumnFilter",
-			suppressMovable: true,
-			pinned: 'left'
-		}, {
-			headerName: 'Name',
-			field: 'name',
-			width: 160,
-			filter: "agTextColumnFilter",
-			suppressMovable: true,
-			pinned: 'left'
-		}, {
-			headerName: 'Max Hours Per Week',
-			width: 170,
-			field: 'maxHourPerWeek',
-			filter: "agTextColumnFilter",
-			suppressMovable: true,
-			pinned: 'left'
-		}, {
-			headerName: 'Details',
-			field: 'detailLink',
-			width: 100,
-			filter: "agTextColumnFilter",
-			suppressMovable: true,
-			pinned: 'left',
-			cellRenderer: function (params) {
-				if (data.length != 0) {
+		let columnDefs = [];
+		if (data.length != 0) {
+			columnDefs = [{
+				headerName: 'NetID',
+				field: 'netid',
+				width: 100,
+				filter: "agTextColumnFilter",
+				suppressMovable: true,
+				pinned: 'left'
+			}, {
+				headerName: 'Name',
+				field: 'name',
+				width: 160,
+				filter: "agTextColumnFilter",
+				suppressMovable: true,
+				pinned: 'left'
+			}, {
+				headerName: 'Max Hours Per Week',
+				width: 170,
+				field: 'maxHourPerWeek',
+				filter: "agTextColumnFilter",
+				suppressMovable: true,
+				pinned: 'left'
+			}, {
+				headerName: 'Details',
+				field: 'detailLink',
+				width: 100,
+				filter: "agTextColumnFilter",
+				suppressMovable: true,
+				pinned: 'left',
+				cellRenderer: function (params) {
 					return "<a href='/individual_resource/" + params.value + "'>Details</a>"
 				}
-			}
-		}]
+			}]
+		}
 
 		let rowData = [];
 		let currJSON = {};
@@ -137,6 +136,22 @@ class Resource_list_page extends React.Component {
 			currJSON[currHeader] = currHours;
 		}
 		rowData.push(currJSON);
+
+		let dates = columnDefs.slice(3);
+		let dateComparator = function (a, b) {
+			if (a.field < b.field) {
+				return -1;
+			}
+			if (a.field > b.field) {
+				return 1;
+			}
+			return 0;
+		};
+		dates.sort(dateComparator);
+		if (dates.length != 0) {
+				this.latestDate = dates[dates.length - 1].field;
+		}
+		columnDefs = columnDefs.slice(0, 3).concat(dates);
 		// console.log(resources);
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
