@@ -83,7 +83,7 @@ class App extends Component {
               </li>
             </ul> */}
           </nav>
-          <Route path="/" exact component={Index} />
+          <Route path="/" exact component={Projects_list_page} />
           <Route path="/login" component={Login} />
           <Route path="/about/" component={About} />
           <Route path="/users/" component={Users} />
