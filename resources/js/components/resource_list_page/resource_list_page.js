@@ -84,7 +84,9 @@ class Resource_list_page extends React.Component {
 			suppressMovable: true,
 			pinned: 'left',
 			cellRenderer: function (params) {
-				return "<a href='/individual_resource/" + params.value + "'>Details</a>"
+				if (data.length != 0) {
+					return "<a href='/individual_resource/" + params.value + "'>Details</a>"
+				}
 			}
 		}]
 
