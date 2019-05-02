@@ -28,6 +28,7 @@ body {
     overflow: hidden;
     overflow-y: scroll;
     height: 290px;
+    background-color: white;
     border: 1px solid black;
 }
 
