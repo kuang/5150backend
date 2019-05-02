@@ -12,9 +12,7 @@ class Resource_list_page extends React.Component {
 		this.state = {
 			showAddPopup: false,
 			showDeletePopup: false,
-			columnDefs: [{
-				headerName: "Name", field: "name"
-			}],
+			columnDefs: [],
 			// state variables needed for resource form
 			rowData: [],
 			selectedResource: {},
@@ -84,59 +82,79 @@ class Resource_list_page extends React.Component {
 			suppressMovable: true,
 			pinned: 'left',
 			cellRenderer: function (params) {
-				if (data.length != 0) {
-					return "<a href='/individual_resource/" + params.value + "'>Details</a>"
+				return "<a href='/individual_resource/" + params.value + "'>Details</a>"
+			}
+		}];
+		
+		if (data.length == 0) {
+			// make API call for then second route
+			// set the row data with the api data
+		} else {
+			let rowData = [];
+			let currJSON = {};
+			let colNames = new Set();
+			let prevNetId = null;
+			let resources = [];
+
+			for (let i = 0; i < data.length; i++) {
+				let curr = data[i];
+				let currID = curr.NetID;
+				let currHeader = curr.Dates;
+				let fullName = curr.FirstName + " " + curr.LastName;
+				let maxHour = curr.MaxHoursPerWeek;
+				let id = curr.ResourceID;
+
+				if (currID != prevNetId) {
+					if (prevNetId != null) {
+						rowData.push(currJSON);
+						// resources.push(fullName);
+						// let tempName = fullName + " (" + currID + ")";
+						// this.resourceOptions.push({ label: tempName, value: currID });
+					}
+					prevNetId = currID;
+					currJSON = {
+						netid: currID,
+						name: fullName,
+						maxHourPerWeek: maxHour,
+						detailLink: id
+					};
+					resources.push(fullName);
+					let tempName = fullName + " (" + currID + ")";
+					this.resourceOptions.push({ label: tempName, value: currID });
 				}
-			}
-		}]
-
-		let rowData = [];
-		let currJSON = {};
-		let colNames = new Set();
-		let prevNetId = null;
-		let resources = [];
-
-		for (let i = 0; i < data.length; i++) {
-			let curr = data[i];
-			let currID = curr.NetID;
-			let currHeader = curr.Dates;
-			let fullName = curr.FirstName + " " + curr.LastName;
-			let maxHour = curr.MaxHoursPerWeek;
-			let id = curr.ResourceID;
-
-			if (currID != prevNetId) {
-				if (prevNetId != null) {
-					rowData.push(currJSON);
-					// resources.push(fullName);
-					// let tempName = fullName + " (" + currID + ")";
-					// this.resourceOptions.push({ label: tempName, value: currID });
+				let currHours = curr.TotalHoursPerWeek;
+				if (!colNames.has(currHeader)) {
+					colNames.add(currHeader);
+					let newColDef = {
+						headerName: currHeader,
+						field: currHeader,
+						sortable: true,
+						filter: "agTextColumnFilter",
+						suppressMovable: true
+					};
+					columnDefs.push(newColDef);
 				}
-				prevNetId = currID;
-				currJSON = {
-					netid: currID,
-					name: fullName,
-					maxHourPerWeek: maxHour,
-					detailLink: id
-				};
-				resources.push(fullName);
-				let tempName = fullName + " (" + currID + ")";
-				this.resourceOptions.push({ label: tempName, value: currID });
+				currJSON[currHeader] = currHours;
 			}
-			let currHours = curr.TotalHoursPerWeek;
-			if (!colNames.has(currHeader)) {
-				colNames.add(currHeader);
-				let newColDef = {
-					headerName: currHeader,
-					field: currHeader,
-					sortable: true,
-					filter: "agTextColumnFilter",
-					suppressMovable: true
-				};
-				columnDefs.push(newColDef);
+			rowData.push(currJSON);
+
+			let dates = columnDefs.slice(3);
+			let dateComparator = function (a, b) {
+				if (a.field < b.field) {
+					return -1;
+				}
+				if (a.field > b.field) {
+					return 1;
+				}
+				return 0;
+			};
+			dates.sort(dateComparator);
+			if (dates.length != 0) {
+					this.latestDate = dates[dates.length - 1].field;
 			}
-			currJSON[currHeader] = currHours;
+			columnDefs = columnDefs.slice(0, 3).concat(dates);
+
 		}
-		rowData.push(currJSON);
 		// console.log(resources);
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
