@@ -104,6 +104,7 @@ class Projects_list_page extends React.Component {
 
         //deleting project modal
         this.projOptions = [];
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     async processData(data) {
@@ -218,11 +219,7 @@ class Projects_list_page extends React.Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(ProjData),
-        });
-        while (true) {
-            
-        }
-        
+        });        
     }
 
     async componentDidMount() {
@@ -271,7 +268,7 @@ class Projects_list_page extends React.Component {
                 className="ag-theme-balham"
                 style={{
                     height: '65vh',
-                    width: '1500px'
+                    width: '100vw'
                 }}
             >
 
