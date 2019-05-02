@@ -81,9 +81,6 @@ class Individual_project_page extends React.Component {
             { headerName: 'Role', field: 'role', sortable: true, enableCellChangeFlash: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
         ];
         let rowData = [];
-        if (data.length == 0) {
-            return;
-        }
         let columnNames = new Set();
         let prevNetID = null;
         let currentJSON = {};
