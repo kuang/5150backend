@@ -350,7 +350,7 @@ class Projects_list_page extends React.Component {
                         <input type="submit" value="Submit" />
                     </form>
                 </Modal>
-
+                {this.buttonGenerater()}
                 {/* <LoginContext.Consumer>
                     {({value, toggleValue}) => (this.buttonGenerater(value))}
                 </LoginContext.Consumer> */}
