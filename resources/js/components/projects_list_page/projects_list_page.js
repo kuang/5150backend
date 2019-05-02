@@ -19,7 +19,8 @@ class Projects_list_page extends React.Component {
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true,
-                    pinned: "left"
+                    pinned: "left",
+                    hide: true
                 }, {
                     headerName: 'Project',
                     field: 'projectName',
@@ -38,7 +39,6 @@ class Projects_list_page extends React.Component {
                         return "<a href='/individual_project/" + params.value + "'>Details</a>"
                     }
                 },
-                // { headerName: 'Most Recent Updates', field: 'updates'},
                 {
                     headerName: 'Start Date',
                     field: 'startDate',
@@ -64,20 +64,6 @@ class Projects_list_page extends React.Component {
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 },
-                // { 
-                //     headerName: 'Assigned Resources', 
-                //     field: 'resources', 
-                //     sortable: true, 
-                //     filter: "agTextColumnFilter",
-                //     suppressMovable: true
-                // },
-                // { 
-                //     headerName: 'Hours This Week', 
-                //     field: 'hoursWeek', 
-                //     sortable: true, 
-                //     filter: "agTextColumnFilter",
-                //     suppressMovable: true
-                // },
                 {
                     headerName: 'Initial Estimated Hours',
                     field: 'estMaxHours',
@@ -118,7 +104,6 @@ class Projects_list_page extends React.Component {
 
         //deleting project modal
         this.projOptions = [];
-        //this.getProjOptions = this.getProjOptions.bind(this);
     }
 
     async processData(data) {
@@ -134,21 +119,15 @@ class Projects_list_page extends React.Component {
             let currDueDate = currJSON.DueDate;
             let currEstMaxHours = currJSON.EstMaxHours;
             let currHoursTotal = currJSON.TotalHoursAssigned;
-            //let currResources = await this.getResourceNames(currProjectID);
-            //let currHoursWeek = await this.getHoursWeek(currProjectID);
-            //let currUpdates = "";
 
             rowJSON = {
                 projectID: currProjectID,
                 projectName: currProjectName,
                 details: currProjectID,
-                //updates: currUpdates,
                 startDate: currStartDate,
                 dueDate: currDueDate,
                 status: currStatus,
                 tech: currTech,
-                //resources: currResources,
-                //hoursWeek : currHoursWeek,
                 estMaxHours: currEstMaxHours,
                 hoursTotal: currHoursTotal
             };
@@ -227,19 +206,9 @@ class Projects_list_page extends React.Component {
         this.setState({ selectedOption: selection });
     }
 
-    /** Takes in an array of project names, returns an array of labels */
-    // getProjOptions(arr) {
-    //     var result = [];
-    //     for (let i = 0; i < arr.length; i++) {
-    //         let newLabel = {label: arr[i], value: 1};
-    //         result.push(newLabel);
-    //     }
-    //     return result;
-    // }
-
     async handleDelete(event) {
         let ProjData = {
-            "ProjectName": this.state.selectedOption.label
+            "ProjectName": this.state.selectedOption
         };
         let response = await fetch(`../api/deleteProject`, {
             method: "DELETE",
@@ -249,6 +218,7 @@ class Projects_list_page extends React.Component {
             },
             body: JSON.stringify(ProjData),
         });
+        
     }
 
     async componentDidMount() {
@@ -264,11 +234,6 @@ class Projects_list_page extends React.Component {
             .then(function(data){
                 return data.map(a => a.ProjectName);
             });
-        
-            // .then(function (newData) {
-            //     console.log(newData);
-            //     return this.getProjOptions(newData);
-            // }.bind(this));
 
         console.log(names);
         for (let i = 0; i < names.length; i++) {
