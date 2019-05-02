@@ -95,6 +95,8 @@ class Resource_list_page extends React.Component {
 		if (data.length != 0) {
 			for (let i = 0; i < data.length; i++) {
 				let curr = data[i];
+				console.log("XXXXXXX");
+				console.log(data);
 				let currID = curr.NetID;
 				let currHeader = curr.Dates;
 				let fullName = curr.FirstName + " " + curr.LastName;
@@ -147,14 +149,14 @@ class Resource_list_page extends React.Component {
 			};
 			dates.sort(dateComparator);
 			if (dates.length != 0) {
-					this.latestDate = dates[dates.length - 1].field;
+				this.latestDate = dates[dates.length - 1].field;
 			}
 			columnDefs = columnDefs.slice(0, 3).concat(dates);
 		} else {
 			let response = await fetch('../api/displayAllResources');
 			let resourceInfo = await response.json();
 
-			for (let j=0; j<resourceInfo.length; j++) {
+			for (let j = 0; j < resourceInfo.length; j++) {
 				let curr = resourceInfo[j];
 				let currID = curr.NetID;
 				let currHeader = curr.Dates;
@@ -269,6 +271,21 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
+	buttonGen() {
+		if (window.sessionStorage.getItem("value") == "logged") {
+			return (<div>
+				<button
+					style={{ height: '30px', width: '100px', marginRight: '10px' }}
+					onClick={this.toggleAddPopup.bind(this)}>
+					Add Resource</button>
+				<button
+					style={{ height: '30px', width: '125px', marginRight: '10px' }}
+					onClick={this.toggleDeletePopup.bind(this)}
+				>Delete Resource</button></div>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<div
@@ -307,27 +324,27 @@ class Resource_list_page extends React.Component {
 					<h4 style={{ marginTop: '15px' }}>Delete a Resource</h4>
 					<form onSubmit={this.handleDeleteSubmit}>
 						<label style={{ marginRight: '15px', width: '100%' }}>
-								Name:
+							Name:
 								<br></br>
-								<Select
-									value={this.state.selectedResource}
-									onChange={this.handleNameSelect.bind(this)}
-									options={this.resourceOptions}>
-								</Select>
+							<Select
+								value={this.state.selectedResource}
+								onChange={this.handleNameSelect.bind(this)}
+								options={this.resourceOptions}>
+							</Select>
 						</label>
 						<br></br>
 						<input type="submit" value="Submit" />
 					</form>
 				</Modal>
-
-				<button
+				{this.buttonGen()}
+				{/* <button
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
 					onClick={this.toggleAddPopup.bind(this)}
 				>Add Resource</button>
 				<button
 					style={{ height: '30px', width: '125px', marginRight: '10px' }}
 					onClick={this.toggleDeletePopup.bind(this)}
-				>Delete Resource</button>
+				>Delete Resource</button> */}
 			</div>
 		);
 	}
