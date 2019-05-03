@@ -95,8 +95,6 @@ class Resource_list_page extends React.Component {
 		if (data.length != 0) {
 			for (let i = 0; i < data.length; i++) {
 				let curr = data[i];
-				console.log("XXXXXXX");
-				console.log(data);
 				let currID = curr.NetID;
 				let currHeader = curr.Dates;
 				let fullName = curr.FirstName + " " + curr.LastName;
