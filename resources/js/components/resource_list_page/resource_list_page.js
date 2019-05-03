@@ -87,6 +87,7 @@ class Resource_list_page extends React.Component {
 		let netIDs = new Set();
 		let resources = [];
 
+<<<<<<< HEAD
 		// process data for the first time
 		for (let i = 0; i < data.length; i++) {
 			let curr = data[i];
@@ -95,12 +96,82 @@ class Resource_list_page extends React.Component {
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
+=======
+		if (data.length != 0) {
+			for (let i = 0; i < data.length; i++) {
+				let curr = data[i];
+				console.log("XXXXXXX");
+				console.log(data);
+				let currID = curr.NetID;
+				let currHeader = curr.Dates;
+				let fullName = curr.FirstName + " " + curr.LastName;
+				let maxHour = curr.MaxHoursPerWeek;
+				let id = curr.ResourceID;
+
+				if (currID != prevNetId) {
+					if (prevNetId != null) {
+						rowData.push(currJSON);
+						// resources.push(fullName);
+						// let tempName = fullName + " (" + currID + ")";
+						// this.resourceOptions.push({ label: tempName, value: currID });
+					}
+					prevNetId = currID;
+					currJSON = {
+						netid: currID,
+						name: fullName,
+						maxHourPerWeek: maxHour,
+						detailLink: id
+					};
+					resources.push(fullName);
+					let tempName = fullName + " (" + currID + ")";
+					this.resourceOptions.push({ label: tempName, value: currID });
+				}
+				let currHours = curr.TotalHoursPerWeek;
+				if (!colNames.has(currHeader)) {
+					colNames.add(currHeader);
+					let newColDef = {
+						headerName: currHeader,
+						field: currHeader,
+						sortable: true,
+						filter: "agTextColumnFilter",
+						suppressMovable: true
+					};
+					columnDefs.push(newColDef);
+				}
+				currJSON[currHeader] = currHours;
+			}
+			rowData.push(currJSON);
+>>>>>>> 7df4a72fe0d0ca9de8b08ee31f0320d219db6339
 
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
 					rowData.push(currJSON);
 				}
+<<<<<<< HEAD
 				prevNetId = currID;
+=======
+				if (a.field > b.field) {
+					return 1;
+				}
+				return 0;
+			};
+			dates.sort(dateComparator);
+			if (dates.length != 0) {
+				this.latestDate = dates[dates.length - 1].field;
+			}
+			columnDefs = columnDefs.slice(0, 3).concat(dates);
+		} else {
+			let response = await fetch('../api/displayAllResources');
+			let resourceInfo = await response.json();
+
+			for (let j = 0; j < resourceInfo.length; j++) {
+				let curr = resourceInfo[j];
+				let currID = curr.NetID;
+				let currHeader = curr.Dates;
+				let fullName = curr.FirstName + " " + curr.LastName;
+				let maxHour = curr.MaxHoursPerWeek;
+				let id = curr.ResourceID;
+>>>>>>> 7df4a72fe0d0ca9de8b08ee31f0320d219db6339
 				currJSON = {
 					netid: currID,
 					name: fullName,
@@ -251,6 +322,21 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
+	buttonGen() {
+		if (window.sessionStorage.getItem("value") == "logged") {
+			return (<div>
+				<button
+					style={{ height: '30px', width: '100px', marginRight: '10px' }}
+					onClick={this.toggleAddPopup.bind(this)}>
+					Add Resource</button>
+				<button
+					style={{ height: '30px', width: '125px', marginRight: '10px' }}
+					onClick={this.toggleDeletePopup.bind(this)}
+				>Delete Resource</button></div>
+			);
+		}
+	}
+
 	render() {
 		return (
 			<div
@@ -289,27 +375,27 @@ class Resource_list_page extends React.Component {
 					<h4 style={{ marginTop: '15px' }}>Delete a Resource</h4>
 					<form onSubmit={this.handleDeleteSubmit}>
 						<label style={{ marginRight: '15px', width: '100%' }}>
-								Name:
+							Name:
 								<br></br>
-								<Select
-									value={this.state.selectedResource}
-									onChange={this.handleNameSelect.bind(this)}
-									options={this.resourceOptions}>
-								</Select>
+							<Select
+								value={this.state.selectedResource}
+								onChange={this.handleNameSelect.bind(this)}
+								options={this.resourceOptions}>
+							</Select>
 						</label>
 						<br></br>
 						<input type="submit" value="Submit" />
 					</form>
 				</Modal>
-
-				<button
+				{this.buttonGen()}
+				{/* <button
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
 					onClick={this.toggleAddPopup.bind(this)}
 				>Add Resource</button>
 				<button
 					style={{ height: '30px', width: '125px', marginRight: '10px' }}
 					onClick={this.toggleDeletePopup.bind(this)}
-				>Delete Resource</button>
+				>Delete Resource</button> */}
 			</div>
 		);
 	}
