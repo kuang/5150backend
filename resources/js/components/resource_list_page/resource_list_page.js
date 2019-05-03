@@ -45,12 +45,6 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
-	// cellClicked(event) {
-	// 	if (event.value == undefined) {
-	// 		console.log("undefined");
-	// 	}
-	// }
-
 	async processData(data) {
 		// console.log(data);
 		let columnDefs = [{
@@ -88,10 +82,12 @@ class Resource_list_page extends React.Component {
 
 		let rowData = [];
 		let currJSON = {};
-		let colNames = new Set();
 		let prevNetId = null;
+		let colNames = new Set();
+		let netIDs = new Set();
 		let resources = [];
 
+<<<<<<< HEAD
 		if (data.length != 0) {
 			for (let i = 0; i < data.length; i++) {
 				let curr = data[i];
@@ -134,57 +130,93 @@ class Resource_list_page extends React.Component {
 				currJSON[currHeader] = currHours;
 			}
 			rowData.push(currJSON);
+=======
+		// process data for the first time
+		for (let i = 0; i < data.length; i++) {
+			let curr = data[i];
+			let currID = curr.NetID;
+			let currHeader = curr.Dates;
+			let fullName = curr.FirstName + " " + curr.LastName;
+			let maxHour = curr.MaxHoursPerWeek;
+			let id = curr.ResourceID;
+>>>>>>> f6af005fb795d3ac77080b3e1e3adcc5ddb6cea4
 
-			let dates = columnDefs.slice(3);
-			let dateComparator = function (a, b) {
-				if (a.field < b.field) {
-					return -1;
+			if (currID != prevNetId) {
+				if (prevNetId != null) {
+					rowData.push(currJSON);
 				}
-				if (a.field > b.field) {
-					return 1;
-				}
-				return 0;
-			};
-			dates.sort(dateComparator);
-			if (dates.length != 0) {
-				this.latestDate = dates[dates.length - 1].field;
-			}
-			columnDefs = columnDefs.slice(0, 3).concat(dates);
-		} else {
-			let response = await fetch('../api/displayAllResources');
-			let resourceInfo = await response.json();
-
-			for (let j = 0; j < resourceInfo.length; j++) {
-				let curr = resourceInfo[j];
-				let currID = curr.NetID;
-				let currHeader = curr.Dates;
-				let fullName = curr.FirstName + " " + curr.LastName;
-				let maxHour = curr.MaxHoursPerWeek;
-				let id = curr.ResourceID;
+				prevNetId = currID;
 				currJSON = {
 					netid: currID,
 					name: fullName,
 					maxHourPerWeek: maxHour,
 					detailLink: id
 				};
-				rowData.push(currJSON);
 				resources.push(fullName);
+				netIDs.add(currID);
 				let tempName = fullName + " (" + currID + ")";
 				this.resourceOptions.push({ label: tempName, value: currID });
 			}
+			let currHours = curr.TotalHoursPerWeek;
+			if (!colNames.has(currHeader)) {
+				colNames.add(currHeader);
+				let newColDef = {
+					headerName: currHeader,
+					field: currHeader,
+					sortable: true,
+					filter: "agTextColumnFilter",
+					suppressMovable: true
+				};
+				columnDefs.push(newColDef);
+			}
+			currJSON[currHeader] = currHours;
 		}
+		rowData.push(currJSON);
 
+		// order the dates
+		let dates = columnDefs.slice(3);
+		let dateComparator = function (a, b) {
+			if (a.field < b.field) {
+				return -1;
+			}
+			if (a.field > b.field) {
+				return 1;
+			}
+			return 0;
+		};
+		dates.sort(dateComparator);
+		if (dates.length != 0) {
+				this.latestDate = dates[dates.length - 1].field;
+		}
+		columnDefs = columnDefs.slice(0, 3).concat(dates);
+
+		// second api call
+		let response = await fetch('../api/displayAllResources');
+		let data_ = await response.json();
+
+		for (let j=0; j<data_.length; j++) {
+			let curr_ = data_[j];
+			let currID_ = curr_.NetID;
+			if (!netIDs.has(currID_)) {
+				let fullName_ = curr_.FirstName + " " + curr_.LastName;
+				let maxHour_ = curr_.MaxHoursPerWeek;
+				let id_ = curr_.ResourceID;
+				currJSON = {
+					netid: currID_,
+					name: fullName_,
+					maxHourPerWeek: maxHour_,
+					detailLink: id_
+				};
+				rowData.push(currJSON);
+				resources.push(fullName_);
+				let tempName = fullName_ + " (" + currID_ + ")";
+				this.resourceOptions.push({ label: tempName, value: currID_ });
+			}
+		}
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
 
 	componentDidMount() {
-		// fetch('../api/displayAllResources')
-		// 	.then(result => result.json())
-		// 	.then(data => this.processData(data))
-		// 	.then(function (newData) {
-		// 		this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
-		// 	}.bind(this));
-
 		fetch('../api/displayResourceHours')
 			.then(result => result.json())
 			.then(data => this.processData(data))
@@ -230,12 +262,14 @@ class Resource_list_page extends React.Component {
 	}
 
 	async handleAddSubmit(event) {
+		console.log("handling add submit");
 		let data = {
 			"NetID": this.state.netID,
 			"FirstName": this.state.firstName,
 			"LastName": this.state.lastName,
 			"MaxHoursPerWeek": this.state.maxHourPerWeek
 		}
+		console.log(data);
 
 		let response = await fetch('../api/addResource', {
 			method: "POST",
@@ -245,13 +279,6 @@ class Resource_list_page extends React.Component {
 			},
 			body: JSON.stringify(data),
 		});
-
-		// fetch('../api/displayAllResources')
-		// 	.then(result => result.json())
-		// 	.then(data => this.processData(data))
-		// 	.then(function (newData) {
-		// 		this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
-		// 	}.bind(this));
 	}
 
 	async handleDeleteSubmit(event) {
