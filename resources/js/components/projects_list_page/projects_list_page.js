@@ -38,8 +38,7 @@ class Projects_list_page extends React.Component {
                     cellRenderer: function (params) {
                         return "<a href='/individual_project/" + params.value + "'>Details</a>"
                     }
-                },
-                {
+                }, {
                     headerName: 'Start Date',
                     field: 'startDate',
                     sortable: true,
@@ -63,19 +62,27 @@ class Projects_list_page extends React.Component {
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
-                },
-                {
+                }, {
                     headerName: 'Initial Estimated Hours',
                     field: 'estMaxHours',
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 }, {
-                    headerName: 'Total Hours',
+                    headerName: 'Total Assigned Hours',
                     field: 'hoursTotal',
                     sortable: true,
                     filter: "agTextColumnFilter",
-                    suppressMovable: true
+                    suppressMovable: true,
+                    cellStyle: function (params) {
+                        if (params.value > params.data.estMaxHours) { 
+                            return { color: 'red' }; //mark cell as red
+                        } else if (params.value <= params.data.estMaxHours) {
+                            return { color: null }; //unmark cell
+                        } else {
+                            return null;
+                        }
+                    }
                 }
             ],
             rowData: [],
