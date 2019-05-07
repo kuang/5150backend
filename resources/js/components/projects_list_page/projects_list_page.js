@@ -16,6 +16,7 @@ class Projects_list_page extends React.Component {
                 {
                     headerName: 'ID',
                     field: 'projectID',
+                    width:100,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true,
@@ -24,6 +25,8 @@ class Projects_list_page extends React.Component {
                 }, {
                     headerName: 'Project',
                     field: 'projectName',
+                    width: 350,
+                    resizable: true,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true,
@@ -41,36 +44,43 @@ class Projects_list_page extends React.Component {
                 }, {
                     headerName: 'Start Date',
                     field: 'startDate',
+                    width: 100,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 }, {
                     headerName: 'Due Date',
                     field: 'dueDate',
+                    width: 100,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 }, {
                     headerName: 'Status',
                     field: 'status',
+                    width: 100,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 }, {
                     headerName: 'Technology',
                     field: 'tech',
+                    width: 300,
+                    resizable: true,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 }, {
                     headerName: 'Initial Estimated Hours',
                     field: 'estMaxHours',
+                    width: 200,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true
                 }, {
                     headerName: 'Total Assigned Hours',
                     field: 'hoursTotal',
+                    width: 200,
                     sortable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true,
