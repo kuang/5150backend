@@ -46,14 +46,15 @@ class Resource_list_page extends React.Component {
 	}
 
 	async processData(data) {
-		// console.log(data);
+		console.log(data);
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
 			width: 100,
 			filter: "agTextColumnFilter",
 			suppressMovable: true,
-			pinned: 'left'
+			pinned: 'left',
+			sortable: true,
 		}, {
 			headerName: 'Name',
 			field: 'name',
@@ -95,6 +96,7 @@ class Resource_list_page extends React.Component {
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
+			console.log(maxHour);
 
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
@@ -141,7 +143,7 @@ class Resource_list_page extends React.Component {
 		};
 		dates.sort(dateComparator);
 		if (dates.length != 0) {
-				this.latestDate = dates[dates.length - 1].field;
+			this.latestDate = dates[dates.length - 1].field;
 		}
 		columnDefs = columnDefs.slice(0, 3).concat(dates);
 
@@ -253,15 +255,17 @@ class Resource_list_page extends React.Component {
 
 	buttonGen() {
 		if (window.sessionStorage.getItem("value") == "logged") {
-			return (<div>
-				<button
-					style={{ height: '30px', width: '100px', marginRight: '10px' }}
-					onClick={this.toggleAddPopup.bind(this)}>
-					Add Resource</button>
-				<button
-					style={{ height: '30px', width: '125px', marginRight: '10px' }}
-					onClick={this.toggleDeletePopup.bind(this)}
-				>Delete Resource</button></div>
+			return (
+				<div>
+					<button
+						style={{ height: '30px', width: '100px', marginRight: '10px' }}
+						onClick={this.toggleAddPopup.bind(this)}>
+						Add Resource</button>
+					<button
+						style={{ height: '30px', width: '125px', marginRight: '10px' }}
+						onClick={this.toggleDeletePopup.bind(this)}
+					>Delete Resource</button>
+				</div>
 			);
 		}
 	}
