@@ -306,7 +306,7 @@ class Resource_list_page extends React.Component {
 						<input style={{ float: 'right' }} type="text" required value={this.state.netID} onChange={this.handleNetIDChange} />
 						<br></br>
 						<label style={{ marginRight: '15px' }}>Max Hours per Week:</label>
-						<input style={{ float: 'right' }} type="number" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
+						<input style={{ float: 'right' }} type="number" min="0" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
 						<br></br>
 						<input type="submit" value="Submit" />
 					</form>
