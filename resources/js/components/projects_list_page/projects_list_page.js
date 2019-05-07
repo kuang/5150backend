@@ -76,9 +76,9 @@ class Projects_list_page extends React.Component {
                     suppressMovable: true,
                     cellStyle: function (params) {
                         if (params.value > params.data.estMaxHours) { 
-                            return { backgroundColor: 'red' }; //mark cell as red
+                            return { color: 'red' }; //mark cell as red
                         } else if (params.value <= params.data.estMaxHours) {
-                            return { backgroundColor: null }; //unmark cell
+                            return { color: null }; //unmark cell
                         } else {
                             return null;
                         }
