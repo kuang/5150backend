@@ -122,7 +122,16 @@ class Resource_list_page extends React.Component {
 					field: currHeader,
 					sortable: true,
 					filter: "agTextColumnFilter",
-					suppressMovable: true
+					suppressMovable: true,
+					cellStyle: function(params) {
+		        if (params.value > params.data.maxHourPerWeek) {
+		          return {color: 'red'};
+		        } else if (params.value < params.data.maxHourPerWeek){
+							return {color: 'green'};
+						} else {
+		          return null;
+		        }
+		      }
 				};
 				columnDefs.push(newColDef);
 			}
