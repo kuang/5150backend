@@ -141,7 +141,7 @@ class Resource_list_page extends React.Component {
 		};
 		dates.sort(dateComparator);
 		if (dates.length != 0) {
-				this.latestDate = dates[dates.length - 1].field;
+			this.latestDate = dates[dates.length - 1].field;
 		}
 		columnDefs = columnDefs.slice(0, 3).concat(dates);
 
@@ -149,7 +149,7 @@ class Resource_list_page extends React.Component {
 		let response = await fetch('../api/displayAllResources');
 		let data_ = await response.json();
 
-		for (let j=0; j<data_.length; j++) {
+		for (let j = 0; j < data_.length; j++) {
 			let curr_ = data_[j];
 			let currID_ = curr_.NetID;
 			if (!netIDs.has(currID_)) {
@@ -278,7 +278,6 @@ class Resource_list_page extends React.Component {
 				<AgGridReact
 					columnDefs={this.state.columnDefs}
 					rowData={this.state.rowData}
-				// onCellClicked={this.cellClicked.bind(this)}
 				></AgGridReact>
 
 				<Modal open={this.state.showAddPopup} onClose={this.toggleAddPopup.bind(this)} center closeIconSize={14}>

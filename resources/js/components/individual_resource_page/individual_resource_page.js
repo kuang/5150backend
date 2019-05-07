@@ -21,31 +21,33 @@ class Individual_resource_page extends Component {
             columnDefs: [{
                 headerName: "Name", field: "name"
             }],
+            allResourcesInfo: null,
             // state variables needed for resource form
             rowData: [],
         };
-        // this.renderItem = this.renderItem.bind(this);
     }
     async processData(data) {
-        let columnDefs = [{
-            headerName: 'Project',
-            field: 'project',
-            width: 100,
-            filter: "agTextColumnFilter",
-            suppressMovable: true,
-            pinned: 'left'
-        }
-            // , {
-            //     headerName: 'Details',
-            //     field: 'detailLink',
-            //     width: 100,
-            //     filter: "agTextColumnFilter",
-            //     suppressMovable: true,
-            //     pinned: 'left',
-            //     cellRenderer: function (params) {
-            //         return "<a href='/individual_project/" + params.value + "'>Details</a>"
-            //     }
-            // }
+        console.log(data);
+        let columnDefs = [
+            {
+                headerName: 'Project',
+                field: 'project',
+                width: 100,
+                filter: "agTextColumnFilter",
+                suppressMovable: true,
+                pinned: 'left'
+            },
+            {
+                headerName: 'Details',
+                field: 'detailLink',
+                width: 100,
+                filter: "agTextColumnFilter",
+                suppressMovable: true,
+                pinned: 'left',
+                cellRenderer: function (params) {
+                    return "<a href='/individual_project/" + params.value + "'>Details</a>"
+                }
+            }
         ]
 
         let rowData = [];
@@ -57,7 +59,8 @@ class Individual_resource_page extends Component {
             let curr = data[i];
             let currHeader = curr.Dates;
             let currProjectName = curr.ProjectName;
-            let numHours = curr.HoursPerWeek;
+            let currHours = curr.HoursPerWeek;
+            let currID = curr.ProjectID;
 
             // new row
             if (currProjectName != prevProjectName) {
@@ -67,10 +70,9 @@ class Individual_resource_page extends Component {
                 prevProjectName = currProjectName;
                 currJSON = {
                     project: currProjectName,
-                    // detailLink: id
+                    detailLink: currID
                 };
             }
-            let currHours = curr.HoursPerWeek;
             if (!colNames.has(currHeader)) {
                 colNames.add(currHeader);
                 let newColDef = {
@@ -100,27 +102,11 @@ class Individual_resource_page extends Component {
             .then(function (newData) {
                 this.setState({ rowData: newData["rowData"], columnDefs: newData["columnDefs"] })
             }.bind(this));
-        // .then(res => res.json())
-        // .then(
-        //     (result) => {
-        //         console.log(result);
-        //         // this.setState({ projects: result });
-        //     },
-        //     // Note: it's important to handle errors here
-        //     // instead of a catch() block so that we don't swallow
-        //     // exceptions from actual bugs in components.
-        //     (error) => {
-        //         return <h2>failed</h2>;
-        //     });
-
-
-
 
         fetch('/api/displayResourceInfo/' + this.props.match.params.resourceID)
             .then(res => res.json())
             .then(
                 (result) => {
-                    // console.log(result)
                     this.setState({
                         firstName: result[0].FirstName,
                         lastName: result[0].LastName,
@@ -128,8 +114,6 @@ class Individual_resource_page extends Component {
                         netID: result[0].NetID,
                         hours: result[0].MaxHoursPerWeek
                     })
-                    console.log(result);
-
                 },
                 (error) => {
                     return <h2>failed</h2>;
@@ -152,8 +136,6 @@ class Individual_resource_page extends Component {
             "MaxHoursPerWeek": this.state.hours
         }
 
-        console.log("handleSubmit called");
-        console.log(data);
         let response = await fetch('../api/updateResource', {
             method: "PUT",
             headers: {
@@ -172,25 +154,8 @@ class Individual_resource_page extends Component {
     }
 
 
-
-
-    // renders each individual row of the projects list.
-    // renderItem(index, key) {
-    //     if (this.state.projects.length != 0) {
-    //         return (
-    //             <div key={key} style={{ borderStyle: 'solid' }}>
-    //                 <div>{this.state.projects[index].ProjectName}</div>
-    //                 <div>Start Date: {this.state.projects[index].StartDate}</div>
-    //             </div >
-    //         );
-    //     }
-    //     else {
-    //         return <div></div>;
-    //     }
-    // }
-
-    buttonGen(){
-        if(window.sessionStorage.getItem("value")=="logged"){
+    buttonGen() {
+        if (window.sessionStorage.getItem("value") == "logged") {
             return (<button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>);
         }
     }
@@ -243,7 +208,6 @@ class Individual_resource_page extends Component {
                         <AgGridReact
                             columnDefs={this.state.columnDefs}
                             rowData={this.state.rowData}
-                        // onCellClicked={this.cellClicked.bind(this)}
                         ></AgGridReact>
                     </div>
                     {this.buttonGen()}

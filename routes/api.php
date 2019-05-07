@@ -141,9 +141,8 @@ Route::get('/displayIndividualResourceHours/{resourceID}', function ($resourceID
         $table = DB::table('resources_per_projects')
             ->join('projects', 'projects.ProjectID', '=', 'resources_per_projects.ProjectID')
             ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
-            ->select('projects.ProjectName', 'schedules.Dates', 'schedules.HoursPerWeek')
+            ->select('projects.ProjectID','projects.ProjectName', 'schedules.Dates', 'schedules.HoursPerWeek')
             ->where([['schedules.Dates', '>=', $curr_week], ['resources_per_projects.ResourceID', '=', $resourceID]])
-//            ->groupBy('resources.NetID', 'schedules.Dates')
             ->get();
         return $table;
     } catch (Exception $e){
