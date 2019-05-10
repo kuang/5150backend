@@ -328,15 +328,17 @@ class Resource_list_page extends React.Component {
 						<input type="submit" value="Submit" />
 					</form>
 				</Modal>
-				{this.buttonGen()}
-				{/* <button
+				
+				{/*
+				<button
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
 					onClick={this.toggleAddPopup.bind(this)}
 				>Add Resource</button>
 				<button
 					style={{ height: '30px', width: '125px', marginRight: '10px' }}
 					onClick={this.toggleDeletePopup.bind(this)}
-				>Delete Resource</button> */}
+				>Delete Resource</button>
+				*/}
 			</div>
 		);
 	}
