@@ -124,6 +124,7 @@ class Projects_list_page extends React.Component {
         this.handleDelete = this.handleDelete.bind(this);
     }
 
+    /** Processes the raw data to make them ready for display on table */
     async processData(data) {
         var rowData = [];
         var rowJSON = {};
@@ -155,6 +156,7 @@ class Projects_list_page extends React.Component {
 
         return rowData
     }
+
 
     /* Methods for the adding project modal */
     togglePopupAdd() {
@@ -193,6 +195,8 @@ class Projects_list_page extends React.Component {
         });
     }
 
+
+    /** Handles the add event button */
     async handleSubmit(event) {
         let newProjData = {
             "ProjectName": this.state.newProjectName,
@@ -212,7 +216,8 @@ class Projects_list_page extends React.Component {
         });
     }
 
-    /* methods for deleting project modal */
+
+    /* Methods for the deleting project modal */
     togglePopupDelete() {
         this.setState({
             showPopupDelete: !(this.state.showPopupDelete)
@@ -224,6 +229,8 @@ class Projects_list_page extends React.Component {
         this.setState({ selectedOption: selection });
     }
 
+
+    /** Handles the delete event button */
     async handleDelete(event) {
         console.log("Deleting Form");
         let ProjData = {
@@ -260,7 +267,8 @@ class Projects_list_page extends React.Component {
         console.log(this.projOptions);
     }
 
-    buttonGenerater() {
+    /** Generates a button. Buttons are made only visible for logged in users*/
+    buttonGenerator() {
         let value = window.sessionStorage.getItem("value");
         if (value === "logged") {
             return (
@@ -305,7 +313,7 @@ class Projects_list_page extends React.Component {
                         <input style={{ float: 'right' }} type="text" required value={this.state.newTechnology} onChange={this.handleSetTech} />
                         <br></br>
                         <label style={{ marginRight: '15px' }}>Estimated Maximum Hours for This Project:</label>
-                        <input style={{ float: 'right' }} type="number" required value={this.state.newEstMaxHours} onChange={this.handleSetHours} />
+                        <input style={{ float: 'right' }} type="number" min="0" required value={this.state.newEstMaxHours} onChange={this.handleSetHours} />
                         <br></br>
                         <label style={{ marginRight: '15px' }}>Start Date:</label>
                         <input style={{ float: 'right' }} type="date" required value={this.state.newStartDate} onChange={this.handleSetStartDate} />
@@ -333,19 +341,7 @@ class Projects_list_page extends React.Component {
                         <input type="submit" value="Submit" />
                     </form>
                 </Modal>
-                {this.buttonGenerater()}
-                {/* <LoginContext.Consumer>
-                    {({value, toggleValue}) => (this.buttonGenerater(value))}
-                </LoginContext.Consumer> */}
-                {/* <button
-                    style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                    onClick={this.togglePopupAdd.bind(this)}
-                >Add Project</button>
-
-                <button
-                    style={{ height: '30px', width: '100px', marginRight: '10px' }}
-                    onClick={this.togglePopupDelete.bind(this)}
-                >Delete Project</button> */}
+                {this.buttonGenerator()}
             </div>
         );
     }
