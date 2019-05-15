@@ -532,47 +532,6 @@ Route::put('/updateResourcePerProject', function(Request $request) {
     }
 });
 
-/** Route that updates an entry to the schedules table
- * ScheduleID: auto-incrementing key, so value that is inputted for it does not matter
-
-//{
-//    "ProjectID": "26",
-//    "NetID": "jd111",
-//    "Dates": "2019-03-07",
-//    "HoursPerWeek": 30
-//}
-//
-// */
-//Route::put('/updateSchedule', function(Request $request) {
-//    $data = $request->all();
-//
-//    $project_id_array = DB::table('projects')->select('ProjectID')->where('ProjectName', '=', $data["ProjectName"])->get();
-//    $project_id_json = json_decode(json_encode($project_id_array{0}), true);
-//    $project_id = $project_id_json["ProjectID"];
-//
-//    $resource_id_array = DB::table('resources')->select('ResourceID')->where('NetID', '=', $data["NetID"])->get();
-//    $resource_id_json = json_decode(json_encode($resource_id_array{0}), true);
-//    $resource_id = $resource_id_json["ResourceID"];
-//
-//    $schedule_id_array = DB::table('resources_per_projects')->select('ScheduleID')->where([['ProjectID', '=', $project_id], ['ResourceID', '=', $resource_id]])->get();
-//    $schedule_id_json = json_decode(json_encode($schedule_id_array{0}), true);
-//    $schedule_id = $schedule_id_json["ScheduleID"];
-//
-//    try {
-//        DB::table('schedules')->where('ScheduleID', $schedule_id)->update(
-//        ["Dates" => $data["Dates"], "HoursPerWeek" => $data["HoursPerWeek"]]);
-//        return "Successfully Updated Existing Schedule";
-//    } catch (Exception $e){
-//        if ($e instanceof \Illuminate\Database\QueryException) {
-//            $error_code= $e->errorInfo[1];
-//            if($error_code == 1062){
-//                return response('This resource already has hours for this week on this project', 403);
-//            }
-//        }
-//        return response('This entry could not be added. Please try again.', 403);
-//    }
-//});
-
 
 //{
 //    "ProjectID": 25,
@@ -758,15 +717,6 @@ Route::get("/displayMostRecentRowData/{projectID}", function($projectID) {
     }
     return response($mostRecentData, 200);
 });
-
-/** Route that clears all records from all tables */
-// Route::get('/clear', function() {
-//     DB::table('schedules')->delete();
-//     DB::table('resources_per_projects')->delete();
-//     DB::table('resources')->delete();
-//     DB::table('projects')->delete();
-//     return('Database cleared successfully');
-// });
 
 Route::put("/updateProjectDueDate", function(Request $request) {
     try {
