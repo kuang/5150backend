@@ -328,7 +328,7 @@ class Resource_list_page extends React.Component {
 						<input type="submit" value="Submit" />
 					</form>
 				</Modal>
-				
+
 				{/*
 				<button
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
@@ -339,6 +339,7 @@ class Resource_list_page extends React.Component {
 					onClick={this.toggleDeletePopup.bind(this)}
 				>Delete Resource</button>
 				*/}
+				{this.buttonGen()}
 			</div>
 		);
 	}
