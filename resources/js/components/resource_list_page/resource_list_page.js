@@ -46,14 +46,15 @@ class Resource_list_page extends React.Component {
 	}
 
 	async processData(data) {
-		// console.log(data);
+		console.log(data);
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
 			width: 100,
 			filter: "agTextColumnFilter",
 			suppressMovable: true,
-			pinned: 'left'
+			pinned: 'left',
+			sortable: true,
 		}, {
 			headerName: 'Name',
 			field: 'name',
@@ -95,6 +96,7 @@ class Resource_list_page extends React.Component {
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
+			console.log(maxHour);
 
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
@@ -120,7 +122,16 @@ class Resource_list_page extends React.Component {
 					field: currHeader,
 					sortable: true,
 					filter: "agTextColumnFilter",
-					suppressMovable: true
+					suppressMovable: true,
+					cellStyle: function(params) {
+		        if (params.value > params.data.maxHourPerWeek) {
+		          return {color: 'red'};
+		        } else if (params.value < params.data.maxHourPerWeek){
+							return {color: 'green'};
+						} else {
+		          return null;
+		        }
+		      }
 				};
 				columnDefs.push(newColDef);
 			}
@@ -141,7 +152,7 @@ class Resource_list_page extends React.Component {
 		};
 		dates.sort(dateComparator);
 		if (dates.length != 0) {
-				this.latestDate = dates[dates.length - 1].field;
+			this.latestDate = dates[dates.length - 1].field;
 		}
 		columnDefs = columnDefs.slice(0, 3).concat(dates);
 
@@ -149,7 +160,7 @@ class Resource_list_page extends React.Component {
 		let response = await fetch('../api/displayAllResources');
 		let data_ = await response.json();
 
-		for (let j=0; j<data_.length; j++) {
+		for (let j = 0; j < data_.length; j++) {
 			let curr_ = data_[j];
 			let currID_ = curr_.NetID;
 			if (!netIDs.has(currID_)) {
@@ -253,15 +264,17 @@ class Resource_list_page extends React.Component {
 
 	buttonGen() {
 		if (window.sessionStorage.getItem("value") == "logged") {
-			return (<div>
-				<button
-					style={{ height: '30px', width: '100px', marginRight: '10px' }}
-					onClick={this.toggleAddPopup.bind(this)}>
-					Add Resource</button>
-				<button
-					style={{ height: '30px', width: '125px', marginRight: '10px' }}
-					onClick={this.toggleDeletePopup.bind(this)}
-				>Delete Resource</button></div>
+			return (
+				<div>
+					<button
+						style={{ height: '30px', width: '100px', marginRight: '10px' }}
+						onClick={this.toggleAddPopup.bind(this)}>
+						Add Resource</button>
+					<button
+						style={{ height: '30px', width: '125px', marginRight: '10px' }}
+						onClick={this.toggleDeletePopup.bind(this)}
+					>Delete Resource</button>
+				</div>
 			);
 		}
 	}
@@ -278,7 +291,6 @@ class Resource_list_page extends React.Component {
 				<AgGridReact
 					columnDefs={this.state.columnDefs}
 					rowData={this.state.rowData}
-				// onCellClicked={this.cellClicked.bind(this)}
 				></AgGridReact>
 
 				<Modal open={this.state.showAddPopup} onClose={this.toggleAddPopup.bind(this)} center closeIconSize={14}>
@@ -294,7 +306,7 @@ class Resource_list_page extends React.Component {
 						<input style={{ float: 'right' }} type="text" required value={this.state.netID} onChange={this.handleNetIDChange} />
 						<br></br>
 						<label style={{ marginRight: '15px' }}>Max Hours per Week:</label>
-						<input style={{ float: 'right' }} type="number" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
+						<input style={{ float: 'right' }} type="number" min="0" required value={this.state.maxHourPerWeek} onChange={this.handleMaxHourChange} />
 						<br></br>
 						<input type="submit" value="Submit" />
 					</form>
@@ -316,15 +328,18 @@ class Resource_list_page extends React.Component {
 						<input type="submit" value="Submit" />
 					</form>
 				</Modal>
-				{this.buttonGen()}
-				{/* <button
+
+				{/*
+				<button
 					style={{ height: '30px', width: '100px', marginRight: '10px' }}
 					onClick={this.toggleAddPopup.bind(this)}
 				>Add Resource</button>
 				<button
 					style={{ height: '30px', width: '125px', marginRight: '10px' }}
 					onClick={this.toggleDeletePopup.bind(this)}
-				>Delete Resource</button> */}
+				>Delete Resource</button>
+				*/}
+				{this.buttonGen()}
 			</div>
 		);
 	}
