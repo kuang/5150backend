@@ -22,7 +22,7 @@ class Individual_project_page extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.addDueDateNotification = this.addDueDateNotification.bind(this);
+        this.addDueDateNotification = this.addDueDateNotification.bind(this); // function to add a due date notification
         this.notificationDOMRef = React.createRef(); // ref for the notification bar
         this.updatedRows = new Set(); // set of all row indicies that have been updated
         this.nameToNetID = new Map(); // mapping between name to net id
@@ -39,7 +39,7 @@ class Individual_project_page extends React.Component {
         this.resourceDateOptions = []; // options for the resource work date
         this.resourceNameOptions = []; // options for the resource names
         this.resourceNetIDOptions = []; // options for net id options
-        this.resourcesWithComments = new Set();
+        this.resourcesWithComments = new Set(); // lists the schedules that have comments associated with them
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption: "", // selectedOption for status
@@ -693,7 +693,8 @@ class Individual_project_page extends React.Component {
             "Dates": this.state.updatedCommentWeek["label"],
             "Comment": this.state.updatedCommentData,
         };
-        console.log(this.state.updatedCommentData == "");
+
+        // initiate PUT request to update comment in the database
         let response = await fetch('../api/updateComment', {
             method: "PUT",
             headers: {
@@ -842,10 +843,12 @@ class Individual_project_page extends React.Component {
                     }}
                 >
 
+                    {/* Modal that shows up when the user enters an invalid input to the grid */}
                     <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
                         <h3 style={{ marginTop: '15px' }}>Please Enter An Integer Greater Than Zero</h3>
                     </Modal>
 
+                    {/* Modal where a user can edit/add a comment */}
                     <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
                         <form onSubmit={this.handleCommentFormSubmit.bind(this)}>
                             <br></br>
@@ -888,10 +891,12 @@ class Individual_project_page extends React.Component {
                         </form>
                     </Modal>
 
+                    {/* Modal that shows up where there is no schedule for the user */}
                     <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
                         <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
                     </Modal>
 
+                    {/* Modal that shows up when the user wants to edit the project characteristics */}
                     <Modal open={this.state.openProjectFormModal} onClose={this.closeFormModal.bind(this)}
                     >
                         <form onSubmit={this.handleFormSubmit.bind(this)}>
@@ -937,8 +942,11 @@ class Individual_project_page extends React.Component {
 
                         </form>
                     </Modal>
+
+                    {/* Ref where notifications will show up */}
                     <ReactNotification ref={this.notificationDOMRef} />
 
+                    {/* The GRID */}
                     <AgGridReact
                         columnDefs={this.state.columnDefs}
                         rowData={this.state.rowData}
