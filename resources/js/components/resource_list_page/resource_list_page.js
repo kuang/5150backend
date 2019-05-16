@@ -33,7 +33,9 @@ class Resource_list_page extends React.Component {
 		this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
 	}
 
-	// toggle add and delete popup window
+	/*
+		Toggle add and delete popup window
+	*/
 	toggleAddPopup() {
 		this.setState({
 			showAddPopup: !this.state.showAddPopup
@@ -46,8 +48,13 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
+	/*
+		Function cleans up data from the api call.
+		The passed in data params contains all resources that have hour assigned
+	*/
 	async processData(data) {
-		console.log(data);
+		// console.log(data);
+		// define column heades
 		let columnDefs = [{
 			headerName: 'NetID',
 			field: 'netid',
@@ -100,6 +107,7 @@ class Resource_list_page extends React.Component {
 			console.log(maxHour);
 
 			if (currID != prevNetId) {
+				// a new resource
 				if (prevNetId != null) {
 					rowData.push(currJSON);
 				}
@@ -140,7 +148,7 @@ class Resource_list_page extends React.Component {
 		}
 		rowData.push(currJSON);
 
-		// order the dates
+		// sort the dates
 		let dates = columnDefs.slice(3);
 		let dateComparator = function (a, b) {
 			if (a.field < b.field) {
@@ -157,7 +165,7 @@ class Resource_list_page extends React.Component {
 		}
 		columnDefs = columnDefs.slice(0, 3).concat(dates);
 
-		// second api call
+		// second api call to get all resources
 		let response = await fetch('../api/displayAllResources');
 		let data_ = await response.json();
 
@@ -165,6 +173,7 @@ class Resource_list_page extends React.Component {
 			let curr_ = data_[j];
 			let currID_ = curr_.NetID;
 			if (!netIDs.has(currID_)) {
+				// current resource not in the netIDs set, then has no hour assigned
 				let fullName_ = curr_.FirstName + " " + curr_.LastName;
 				let maxHour_ = curr_.MaxHoursPerWeek;
 				let id_ = curr_.ResourceID;
@@ -180,9 +189,13 @@ class Resource_list_page extends React.Component {
 				this.resourceOptions.push({ label: tempName, value: currID_ });
 			}
 		}
+		// return the combined the data
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
 
+	/*
+		Fetched all resources that have hours assigned from api call
+	*/
 	componentDidMount() {
 		fetch('../api/displayResourceHours')
 			.then(result => result.json())
@@ -196,6 +209,9 @@ class Resource_list_page extends React.Component {
 			}.bind(this));
 	}
 
+	/*
+		Set of functions that handles changes on the form
+	*/
 	handleFirstNameChange(event) {
 		this.setState({
 			firstName: event.target.value
@@ -225,19 +241,24 @@ class Resource_list_page extends React.Component {
 			selectedResource: event,
 			selectedResourceID: event["value"]
 		});
-		// console.log(this);
 	}
 
+	/*
+		Function that handles form submition for adding new resource
+	*/
 	async handleAddSubmit(event) {
-		console.log("handling add submit");
+		// console.log("handling add submit");
+
+		// retrieveing and assigning data
 		let data = {
 			"NetID": this.state.netID,
 			"FirstName": this.state.firstName,
 			"LastName": this.state.lastName,
 			"MaxHoursPerWeek": this.state.maxHourPerWeek
 		}
-		console.log(data);
+		// console.log(data);
 
+		// api call to update the database with new data
 		let response = await fetch('../api/addResource', {
 			method: "POST",
 			headers: {
@@ -248,11 +269,13 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
+	/*
+		Function that handles form submition for deleteing resource
+	*/
 	async handleDeleteSubmit(event) {
-		console.log("Deleting a resource");
-		console.log(this.state.selectedResourceID);
-
 		let data = { "NetID": this.state.selectedResourceID };
+
+		// api call to update the database
 		let response = await fetch('../api/deleteResource', {
 			method: "DELETE",
 			headers: {
@@ -263,6 +286,9 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
+	/*
+		Function that shows and hides the buttons based on authentications
+	*/
 	buttonGen() {
 		if (window.sessionStorage.getItem("value") == "logged") {
 			return (
@@ -340,7 +366,7 @@ class Resource_list_page extends React.Component {
 					onClick={this.toggleDeletePopup.bind(this)}
 				>Delete Resource</button>
 				*/}
-				{this.buttonGen()}
+				{ this.buttonGen() }
 			</div>
 		);
 	}
