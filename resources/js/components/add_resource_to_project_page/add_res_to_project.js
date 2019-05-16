@@ -258,12 +258,13 @@ class twoList extends React.Component {
     render() {
         var leftList = this.generateListElements(this.state.avaliableList, this.state.toadd, this.clickHandler);
         var rightList = this.generateListElements(this.state.currentList, this.state.toremove, this.clickHandler);
-        console.log("----------------------");
-        console.log(this.context);
         let backPageUrl = '/individual_project/' + this.props.match.params.projectID;
         return (
             <div style={{ height: '550px' }}>
+                
                 <h1>Project Name: {this.state.projectName}</h1>
+
+                {/* the list of avaliable resources */}
                 <div className="leftContainer">
                     <p>Avaliable resources to add to project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 0)} placeholder="Search for names..." />
@@ -271,18 +272,20 @@ class twoList extends React.Component {
                         {leftList}
                     </ul>
                     <div>
-                        {/* {(this.dealLog(0))} */}
+                        {/* {(this.dealLog(0))} "This comment out is for loggin function"*/}
                         <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
                         <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>
                     </div>
                 </div>
+
+                {/* the list of current resources */}
                 <div className="rightContainer">
                     <p>Current resources in this project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 1)} placeholder="Search for names..." />
                     <ul className="myUL">
                         {rightList}
                     </ul>
-                    {/* {(this.dealLog(1))} */}
+                    {/* {(this.dealLog(1))} "This comment out is for loggin function"*/}
                     <button onClick={this.handleRemove}>Remove Resources</button>
                     <Link to={backPageUrl}><button>Back to project</button></Link>
                 </div>
