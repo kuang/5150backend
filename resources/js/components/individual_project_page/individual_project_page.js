@@ -39,7 +39,7 @@ class Individual_project_page extends React.Component {
         this.resourceDateOptions = []; // options for the resource work date
         this.resourceNameOptions = []; // options for the resource names
         this.resourceNetIDOptions = []; // options for net id options
-
+        this.resourcesWithComments = new Set();
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
             selectedOption: "", // selectedOption for status
@@ -76,9 +76,16 @@ class Individual_project_page extends React.Component {
      */
     async processData(data) {
         let projectID = this.props.match.params.projectID;
+        console.log("COMMENTS INCOMING");
         let comments = await fetch(`../api/getComments/${projectID}`);
-        console.log(comments);
+        let commentsJSON = await comments.json();
+        console.log(commentsJSON);
+        this.resourcesWithComments = new Set();
 
+        for (let i = 0; i < commentsJSON.length; i++) {
+            this.resourcesWithComments.add(commentsJSON[i].NetID + ":" + commentsJSON[i].Dates);
+        }
+        console.log(this.resourcesWithComments);
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
             { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide: true },
@@ -129,14 +136,15 @@ class Individual_project_page extends React.Component {
                     suppressMovable: true,
                     cellStyle: function(params) {
                         console.log("PARMAS");
-                        console.log(params);
-                        if (params.value == 50) {
+                        console.log(this);
+                        let key = params.data.netid + ":" + params.colDef.field;
+                        if (this.resourcesWithComments.has(key)) {
                             //mark police cells as red
                             return {backgroundColor: 'yellow'};
                         } else {
                             return null;
                         }
-                    }
+                    }.bind(this)
                 };
                 columnDefs.push(newColumnDef);
             }
@@ -685,7 +693,7 @@ class Individual_project_page extends React.Component {
             "Dates": this.state.updatedCommentWeek["label"],
             "Comment": this.state.updatedCommentData,
         };
-
+        console.log(this.state.updatedCommentData == "");
         let response = await fetch('../api/updateComment', {
             method: "PUT",
             headers: {

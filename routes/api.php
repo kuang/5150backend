@@ -752,7 +752,7 @@ Route::put("/updateComment", function(Request $request) {
         $schedule_id = $schedule_id_json["ScheduleID"];
 
         DB::table('schedules')->where([['ScheduleID' ,"=", $schedule_id], ['Dates', "=", $data["Dates"]]])->update(["Comment" => $data["Comment"]]);
-        return response("Successfully Updated Comment", 403);
+        return response("Successfully Updated Comment", 200);
     } catch (Exception $e){
         return response('This field could not be updated. Please try again.', 403);
     }
