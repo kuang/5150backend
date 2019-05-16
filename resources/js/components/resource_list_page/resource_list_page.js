@@ -33,6 +33,7 @@ class Resource_list_page extends React.Component {
 		this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
 	}
 
+	// toggle add and delete popup window
 	toggleAddPopup() {
 		this.setState({
 			showAddPopup: !this.state.showAddPopup
