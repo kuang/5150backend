@@ -688,6 +688,9 @@ class Individual_project_page extends React.Component {
         event.api.sizeColumnsToFit();
     }
 
+    /***
+     * buttonGen() will generate the buttons that allows the admin to manipulate the GRID
+     */
     buttonGen() {
         let value = window.sessionStorage.getItem("value");
         if (value === "logged") {
