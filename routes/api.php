@@ -884,3 +884,14 @@ Route::put("/updateIndividualProjectInfo", function(Request $request) {
 
 });
 
+/** Route that returns all comments for a particular project */
+Route::get('/getComments/{projectID}', function ($projectID) {
+    $table = DB::table('resources_per_projects')
+        ->join('resources', 'resources.ResourceID', '=', 'resources_per_projects.ResourceID')
+        ->join('schedules', 'resources_per_projects.ScheduleID', '=', 'schedules.ScheduleID')
+        ->select('resources.NetID', 'schedules.Dates', 'schedules.Comment')->distinct()
+        ->where('resources_per_projects.ProjectID', '=', $projectID)
+        ->get();
+    return $table;
+});
+

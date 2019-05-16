@@ -437,6 +437,10 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /***
+     * Deletes another week to the schedule, with the update being reflected in the database
+     * @returns {Promise<void>}
+     */
     async deleteOneWeek() {
         let projectID = this.props.match.params.projectID;
         let newData = { "ProjectID": projectID };
@@ -455,6 +459,12 @@ class Individual_project_page extends React.Component {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this))
     }
+
+    /***
+     * Brings up the confirmation model for deleting a one week. If yes, it clicked, then
+     * the grid is updated with another week deleted
+     * @returns {Promise<void>}
+     */
     async submitDeleteLastWeek() {
         confirmAlert({
             title: 'Confirm To Delete Last Week',
@@ -474,10 +484,18 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /** Handles a change to the project status
+     *
+     * @param selection
+     */
     handleChange(selection) {
         this.setState({ selectedOption: selection });
     }
 
+    /*** Adds an old week to the schedule
+     *
+     * @returns {Promise<void>}
+     */
     async addOldWeek() {
         this.currentDate = this.currentDate.subtract(7, 'days');
         let projectID = this.props.match.params.projectID;
@@ -637,6 +655,10 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /***
+     * Submits the fields in the comment form using POST request
+     * @returns {Promise<void>}
+     */
     async handleCommentFormSubmit() {
         let projectID = this.props.match.params.projectID;
         let newData = {
@@ -657,6 +679,11 @@ class Individual_project_page extends React.Component {
         console.log(response);
     }
 
+    /***
+     * Handles an update to the user dropdown in the comment form,
+     * and narrows the remaining dropdowns accordingly
+     * @param selection
+     */
     handleCommentFormUserUpdate(selection) {
         let name = selection["label"];
         let netids = this.nameToNetID.get(name);
@@ -664,11 +691,15 @@ class Individual_project_page extends React.Component {
         for (let i = 0; i < netids.length; i++) {
             this.resourceNetIDOptions.push({ label: netids[i], value: 1 });
         }
-        console.log("hello");
         this.setState({ updatedCommentUser: selection, updatedCommentNetID: "", updatedCommentData: "" });
         console.log(this);
     }
 
+    /***
+     * Handles an update to the netid dropdown in the comment form,
+     * and narrows the remaining drop downs accordingly
+     * @param selection
+     */
     async handleCommentFormNetIDUpdate(selection) {
         let date = this.state.updatedCommentWeek["label"];
         let comment = "";
@@ -683,6 +714,11 @@ class Individual_project_page extends React.Component {
         console.log(this);
     }
 
+    /***
+     * Handles an update to the week dropdown in the comment form,
+     * and narrows the remaining drop downs accordingly
+     * @param selection
+     */
     async handleCommentFormWeekUpdate(selection) {
         let netID = this.state.updatedCommentNetID["label"];
         let name = this.state.updatedCommentUser["label"];
@@ -698,8 +734,11 @@ class Individual_project_page extends React.Component {
         console.log(this);
     }
 
+    /***
+     * Updates a change to the comment form
+     * @param event
+     */
     handleCommentFormDataUpdate(event) {
-        console.log("commentFormDataUpdate");
         this.setState({ updatedCommentData: event.target.value });
     }
 
