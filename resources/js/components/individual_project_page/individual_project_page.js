@@ -75,17 +75,14 @@ class Individual_project_page extends React.Component {
      * defs is the names of each of the individual columns
      */
     async processData(data) {
-        let projectID = this.props.match.params.projectID;
-        console.log("COMMENTS INCOMING");
+        let projectID = this.props.match.params.projectID; // project id of this project
         let comments = await fetch(`../api/getComments/${projectID}`);
         let commentsJSON = await comments.json();
-        console.log(commentsJSON);
-        this.resourcesWithComments = new Set();
+        this.resourcesWithComments = new Set(); // add comments to the set
 
         for (let i = 0; i < commentsJSON.length; i++) {
             this.resourcesWithComments.add(commentsJSON[i].NetID + ":" + commentsJSON[i].Dates);
         }
-        console.log(this.resourcesWithComments);
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
             { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide: true },
@@ -135,8 +132,6 @@ class Individual_project_page extends React.Component {
                     filter: "agTextColumnFilter",
                     suppressMovable: true,
                     cellStyle: function(params) {
-                        console.log("PARMAS");
-                        console.log(this);
                         let key = params.data.netid + ":" + params.colDef.field;
                         if (this.resourcesWithComments.has(key)) {
                             //mark police cells as red
@@ -314,7 +309,6 @@ class Individual_project_page extends React.Component {
         //     .then(function(newStuff) {
         //         this.setState({rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"]})
         //     }.bind(this))
-        console.log(response.json());
     }
 
     /***
@@ -547,7 +541,6 @@ class Individual_project_page extends React.Component {
         let netID = event.data.netid;
         let date = event.colDef.headerName;
         let name = event.data.name;
-        console.log(event);
         let response = await fetch(`../api/getComment/${projectID}/${netID}/${date}`);
         let commentData = await response.json();
         if (commentData.length == 0) {
@@ -590,7 +583,6 @@ class Individual_project_page extends React.Component {
      */
     handleCommentFormInputChange(e) {
         this.setState({ [e.target.id]: e.target.value });
-        console.log(this);
     }
     /*** Handle PUT Request(s) upon form being submitted
      *
@@ -703,7 +695,6 @@ class Individual_project_page extends React.Component {
             },
             body: JSON.stringify(newData)
         });
-        console.log(response);
     }
 
     /***
@@ -719,7 +710,6 @@ class Individual_project_page extends React.Component {
             this.resourceNetIDOptions.push({ label: netids[i], value: 1 });
         }
         this.setState({ updatedCommentUser: selection, updatedCommentNetID: "", updatedCommentData: "" });
-        console.log(this);
     }
 
     /***
@@ -738,7 +728,6 @@ class Individual_project_page extends React.Component {
             comment = comment_json[0]["Comment"];
         }
         this.setState({ updatedCommentData: comment, updatedCommentNetID: selection });
-        console.log(this);
     }
 
     /***
@@ -758,7 +747,6 @@ class Individual_project_page extends React.Component {
             comment = comment_json[0]["Comment"];
         }
         this.setState({ updatedCommentData: comment, updatedCommentWeek: selection });
-        console.log(this);
     }
 
     /***
