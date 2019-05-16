@@ -48,7 +48,7 @@ class App extends Component {
                 <LoginContext.Consumer>{(context)=><p>{context}</p>}</LoginContext.Consumer>
               </LoginContext.Provider> */}
               <div className="loginButton">
-                <Login />
+                {/* <Login /> */}
               </div>
             </div>
 

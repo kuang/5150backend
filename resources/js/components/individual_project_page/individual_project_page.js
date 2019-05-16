@@ -131,11 +131,11 @@ class Individual_project_page extends React.Component {
                     editable: true,
                     filter: "agTextColumnFilter",
                     suppressMovable: true,
-                    cellStyle: function(params) {
+                    cellStyle: function (params) {
                         let key = params.data.netid + ":" + params.colDef.field;
                         if (this.resourcesWithComments.has(key)) {
                             //mark police cells as red
-                            return {backgroundColor: 'yellow'};
+                            return { backgroundColor: 'yellow' };
                         } else {
                             return null;
                         }
@@ -154,7 +154,7 @@ class Individual_project_page extends React.Component {
         for (let i = 0; i < dates.length; i++) {
             let name = dates[i]["headerName"];
             if (!seenDates.has(name)) {
-                this.resourceDateOptions.push({label: name, value: 1});
+                this.resourceDateOptions.push({ label: name, value: 1 });
                 seenDates.add(name);
             }
         }
@@ -769,48 +769,43 @@ class Individual_project_page extends React.Component {
      * buttonGen() will generate the buttons that allows the admin to manipulate the GRID
      */
     buttonGen() {
-        let value = window.sessionStorage.getItem("value");
-        if (value === "logged") {
-            let addResPageUrl = '/add_res_to_project/' + this.props.match.params.projectID;
-            return (
-                <div>
-                    <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
-                        onClick={
-                            this.submitSave.bind(this)
-                        }
-                    >
-                        Save
+        // let value = window.sessionStorage.getItem("value");
+        // if (value === "logged") {
+        let addResPageUrl = '/add_res_to_project/' + this.props.match.params.projectID;
+        return (
+            <div>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
+                    onClick={
+                        this.submitSave.bind(this)
+                    }
+                >
+                    Save
                 </button>
-                    <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>+ Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>+ Week</button>
 
-                    <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
+                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button>
 
-                    {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
-                    {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
-                    {/*    </Select>*/}
-                    {/*</div>*/}
-
-                    <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.addOldWeek.bind(this)}
-                    >
-                        See Old Week
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.addOldWeek.bind(this)}
+                >
+                    See Old Week
                 </button>
 
-                    {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
+                {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
 
-                    <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openProjectForm.bind(this)}
-                    >
-                        Edit Project
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openProjectForm.bind(this)}
+                >
+                    Edit Project
                 </button>
 
-                    <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openCommentViewModal.bind(this)}
-                    >
-                        Edit Comment
+                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openCommentViewModal.bind(this)}
+                >
+                    Edit Comment
                 </button>
 
-                    <Link to={addResPageUrl}><button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }}>Add Resource</button></Link>
-                </div>
-            );
-        }
+                <Link to={addResPageUrl}><button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }}>Add Resource</button></Link>
+            </div>
+        );
+        // }
     }
 
     render() {
@@ -947,40 +942,6 @@ class Individual_project_page extends React.Component {
 
                     {(this.buttonGen())}
 
-                    {/* <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }}
-                    onClick={
-                        this.submitSave.bind(this)
-                    }
-                >
-                    Save
-                </button>
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitAddOneWeek.bind(this)}>+ Week</button>
-
-                <button style={{ height: '30px', width: '100px', marginRight: '10px', marginTop: '8px', marginLeft: '8px' }} onClick={this.submitDeleteLastWeek.bind(this)}>- Week</button> */}
-
-                    {/*<div style = {{width: '200px', float :'right', marginTop: '8px', marginLeft: '8px'}}>*/}
-                    {/*    <Select value = {this.state.selectedOption} onChange = {this.handleChange.bind(this)} options = {this.statusOptions}>*/}
-                    {/*    </Select>*/}
-                    {/*</div>*/}
-
-                    {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.addOldWeek.bind(this)}
-                >
-                    See Old Week
-                </button> */}
-
-                    {/*<p style = {{float :'right', 'marginTop' : '7px', 'marginRight' : '10px', "font-size" : '15px'}}><b>Project Status</b></p>*/}
-
-                    {/* <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openProjectForm.bind(this)}
-                >
-                    Edit Project
-                </button>
-
-                <button style={{ height: '30px', width: '100px', marginRight: '15px', marginTop: '8px', marginLeft: '8px' }} onClick={this.openCommentViewModal.bind(this)}
-                >
-                    Edit Comment
-                </button>
-
-                <Link to={addResPageUrl}>Add Resource</Link> */}
                 </div>
             </div>
         );

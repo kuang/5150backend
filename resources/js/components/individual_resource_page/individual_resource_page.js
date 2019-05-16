@@ -155,9 +155,9 @@ class Individual_resource_page extends Component {
 
 
     buttonGen() {
-        if (window.sessionStorage.getItem("value") == "logged") {
-            return (<button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>);
-        }
+        // if (window.sessionStorage.getItem("value") == "logged") {
+        return (<button type='button' onClick={this.openEditModal.bind(this)}>Edit Resource</button>);
+        // }
     }
 
     render() {

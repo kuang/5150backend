@@ -151,15 +151,15 @@ class Resource_list_page extends React.Component {
 					sortable: true,
 					filter: "agTextColumnFilter",
 					suppressMovable: true,
-					cellStyle: function(params) {
-		        if (params.value > params.data.maxHourPerWeek) {
-		          return {color: 'red'};
-		        } else if (params.value < params.data.maxHourPerWeek){
-							return {color: 'green'};
+					cellStyle: function (params) {
+						if (params.value > params.data.maxHourPerWeek) {
+							return { color: 'red' };
+						} else if (params.value < params.data.maxHourPerWeek) {
+							return { color: 'green' };
 						} else {
-		          return null;
-		        }
-		      }
+							return null;
+						}
+					}
 				};
 				columnDefs.push(newColDef);
 			}
@@ -336,20 +336,20 @@ class Resource_list_page extends React.Component {
 	 * Function that shows and hides the buttons based on authentications
 	 */
 	buttonGen() {
-		if (window.sessionStorage.getItem("value") == "logged") {
-			return (
-				<div>
-					<button
-						style={{ height: '30px', width: '100px', marginRight: '10px' }}
-						onClick={this.toggleAddPopup.bind(this)}>
-						Add Resource</button>
-					<button
-						style={{ height: '30px', width: '125px', marginRight: '10px' }}
-						onClick={this.toggleDeletePopup.bind(this)}
-					>Delete Resource</button>
-				</div>
-			);
-		}
+		// if (window.sessionStorage.getItem("value") == "logged") {
+		return (
+			<div>
+				<button
+					style={{ height: '30px', width: '100px', marginRight: '10px' }}
+					onClick={this.toggleAddPopup.bind(this)}>
+					Add Resource</button>
+				<button
+					style={{ height: '30px', width: '125px', marginRight: '10px' }}
+					onClick={this.toggleDeletePopup.bind(this)}
+				>Delete Resource</button>
+			</div>
+		);
+		// }
 	}
 
 	render() {
@@ -412,7 +412,7 @@ class Resource_list_page extends React.Component {
 					onClick={this.toggleDeletePopup.bind(this)}
 				>Delete Resource</button>
 				*/}
-				{ this.buttonGen() }
+				{this.buttonGen()}
 			</div>
 		);
 	}
