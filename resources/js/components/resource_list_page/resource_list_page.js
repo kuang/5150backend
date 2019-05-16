@@ -87,50 +87,6 @@ class Resource_list_page extends React.Component {
 		let netIDs = new Set();
 		let resources = [];
 
-<<<<<<< HEAD
-		if (data.length != 0) {
-			for (let i = 0; i < data.length; i++) {
-				let curr = data[i];
-				let currID = curr.NetID;
-				let currHeader = curr.Dates;
-				let fullName = curr.FirstName + " " + curr.LastName;
-				let maxHour = curr.MaxHoursPerWeek;
-				let id = curr.ResourceID;
-
-				if (currID != prevNetId) {
-					if (prevNetId != null) {
-						rowData.push(currJSON);
-						// resources.push(fullName);
-						// let tempName = fullName + " (" + currID + ")";
-						// this.resourceOptions.push({ label: tempName, value: currID });
-					}
-					prevNetId = currID;
-					currJSON = {
-						netid: currID,
-						name: fullName,
-						maxHourPerWeek: maxHour,
-						detailLink: id
-					};
-					resources.push(fullName);
-					let tempName = fullName + " (" + currID + ")";
-					this.resourceOptions.push({ label: tempName, value: currID });
-				}
-				let currHours = curr.TotalHoursPerWeek;
-				if (!colNames.has(currHeader)) {
-					colNames.add(currHeader);
-					let newColDef = {
-						headerName: currHeader,
-						field: currHeader,
-						sortable: true,
-						filter: "agTextColumnFilter",
-						suppressMovable: true
-					};
-					columnDefs.push(newColDef);
-				}
-				currJSON[currHeader] = currHours;
-			}
-			rowData.push(currJSON);
-=======
 		// process data for the first time
 		for (let i = 0; i < data.length; i++) {
 			let curr = data[i];
@@ -139,7 +95,6 @@ class Resource_list_page extends React.Component {
 			let fullName = curr.FirstName + " " + curr.LastName;
 			let maxHour = curr.MaxHoursPerWeek;
 			let id = curr.ResourceID;
->>>>>>> f6af005fb795d3ac77080b3e1e3adcc5ddb6cea4
 
 			if (currID != prevNetId) {
 				if (prevNetId != null) {
