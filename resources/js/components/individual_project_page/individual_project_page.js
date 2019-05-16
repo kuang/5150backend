@@ -52,18 +52,18 @@ class Individual_project_page extends React.Component {
             }, {
                 headerName: "Role", field: "role", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"
             }],
-            rowData: [],
-            openProjectFormModal: false,
-            updatedProjectName: "",
-            updatedProjectTechnology: "",
-            updatedProjectDueDate: "",
-            updatedProjectStartDate: "",
-            updatedProjectMaxHours: "",
-            openCommentView: false,
-            updatedCommentUser: "",
-            updatedCommentNetID: "",
-            updatedCommentWeek: "",
-            updatedCommentData: ""
+            rowData: [], // the data in the row
+            openProjectFormModal: false, // flag for opening the project form modal
+            updatedProjectName: "", // new project name from the form
+            updatedProjectTechnology: "", // new project technology from the form
+            updatedProjectDueDate: "", // new project due date from the form
+            updatedProjectStartDate: "", // new project start date from the form
+            updatedProjectMaxHours: "", // new project max hours from the form
+            openCommentView: false, // open the form for adding/editing a comment
+            updatedCommentUser: "", // new updated user from the comment form
+            updatedCommentNetID: "", // new updated net id from the comment form
+            updatedCommentWeek: "", // new updated week from the comment form
+            updatedCommentData: "" // new updated data from the comment form
         }
     }
 
@@ -123,7 +123,17 @@ class Individual_project_page extends React.Component {
                     enableCellChangeFlash: true,
                     editable: true,
                     filter: "agTextColumnFilter",
-                    suppressMovable: true
+                    suppressMovable: true,
+                    cellStyle: function(params) {
+                        console.log("PARMAS");
+                        console.log(params);
+                        if (params.value == 50) {
+                            //mark police cells as red
+                            return {backgroundColor: 'yellow'};
+                        } else {
+                            return null;
+                        }
+                    }
                 };
                 columnDefs.push(newColumnDef);
             }
@@ -143,6 +153,7 @@ class Individual_project_page extends React.Component {
             }
         }
 
+        // function that sorts row data by ascending dates
         let dateComparator = function (a, b) {
             if (a.field < b.field) {
                 return -1;
@@ -401,6 +412,11 @@ class Individual_project_page extends React.Component {
         }
     }
 
+    /***
+     * Brings up the confirmation model for adding a one week. If yes, it clicked, then
+     * the grid is updated with another week
+     * @returns {Promise<void>}
+     */
     async submitAddOneWeek() {
         confirmAlert({
             title: 'Confirm To Add One Week',
@@ -559,6 +575,10 @@ class Individual_project_page extends React.Component {
 
     }
 
+    /***
+     * Initializes the editProjectModal
+     * @returns {Promise<void>}
+     */
     async openProjectForm() {
         let projectID = this.props.match.params.projectID;
         let response = await fetch(`../api/displayProjectInfo/${projectID}`);
@@ -598,10 +618,16 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /***
+     * Closes the comment view modal
+     */
     closeCommentViewModal() {
         this.setState({ openCommentView: false });
     }
 
+    /***
+     * Opens the comment view modal
+     */
     openCommentViewModal() {
         this.setState({
             updatedCommentUser: "",
@@ -610,13 +636,6 @@ class Individual_project_page extends React.Component {
             updatedCommentData: "", openCommentView: true
         });
     }
-    /***
-     * Makes POST Request to save data
-     */
-    /*** This is what you see on the screen
-     *
-     * @returns {*}
-     */
 
     async handleCommentFormSubmit() {
         let projectID = this.props.match.params.projectID;
@@ -684,6 +703,10 @@ class Individual_project_page extends React.Component {
         this.setState({ updatedCommentData: event.target.value });
     }
 
+    /***
+     * Resizes the columns in the grid
+     * @param event
+     */
     resizeColumns(event) {
         event.api.sizeColumnsToFit();
     }
