@@ -22,28 +22,29 @@ class Individual_project_page extends React.Component {
      */
     constructor(props) {
         super(props);
-        this.addDueDateNotification = this.addDueDateNotification.bind(this);
-        this.notificationDOMRef = React.createRef();
-        this.updatedRows = new Set();
-        this.nameToNetID = new Map();
-        this.projectName = "";
-        this.statusOptions = [
+        this.addDueDateNotification = this.addDueDateNotification.bind(this); // function to add a due date notification
+        this.notificationDOMRef = React.createRef(); // ref for the notification bar
+        this.updatedRows = new Set(); // set of all row indicies that have been updated
+        this.nameToNetID = new Map(); // mapping between name to net id
+        this.projectName = ""; // current project name
+        this.statusOptions = [ // project status options
             { label: "Ongoing", value: 1 },
             { label: "Inactive", value: 1 },
             { label: "Done", value: 1 },
             { label: "On Hold", value: 1 },
         ];
         this.dueDate = undefined; // dueDate of the project
-        this.currentDate = moment();
-        this.latestDate = undefined;
-        this.resourceDateOptions = [];
-        this.resourceNameOptions = [];
-        this.resourceNetIDOptions = [];
+        this.currentDate = moment(); // the current date
+        this.latestDate = undefined;  // the latest date in the table
+        this.resourceDateOptions = []; // options for the resource work date
+        this.resourceNameOptions = []; // options for the resource names
+        this.resourceNetIDOptions = []; // options for net id options
+        this.resourcesWithComments = new Set(); // lists the schedules that have comments associated with them
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
-            selectedOption: "",
-            openTypeWarning: false,
-            openNoScheduleWarning: false,
+            selectedOption: "", // selectedOption for status
+            openTypeWarning: false, // flag for showing type warning for input to cell
+            openNoScheduleWarning: false, //
             columnDefs: [{
                 headerName: "Name", field: "name", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"// headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
@@ -51,18 +52,18 @@ class Individual_project_page extends React.Component {
             }, {
                 headerName: "Role", field: "role", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"
             }],
-            rowData: [],
-            openProjectFormModal: false,
-            updatedProjectName: "",
-            updatedProjectTechnology: "",
-            updatedProjectDueDate: "",
-            updatedProjectStartDate: "",
-            updatedProjectMaxHours: "",
-            openCommentView: false,
-            updatedCommentUser: "",
-            updatedCommentNetID: "",
-            updatedCommentWeek: "",
-            updatedCommentData: ""
+            rowData: [], // the data in the row
+            openProjectFormModal: false, // flag for opening the project form modal
+            updatedProjectName: "", // new project name from the form
+            updatedProjectTechnology: "", // new project technology from the form
+            updatedProjectDueDate: "", // new project due date from the form
+            updatedProjectStartDate: "", // new project start date from the form
+            updatedProjectMaxHours: "", // new project max hours from the form
+            openCommentView: false, // open the form for adding/editing a comment
+            updatedCommentUser: "", // new updated user from the comment form
+            updatedCommentNetID: "", // new updated net id from the comment form
+            updatedCommentWeek: "", // new updated week from the comment form
+            updatedCommentData: "" // new updated data from the comment form
         }
     }
 
@@ -74,7 +75,17 @@ class Individual_project_page extends React.Component {
      * defs is the names of each of the individual columns
      */
     async processData(data) {
-        console.log(data);
+        let projectID = this.props.match.params.projectID;
+        console.log("COMMENTS INCOMING");
+        let comments = await fetch(`../api/getComments/${projectID}`);
+        let commentsJSON = await comments.json();
+        console.log(commentsJSON);
+        this.resourcesWithComments = new Set();
+
+        for (let i = 0; i < commentsJSON.length; i++) {
+            this.resourcesWithComments.add(commentsJSON[i].NetID + ":" + commentsJSON[i].Dates);
+        }
+        console.log(this.resourcesWithComments);
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
             { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide: true },
@@ -122,7 +133,18 @@ class Individual_project_page extends React.Component {
                     enableCellChangeFlash: true,
                     editable: true,
                     filter: "agTextColumnFilter",
-                    suppressMovable: true
+                    suppressMovable: true,
+                    cellStyle: function(params) {
+                        console.log("PARMAS");
+                        console.log(this);
+                        let key = params.data.netid + ":" + params.colDef.field;
+                        if (this.resourcesWithComments.has(key)) {
+                            //mark police cells as red
+                            return {backgroundColor: 'yellow'};
+                        } else {
+                            return null;
+                        }
+                    }.bind(this)
                 };
                 columnDefs.push(newColumnDef);
             }
@@ -132,12 +154,17 @@ class Individual_project_page extends React.Component {
 
         rowData.push(currentJSON);
         let dates = columnDefs.slice(3);
-
+        this.resourceDateOptions = [];
+        let seenDates = new Set();
         for (let i = 0; i < dates.length; i++) {
             let name = dates[i]["headerName"];
-            this.resourceDateOptions.push({ label: name, value: 1 });
+            if (!seenDates.has(name)) {
+                this.resourceDateOptions.push({label: name, value: 1});
+                seenDates.add(name);
+            }
         }
 
+        // function that sorts row data by ascending dates
         let dateComparator = function (a, b) {
             if (a.field < b.field) {
                 return -1;
@@ -305,7 +332,7 @@ class Individual_project_page extends React.Component {
         let numericalInput = Number(event.value);
         let editedColumn = event.colDef.field;
         let rowIndex = event.rowIndex;
-        if (isNaN(numericalInput)) {
+        if (isNaN(numericalInput) || numericalInput < 0) {
             let oldData = event.oldValue;
             let currentRowData = this.state.rowData;
             let currentRow = currentRowData[rowIndex];
@@ -396,6 +423,11 @@ class Individual_project_page extends React.Component {
         }
     }
 
+    /***
+     * Brings up the confirmation model for adding a one week. If yes, it clicked, then
+     * the grid is updated with another week
+     * @returns {Promise<void>}
+     */
     async submitAddOneWeek() {
         confirmAlert({
             title: 'Confirm To Add One Week',
@@ -416,6 +448,10 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /***
+     * Deletes another week to the schedule, with the update being reflected in the database
+     * @returns {Promise<void>}
+     */
     async deleteOneWeek() {
         let projectID = this.props.match.params.projectID;
         let newData = { "ProjectID": projectID };
@@ -434,6 +470,12 @@ class Individual_project_page extends React.Component {
                 this.setState({ rowData: newStuff["rowData"], columnDefs: newStuff["columnDefs"] })
             }.bind(this))
     }
+
+    /***
+     * Brings up the confirmation model for deleting a one week. If yes, it clicked, then
+     * the grid is updated with another week deleted
+     * @returns {Promise<void>}
+     */
     async submitDeleteLastWeek() {
         confirmAlert({
             title: 'Confirm To Delete Last Week',
@@ -453,10 +495,18 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /** Handles a change to the project status
+     *
+     * @param selection
+     */
     handleChange(selection) {
         this.setState({ selectedOption: selection });
     }
 
+    /*** Adds an old week to the schedule
+     *
+     * @returns {Promise<void>}
+     */
     async addOldWeek() {
         this.currentDate = this.currentDate.subtract(7, 'days');
         let projectID = this.props.match.params.projectID;
@@ -470,6 +520,9 @@ class Individual_project_page extends React.Component {
             }.bind(this));
     }
 
+    /*** Adds a notification when current week exceeds project due date
+     *
+      */
     addDueDateNotification() {
         this.notificationDOMRef.current.addNotification({
             title: "Warning",
@@ -484,6 +537,11 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /** Displays a comment for a schedule
+     *
+     * @param event
+     * @returns {Promise<void>}
+     */
     async displayComment(event) {
         let projectID = this.props.match.params.projectID;
         let netID = event.data.netid;
@@ -511,10 +569,17 @@ class Individual_project_page extends React.Component {
         }
     }
 
+    /*** Closes form modal
+     *
+     */
     closeFormModal() {
         this.setState({ openProjectFormModal: false });
     }
 
+    /*** Handles input change to state
+     *
+     * @param e
+     */
     handleFormInputChange(e) {
         this.setState({ [e.target.id]: e.target.value });
     }
@@ -554,6 +619,10 @@ class Individual_project_page extends React.Component {
 
     }
 
+    /***
+     * Initializes the editProjectModal
+     * @returns {Promise<void>}
+     */
     async openProjectForm() {
         let projectID = this.props.match.params.projectID;
         let response = await fetch(`../api/displayProjectInfo/${projectID}`);
@@ -593,10 +662,16 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /***
+     * Closes the comment view modal
+     */
     closeCommentViewModal() {
         this.setState({ openCommentView: false });
     }
 
+    /***
+     * Opens the comment view modal
+     */
     openCommentViewModal() {
         this.setState({
             updatedCommentUser: "",
@@ -605,14 +680,11 @@ class Individual_project_page extends React.Component {
             updatedCommentData: "", openCommentView: true
         });
     }
-    /***
-     * Makes POST Request to save data
-     */
-    /*** This is what you see on the screen
-     *
-     * @returns {*}
-     */
 
+    /***
+     * Submits the fields in the comment form using POST request
+     * @returns {Promise<void>}
+     */
     async handleCommentFormSubmit() {
         let projectID = this.props.match.params.projectID;
         let newData = {
@@ -622,6 +694,7 @@ class Individual_project_page extends React.Component {
             "Comment": this.state.updatedCommentData,
         };
 
+        // initiate PUT request to update comment in the database
         let response = await fetch('../api/updateComment', {
             method: "PUT",
             headers: {
@@ -633,6 +706,11 @@ class Individual_project_page extends React.Component {
         console.log(response);
     }
 
+    /***
+     * Handles an update to the user dropdown in the comment form,
+     * and narrows the remaining dropdowns accordingly
+     * @param selection
+     */
     handleCommentFormUserUpdate(selection) {
         let name = selection["label"];
         let netids = this.nameToNetID.get(name);
@@ -640,11 +718,15 @@ class Individual_project_page extends React.Component {
         for (let i = 0; i < netids.length; i++) {
             this.resourceNetIDOptions.push({ label: netids[i], value: 1 });
         }
-        console.log("hello");
         this.setState({ updatedCommentUser: selection, updatedCommentNetID: "", updatedCommentData: "" });
         console.log(this);
     }
 
+    /***
+     * Handles an update to the netid dropdown in the comment form,
+     * and narrows the remaining drop downs accordingly
+     * @param selection
+     */
     async handleCommentFormNetIDUpdate(selection) {
         let date = this.state.updatedCommentWeek["label"];
         let comment = "";
@@ -659,6 +741,11 @@ class Individual_project_page extends React.Component {
         console.log(this);
     }
 
+    /***
+     * Handles an update to the week dropdown in the comment form,
+     * and narrows the remaining drop downs accordingly
+     * @param selection
+     */
     async handleCommentFormWeekUpdate(selection) {
         let netID = this.state.updatedCommentNetID["label"];
         let name = this.state.updatedCommentUser["label"];
@@ -674,17 +761,27 @@ class Individual_project_page extends React.Component {
         console.log(this);
     }
 
+    /***
+     * Updates a change to the comment form
+     * @param event
+     */
     handleCommentFormDataUpdate(event) {
-        console.log("commentFormDataUpdate");
         this.setState({ updatedCommentData: event.target.value });
     }
 
+    /***
+     * Resizes the columns in the grid
+     * @param event
+     */
     resizeColumns(event) {
         event.api.sizeColumnsToFit();
     }
 
+    /***
+     * buttonGen() will generate the buttons that allows the admin to manipulate the GRID
+     */
     buttonGen() {
-        var value = window.sessionStorage.getItem("value");
+        let value = window.sessionStorage.getItem("value");
         if (value === "logged") {
             let addResPageUrl = '/add_res_to_project/' + this.props.match.params.projectID;
             return (
@@ -746,10 +843,12 @@ class Individual_project_page extends React.Component {
                     }}
                 >
 
+                    {/* Modal that shows up when the user enters an invalid input to the grid */}
                     <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
-                        <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
+                        <h3 style={{ marginTop: '15px' }}>Please Enter An Integer Greater Than Zero</h3>
                     </Modal>
 
+                    {/* Modal where a user can edit/add a comment */}
                     <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
                         <form onSubmit={this.handleCommentFormSubmit.bind(this)}>
                             <br></br>
@@ -792,10 +891,12 @@ class Individual_project_page extends React.Component {
                         </form>
                     </Modal>
 
+                    {/* Modal that shows up where there is no schedule for the user */}
                     <Modal open={this.state.openNoScheduleWarning} onClose={this.closeNoScheduleWarningModal.bind(this)} center closeIconSize={14}>
                         <h3 style={{ marginTop: '15px' }}>Resource Did Not Work This Week</h3>
                     </Modal>
 
+                    {/* Modal that shows up when the user wants to edit the project characteristics */}
                     <Modal open={this.state.openProjectFormModal} onClose={this.closeFormModal.bind(this)}
                     >
                         <form onSubmit={this.handleFormSubmit.bind(this)}>
@@ -841,8 +942,11 @@ class Individual_project_page extends React.Component {
 
                         </form>
                     </Modal>
+
+                    {/* Ref where notifications will show up */}
                     <ReactNotification ref={this.notificationDOMRef} />
 
+                    {/* The GRID */}
                     <AgGridReact
                         columnDefs={this.state.columnDefs}
                         rowData={this.state.rowData}

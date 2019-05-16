@@ -58,6 +58,10 @@ class twoList extends React.Component {
         this.getProjectName(this.projectID);
     }
 
+    /**
+     * The function used to get information from database
+     * @param projectID 
+     */
     async fetchResources(projectID) {
 
         await fetch(`../api/displayResourcesPerProject/${projectID}`)
@@ -69,6 +73,11 @@ class twoList extends React.Component {
             .then(data => this.processData(data, 1));
     }
 
+
+    /**
+     * The function used to get the project Name from given projectID
+     * @param projectID 
+     */
     async getProjectName(projectID) {
         fetch(`../api/displayProjectNameById/${projectID}`)
             .then(result => result.json())
@@ -76,6 +85,10 @@ class twoList extends React.Component {
     }
 
 
+    /**
+     * The function that handle the click event happens on list elements
+     * @param {click event} evt 
+     */
     clickHandler(evt) {
         var flag = true;
         if (evt.currentTarget.dataset.selected == 0) {
@@ -111,12 +124,13 @@ class twoList extends React.Component {
         // console.log(this.state.toremove);
     }
 
-
+    /**
+     * 
+     * @param {the list of elements} renderList 
+     * @param {the list of elements that have been selected} actionList 
+     * @param {the click handler for element in list} handler 
+     */
     generateListElements(renderList, actionList, handler) {
-        // console.log("------------------------");
-        // console.log(resDic);
-
-
         var resourcesList = renderList.map(function (resource) {
             if (actionList.indexOf(resource.NetID) > -1) {
                 return <li key={resource.NetID} data-selected={1} data-id={resource.NetID} onClick={handler} style={{ backgroundColor: "#19e88e" }}>
@@ -174,11 +188,12 @@ class twoList extends React.Component {
         }
     }
 
+    /**
+     * Handler for add button
+     * @param {click event} evt 
+     * @param {the role name} rolename 
+     */
     async handleAdd(evt, rolename) {
-        // let newCurrentResources = this.state.currentResources;
-        // let newCurrentList = [];
-        // let newAvaliableResources = this.state.avaliableResources;
-        // let newAvaliableList = [];
         for (var i = 0, len = this.state.toadd.length; i < len; i++) {
             let netid = this.state.toadd[i];
             let data = {
@@ -195,13 +210,13 @@ class twoList extends React.Component {
                 body: JSON.stringify(data),
             });
         }
-        // console.log('add done');
         this.state.toadd = [];
         this.fetchResources(this.projectID);
     }
 
+
+    /**handler function for remove button */
     async handleRemove(evt) {
-        // console.log(this.projectName);
         for (var i = 0, len = this.state.toremove.length; i < len; i++) {
             let data = {
                 "ProjectName": this.state.projectName,
@@ -216,36 +231,40 @@ class twoList extends React.Component {
                 body: JSON.stringify(data),
             });
         }
-        // console.log('remove done');
         this.state.toremove = [];
         this.fetchResources(this.projectID);
     }
 
-    dealLog(flag) {
-        var toreturn = [];
-        let value = window.sessionStorage.getItem("value");
-        if (value === "logged") {
-            if (flag == 0) {
-                // console.log("ggggg");
-                toreturn.push(<button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>);
-                toreturn.push(<button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>);
-            } else {
-                toreturn.push(<button onClick={this.handleRemove}>Remove Resources</button>);
-            }
-        }
 
-        return toreturn;
-    }
+    /**
+    * This comment outted function is for loggin function to hide the buttons 
+    */
+    // dealLog(flag) {
+    //     var toreturn = [];
+    //     let value = window.sessionStorage.getItem("value");
+    //     if (value === "logged") {
+    //         if (flag == 0) {
+    //             // console.log("ggggg");
+    //             toreturn.push(<button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>);
+    //             toreturn.push(<button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>);
+    //         } else {
+    //             toreturn.push(<button onClick={this.handleRemove}>Remove Resources</button>);
+    //         }
+    //     }
+
+    //     return toreturn;
+    // }
 
     render() {
         var leftList = this.generateListElements(this.state.avaliableList, this.state.toadd, this.clickHandler);
         var rightList = this.generateListElements(this.state.currentList, this.state.toremove, this.clickHandler);
-        console.log("----------------------");
-        console.log(this.context);
         let backPageUrl = '/individual_project/' + this.props.match.params.projectID;
         return (
             <div style={{ height: '550px' }}>
+                
                 <h1>Project Name: {this.state.projectName}</h1>
+
+                {/* the list of avaliable resources */}
                 <div className="leftContainer">
                     <p>Avaliable resources to add to project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 0)} placeholder="Search for names..." />
@@ -253,19 +272,21 @@ class twoList extends React.Component {
                         {leftList}
                     </ul>
                     <div>
-                        {(this.dealLog(0))}
-                        {/* <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
-                        <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button> */}
+                        {/* {(this.dealLog(0))} "This comment out is for loggin function"*/}
+                        <button onClick={(event) => this.handleAdd(event, "Programmer")}>Add as Programmer</button>
+                        <button onClick={(event) => this.handleAdd(event, "Product Manager")}>Add as PM</button>
                     </div>
                 </div>
+
+                {/* the list of current resources */}
                 <div className="rightContainer">
                     <p>Current resources in this project</p>
                     <input className="myInput" type="text" onChange={event => this.searchFunc(event, 1)} placeholder="Search for names..." />
                     <ul className="myUL">
                         {rightList}
                     </ul>
-                    {(this.dealLog(1))}
-                    {/* <button onClick={this.handleRemove}>Remove Resources</button> */}
+                    {/* {(this.dealLog(1))} "This comment out is for loggin function"*/}
+                    <button onClick={this.handleRemove}>Remove Resources</button>
                     <Link to={backPageUrl}><button>Back to project</button></Link>
                 </div>
 
