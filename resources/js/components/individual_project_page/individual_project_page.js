@@ -75,7 +75,10 @@ class Individual_project_page extends React.Component {
      * defs is the names of each of the individual columns
      */
     async processData(data) {
-        console.log(data);
+        let projectID = this.props.match.params.projectID;
+        let comments = await fetch(`../api/getComments/${projectID}`);
+        console.log(comments);
+
         let columnDefs = [
             { headerName: 'Name', field: 'name', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left' },
             { headerName: 'NetID', field: 'netid', sortable: true, filter: "agTextColumnFilter", suppressMovable: true, pinned: 'left', hide: true },
@@ -509,6 +512,9 @@ class Individual_project_page extends React.Component {
             }.bind(this));
     }
 
+    /*** Adds a notification when current week exceeds project due date
+     *
+      */
     addDueDateNotification() {
         this.notificationDOMRef.current.addNotification({
             title: "Warning",
@@ -523,6 +529,11 @@ class Individual_project_page extends React.Component {
         });
     }
 
+    /** Displays a comment for a schedule
+     *
+     * @param event
+     * @returns {Promise<void>}
+     */
     async displayComment(event) {
         let projectID = this.props.match.params.projectID;
         let netID = event.data.netid;
@@ -550,10 +561,17 @@ class Individual_project_page extends React.Component {
         }
     }
 
+    /*** Closes form modal
+     *
+     */
     closeFormModal() {
         this.setState({ openProjectFormModal: false });
     }
 
+    /*** Handles input change to state
+     *
+     * @param e
+     */
     handleFormInputChange(e) {
         this.setState({ [e.target.id]: e.target.value });
     }
