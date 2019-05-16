@@ -7,6 +7,10 @@ import Modal from 'react-responsive-modal';
 import Select from 'react-select';
 
 class Resource_list_page extends React.Component {
+	/** Constructor that is called when component is initialized.
+	 *  Entry point of this component
+	 *	@param props
+	 */
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -33,25 +37,40 @@ class Resource_list_page extends React.Component {
 		this.handleDeleteSubmit = this.handleDeleteSubmit.bind(this);
 	}
 
-	/*
-		Toggle add and delete popup window
-	*/
+	/**
+	 * Toggle add popup window on the page
+	 * @returns {Promise<void>}
+	 */
 	toggleAddPopup() {
 		this.setState({
 			showAddPopup: !this.state.showAddPopup
 		});
 	}
 
+	/**
+	 * Toggle delete popup window on the page
+	 * @returns {Promise<void>}
+	 */
 	toggleDeletePopup() {
 		this.setState({
 			showDeletePopup: !this.state.showDeletePopup
 		});
 	}
 
-	/*
-		Function cleans up data from the api call.
-		The passed in data params contains all resources that have hour assigned
-	*/
+	/**
+	 * Function processes cleans up data from the api call.
+	 * The passed in data params contains all resources that have hour assigned.
+	 * It makes a GET request to the api (argument to the fetch function),
+	 * retrieves it, then processes the data using processData to create new row
+	 * data and column definitions, and then updates the state to those values.
+	 * That is why when you load this page, it starts off empty and then data
+	 * populates the grid. It is called once, immediately after render() is first
+	 * called.
+	 * @param data
+	 * @returns {{rowData: Array, columnDefs: [], resources: []}}, where rowData
+	 * is the data to be placed in the grid, and columnDefs is the names of each
+	 * of the individual columns, resources is the names of resources
+	 */
 	async processData(data) {
 		// console.log(data);
 		// define column heades
@@ -89,12 +108,12 @@ class Resource_list_page extends React.Component {
 			}
 		}]
 
-		let rowData = [];
-		let currJSON = {};
-		let prevNetId = null;
-		let colNames = new Set();
-		let netIDs = new Set();
-		let resources = [];
+		let rowData = [];  // row data in the grid
+		let currJSON = {};  // temp store of json of data
+		let prevNetId = null;  // previous processed netID
+		let colNames = new Set();  // column header
+		let netIDs = new Set();  // a set of seen netIDs
+		let resources = [];  // names of resources
 
 		// process data for the first time
 		for (let i = 0; i < data.length; i++) {
@@ -193,8 +212,9 @@ class Resource_list_page extends React.Component {
 		return { "rowData": rowData, "columnDefs": columnDefs, "resources": resources };
 	}
 
-	/*
-		Fetched all resources that have hours assigned from api call
+	/**
+	 * This function is always called right after the constructor for this class
+	 * is called, and the component is loaded onto a screen via render().
 	*/
 	componentDidMount() {
 		fetch('../api/displayResourceHours')
@@ -209,8 +229,10 @@ class Resource_list_page extends React.Component {
 			}.bind(this));
 	}
 
-	/*
-		Set of functions that handles changes on the form
+	/**
+	 * Functions that handles firstName changes on the form
+	 * @param: event
+	 * @returns {Promise<void>}
 	*/
 	handleFirstNameChange(event) {
 		this.setState({
@@ -218,24 +240,44 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
+	/**
+	 * Functions that handles lastName changes on the form
+	 * @param: event
+	 * @returns {Promise<void>}
+	*/
 	handleLastNameChange(event) {
 		this.setState({
 			lastName: event.target.value
 		});
 	}
 
+	/**
+	 * Functions that handles netID changes on the form
+	 * @param: event
+	 * @returns {Promise<void>}
+	*/
 	handleNetIDChange(event) {
 		this.setState({
 			netID: event.target.value
 		});
 	}
 
+	/**
+	 * Functions that handles maxHour changes on the form
+	 * @param: event
+	 * @returns {Promise<void>}
+	*/
 	handleMaxHourChange(event) {
 		this.setState({
 			maxHourPerWeek: event.target.value
 		});
 	}
 
+	/**
+	 * Functions that handles name seleted changes on the form
+	 * @param: event
+	 * @returns {Promise<void>}
+	*/
 	handleNameSelect(event) {
 		this.setState({
 			selectedResource: event,
@@ -243,9 +285,11 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
-	/*
-		Function that handles form submition for adding new resource
-	*/
+	/**
+	 * Function that handles form submition for adding new resource
+	 * @param: event
+	 * @returns {Promise<void>}
+	 */
 	async handleAddSubmit(event) {
 		// console.log("handling add submit");
 
@@ -269,9 +313,11 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
-	/*
-		Function that handles form submition for deleteing resource
-	*/
+	/**
+	 * Function that handles form submition for deleting existing resource
+	 * @param: event
+	 * @returns {Promise<void>}
+	 */
 	async handleDeleteSubmit(event) {
 		let data = { "NetID": this.state.selectedResourceID };
 
@@ -286,9 +332,9 @@ class Resource_list_page extends React.Component {
 		});
 	}
 
-	/*
-		Function that shows and hides the buttons based on authentications
-	*/
+	/**
+	 * Function that shows and hides the buttons based on authentications
+	 */
 	buttonGen() {
 		if (window.sessionStorage.getItem("value") == "logged") {
 			return (
