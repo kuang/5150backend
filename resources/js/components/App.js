@@ -51,37 +51,6 @@ class App extends Component {
                 {/* <Login /> */}
               </div>
             </div>
-
-
-            {/* <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
-              </li>
-              <li>
-                <Link to="/about/">About</Link>
-              </li>
-              <li>
-                <Link to="/users/">Users</Link>
-              </li>
-              <li>
-                <Link to="/resource/">resource</Link>
-              </li>
-              <li>
-                <Link to="/individual_resource/4">individual_resource</Link>
-              </li>
-              <li>
-                <Link to="/individual_project/1">projects</Link>
-              </li>
-              <li>
-                <Link to="/projects_list/">List of projects</Link>
-              </li>
-              <li>
-                <Link to="/add_res_to_project/1">add_resource_to_project</Link>
-              </li>
-            </ul> */}
           </nav>
           <Route path="/" exact component={Projects_list_page} />
           <Route path="/login" component={Login} />

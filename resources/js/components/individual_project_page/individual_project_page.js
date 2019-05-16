@@ -253,23 +253,6 @@ class Individual_project_page extends React.Component {
     async saveData() {
         let data = this.state.rowData;
         let projectID = this.props.match.params.projectID;
-        // let updateSuccessful = await fetch('../api/updateMostRecentRowData', {
-        //     method: "PUT",
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({ "projectID": projectID, "data": data })
-        // });
-
-        // let statusUpdateSuccessful = await fetch('../api/updateProjectStatus', {
-        //     method: "PUT",
-        //     headers: {
-        //         'Accept': 'application/json',
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({ "ProjectID": projectID, "Status": this.state.selectedOption["label"] })
-        // });
 
         let updatedRows = this.updatedRows;
 
