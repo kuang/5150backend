@@ -23,27 +23,28 @@ class Individual_project_page extends React.Component {
     constructor(props) {
         super(props);
         this.addDueDateNotification = this.addDueDateNotification.bind(this);
-        this.notificationDOMRef = React.createRef();
-        this.updatedRows = new Set();
-        this.nameToNetID = new Map();
-        this.projectName = "";
-        this.statusOptions = [
+        this.notificationDOMRef = React.createRef(); // ref for the notification bar
+        this.updatedRows = new Set(); // set of all row indicies that have been updated
+        this.nameToNetID = new Map(); // mapping between name to net id
+        this.projectName = ""; // current project name
+        this.statusOptions = [ // project status options
             { label: "Ongoing", value: 1 },
             { label: "Inactive", value: 1 },
             { label: "Done", value: 1 },
             { label: "On Hold", value: 1 },
         ];
         this.dueDate = undefined; // dueDate of the project
-        this.currentDate = moment();
-        this.latestDate = undefined;
-        this.resourceDateOptions = [];
-        this.resourceNameOptions = [];
-        this.resourceNetIDOptions = [];
+        this.currentDate = moment(); // the current date
+        this.latestDate = undefined;  // the latest date in the table
+        this.resourceDateOptions = []; // options for the resource work date
+        this.resourceNameOptions = []; // options for the resource names
+        this.resourceNetIDOptions = []; // options for net id options
+
         this.state = { // state is initialized to just have two column definitions, and no row data.
             // the column definitions and row data are actually updated in compoundDidMount()
-            selectedOption: "",
-            openTypeWarning: false,
-            openNoScheduleWarning: false,
+            selectedOption: "", // selectedOption for status
+            openTypeWarning: false, // flag for showing type warning for input to cell
+            openNoScheduleWarning: false, //
             columnDefs: [{
                 headerName: "Name", field: "name", filter: "agTextColumnFilter", cellClass: "suppress-movable-col"// headerName is the name of the column, field is what is
                 // referenced by row data. For instance, to create a row for these two column defs, you would do
@@ -132,10 +133,14 @@ class Individual_project_page extends React.Component {
 
         rowData.push(currentJSON);
         let dates = columnDefs.slice(3);
-
+        this.resourceDateOptions = [];
+        let seenDates = new Set();
         for (let i = 0; i < dates.length; i++) {
             let name = dates[i]["headerName"];
-            this.resourceDateOptions.push({ label: name, value: 1 });
+            if (!seenDates.has(name)) {
+                this.resourceDateOptions.push({label: name, value: 1});
+                seenDates.add(name);
+            }
         }
 
         let dateComparator = function (a, b) {
@@ -305,7 +310,7 @@ class Individual_project_page extends React.Component {
         let numericalInput = Number(event.value);
         let editedColumn = event.colDef.field;
         let rowIndex = event.rowIndex;
-        if (isNaN(numericalInput)) {
+        if (isNaN(numericalInput) || numericalInput < 0) {
             let oldData = event.oldValue;
             let currentRowData = this.state.rowData;
             let currentRow = currentRowData[rowIndex];
@@ -684,7 +689,7 @@ class Individual_project_page extends React.Component {
     }
 
     buttonGen() {
-        var value = window.sessionStorage.getItem("value");
+        let value = window.sessionStorage.getItem("value");
         if (value === "logged") {
             let addResPageUrl = '/add_res_to_project/' + this.props.match.params.projectID;
             return (
@@ -747,7 +752,7 @@ class Individual_project_page extends React.Component {
                 >
 
                     <Modal open={this.state.openTypeWarning} onClose={this.closeTypeWarningModal.bind(this)} center closeIconSize={14}>
-                        <h3 style={{ marginTop: '15px' }}>Please Enter An Integer</h3>
+                        <h3 style={{ marginTop: '15px' }}>Please Enter An Integer Greater Than Zero</h3>
                     </Modal>
 
                     <Modal open={this.state.openCommentView} onClose={this.closeCommentViewModal.bind(this)} center closeIconSize={14}>
