@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ReactList from 'react-list';
-import { Link } from 'react-router-dom'
 import Modal from 'react-responsive-modal';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
@@ -87,10 +85,6 @@ class Individual_resource_page extends Component {
             currJSON[currHeader] = currHours;
         }
         rowData.push(currJSON);
-        console.log("rowData");
-        console.log(rowData);
-        console.log("columnDefs");
-        console.log(columnDefs);
         return { "rowData": rowData, "columnDefs": columnDefs };
     }
 
@@ -126,7 +120,6 @@ class Individual_resource_page extends Component {
     openEditModal() {
         this.setState({ openEdit: true });
     }
-    //TODO: handle HTTP PUT call
     async handleSubmit(event) {
         let data = {
             "OldNetID": this.state.oldNetID,
