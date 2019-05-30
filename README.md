@@ -17,3 +17,4 @@ Bulk of backend logic (interfacing with the database layer) is in /routes/api.ph
 
 Automated testing files are in /tests.
 
+![](project_list.png)
