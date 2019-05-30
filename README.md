@@ -1,7 +1,7 @@
 CIT Resource Scheduling Tool
 
 
-This repo contains both the backend AND frontend (bad repo naming on our part) for this project.
+This repo contains both the backend AND frontend code for this project.
 
 Frontend files:
 
@@ -18,3 +18,4 @@ Bulk of backend logic (interfacing with the database layer) is in /routes/api.ph
 Automated testing files are in /tests.
 
 ![](project_list.png)
+![](resource_list.png)
